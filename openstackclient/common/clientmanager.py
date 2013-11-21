@@ -20,6 +20,7 @@ import logging
 from openstackclient.compute import client as compute_client
 from openstackclient.identity import client as identity_client
 from openstackclient.image import client as image_client
+from openstackclient.network import client as network_client
 from openstackclient.object import client as object_client
 from openstackclient.volume import client as volume_client
 
@@ -47,6 +48,7 @@ class ClientManager(object):
     image = ClientCache(image_client.make_client)
     object = ClientCache(object_client.make_client)
     volume = ClientCache(volume_client.make_client)
+    neutron = ClientCache(network_client.make_client)
 
     def __init__(self, token=None, url=None, auth_url=None, project_name=None,
                  project_id=None, username=None, password=None,

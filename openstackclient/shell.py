@@ -41,6 +41,7 @@ DEFAULT_IDENTITY_API_VERSION = '2.0'
 DEFAULT_IMAGE_API_VERSION = '1'
 DEFAULT_OBJECT_API_VERSION = '1'
 DEFAULT_VOLUME_API_VERSION = '1'
+DEFAULT_NETWORK_API_VERSION = '2.0'
 DEFAULT_DOMAIN = 'default'
 
 
@@ -232,6 +233,15 @@ class OpenStackShell(app.App):
                  DEFAULT_VOLUME_API_VERSION +
                  ' (Env: OS_VOLUME_API_VERSION)')
         parser.add_argument(
+            '--os-network-api-version',
+            metavar='<network-api-version>',
+            default=env(
+                'OS_NETWORK_API_VERSION',
+                default=DEFAULT_NETWORK_API_VERSION),
+            help='Volume API version, default=' +
+                 DEFAULT_NETWORK_API_VERSION +
+                 ' (Env: OS_NETWORK_API_VERSION)')
+        parser.add_argument(
             '--os-token',
             metavar='<token>',
             default=env('OS_TOKEN'),
@@ -378,6 +388,7 @@ class OpenStackShell(app.App):
             'image': self.options.os_image_api_version,
             'object-store': self.options.os_object_api_version,
             'volume': self.options.os_volume_api_version,
+            'network': self.options.os_network_api_version,
         }
 
         # Add the API version-specific commands
