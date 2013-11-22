@@ -48,7 +48,8 @@ class ClientManager(object):
     image = ClientCache(image_client.make_client)
     object = ClientCache(object_client.make_client)
     volume = ClientCache(volume_client.make_client)
-    neutron = ClientCache(network_client.make_client)
+    network = ClientCache(network_client.make_client)
+    neutron = network
 
     def __init__(self, token=None, url=None, auth_url=None, project_name=None,
                  project_id=None, username=None, password=None,

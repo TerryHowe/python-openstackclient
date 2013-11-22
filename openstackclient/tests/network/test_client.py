@@ -31,14 +31,14 @@ class FakeClient(object):
         self.client.auth_url = AUTH_URL
 
 
-class TestClient(utils.TestCase):
+class TestNetworkClient(utils.TestCase):
     def setUp(self):
-        super(TestClient, self).setUp()
+        super(TestNetworkClient, self).setUp()
 
         api_version = {"network": "1"}
 
         network_client.API_VERSIONS = {
-            "1": "openstackclient.tests.network.test_network.FakeClient"
+            "1": "openstackclient.tests.network.test_client.FakeClient"
         }
 
         self.cm = clientmanager.ClientManager(token=AUTH_TOKEN,
@@ -47,5 +47,5 @@ class TestClient(utils.TestCase):
                                               api_version=api_version)
 
     def test_make_client(self):
-        self.assertEqual(self.cm.network.client.auth_token + "wtf", AUTH_TOKEN)
-        self.assertEqual(self.cm.network.client.auth_url, AUTH_URL + "bogus")
+        self.assertEqual(self.cm.network.client.auth_token, AUTH_TOKEN)
+        self.assertEqual(self.cm.network.client.auth_url, AUTH_URL)

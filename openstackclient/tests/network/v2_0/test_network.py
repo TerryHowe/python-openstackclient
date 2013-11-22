@@ -13,18 +13,95 @@
 #   under the License.
 #
 
-#import mock
+import argparse
+import mock
 
 from openstackclient.network.v2_0 import network
 from openstackclient.tests import utils
 
 
-class TestCreateNetwork(utils.TestCase):
-    def setUp(self):
-        super(TestCreateNetwork, self).setUp()
-        self.cmd = network.CreateNetwork()
+class TestNetworkBase(utils.TestCase):
+    def given_args(self, clz, args):
+        args = args.split()
+        app = mock.Mock()
+        cmd = clz(app, argparse.Namespace())
+        parser = cmd.get_parser(str(clz))
+        try:
+            parsed_args = parser.parse_args(args)
+        except SystemExit:
+            self.assertEqual('Bad argument: ' + str(args), '')
+        return parsed_args
 
-    def test_get_parser(self):
-        parser = self.cmd.get_parser("CreateNetwork")
-        args = parser.parse_args()
-        self.assertEqual(str(args), "wtf")
+
+class TestCreateNetwork(TestNetworkBase):
+    def test_get_parser_nothing(self):
+        parsed = self.given_args(network.CreateNetwork, "noo")
+        self.assertEqual('noo', parsed.name)
+        self.assertEqual(True, parsed.admin_state)
+        self.assertEqual(False, parsed.shared)
+        self.assertEqual('table', parsed.formatter)
+        self.assertEqual([], parsed.columns)
+        self.assertEqual([], parsed.variables)
+        self.assertEqual('', parsed.prefix)
+
+    def test_get_parser_all(self):
+        allargs = "too --admin-state-down --shared -f shell -c id \
+                   --variable VAR --prefix TST"
+        parsed = self.given_args(network.CreateNetwork, allargs)
+        self.assertEqual('too', parsed.name)
+        self.assertEqual(False, parsed.admin_state)
+        self.assertEqual(True, parsed.shared)
+        self.assertEqual('shell', parsed.formatter)
+        self.assertEqual(['id'], parsed.columns)
+        self.assertEqual(['VAR'], parsed.variables)
+        self.assertEqual('TST', parsed.prefix)
+
+
+class TestDeleteNetwork(TestNetworkBase):
+    def test_get_parser_nothing(self):
+        parsed = self.given_args(network.DeleteNetwork, "noo")
+        self.assertEqual('noo', parsed.network)
+
+
+class TestListNetwork(TestNetworkBase):
+    def test_get_parser_nothing(self):
+        parsed = self.given_args(network.ListNetwork, "")
+        self.assertEqual(False, parsed.show_details)
+        self.assertEqual(False, parsed.external)
+        self.assertEqual('table', parsed.formatter)
+        self.assertEqual([], parsed.columns)
+        self.assertEqual('nonnumeric', parsed.quote_mode)
+
+    def test_get_parser_all(self):
+        allargs = "--long --external -f csv -c id --quote all"
+        parsed = self.given_args(network.ListNetwork, allargs)
+        self.assertEqual(True, parsed.show_details)
+        self.assertEqual(True, parsed.external)
+        self.assertEqual('csv', parsed.formatter)
+        self.assertEqual(['id'], parsed.columns)
+        self.assertEqual('all', parsed.quote_mode)
+
+
+class TestSetNetwork(TestNetworkBase):
+    def test_get_parser_nothing(self):
+        parsed = self.given_args(network.SetNetwork, "noo")
+        self.assertEqual('noo', parsed.network)
+
+
+class TestShowNetwork(TestNetworkBase):
+    def test_get_parser_nothing(self):
+        parsed = self.given_args(network.ShowNetwork, "noo")
+        self.assertEqual('noo', parsed.network)
+        self.assertEqual('table', parsed.formatter)
+        self.assertEqual([], parsed.columns)
+        self.assertEqual([], parsed.variables)
+        self.assertEqual('', parsed.prefix)
+
+    def test_get_parser_all(self):
+        allargs = "too -f shell -c id --variable VAR --prefix TST"
+        parsed = self.given_args(network.ShowNetwork, allargs)
+        self.assertEqual('too', parsed.network)
+        self.assertEqual('shell', parsed.formatter)
+        self.assertEqual(['id'], parsed.columns)
+        self.assertEqual(['VAR'], parsed.variables)
+        self.assertEqual('TST', parsed.prefix)
