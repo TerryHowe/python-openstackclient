@@ -13,93 +13,69 @@
 #   under the License.
 #
 
-import argparse
-import mock
-
 from openstackclient.network.v2_0 import port
-from openstackclient.tests import utils
+from openstackclient.tests.network.v2_0 import common
 
 
-class TestPortBase(utils.TestCase):
-    def given_args(self, clz, args):
-        args = args.split()
-        app = mock.Mock()
-        cmd = clz(app, argparse.Namespace())
-        parser = cmd.get_parser(str(clz))
-        try:
-            parsed_args = parser.parse_args(args)
-        except SystemExit:
-            self.assertEqual('Bad argument: ' + str(args), '')
-        return parsed_args
-
-
-class TestCreatePort(TestPortBase):
+class TestCreatePort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        parsed = self.given_args(port.CreatePort, "noo")
+        given = "noo" + self.given_default_show_options()
+        parsed = self.given_args(port.CreatePort, given)
         self.assertEqual('noo', parsed.name)
         self.assertEqual(True, parsed.admin_state)
         self.assertEqual(None, parsed.device_id)
-        self.assertEqual([], parsed.columns)
         self.assertEqual([], parsed.extra_dhcp_opts)
         self.assertEqual(None, parsed.fixed_ip)
-        self.assertEqual('table', parsed.formatter)
         self.assertEqual(None, parsed.mac_address)
         self.assertEqual(None, parsed.network_id)
         self.assertEqual(False, parsed.no_security_groups)
-        self.assertEqual('', parsed.prefix)
         self.assertEqual([], parsed.security_groups)
         self.assertEqual(None, parsed.tenant_id)
-        self.assertEqual([], parsed.variables)
+        self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
         allargs = 'too --device-id DI --disable --extra-dhcp-opt DO ' \
                   '--fixed-ip FI -f shell --mac-address MA ' \
                   '--network NI --security-group ONE ' \
-                  '--security-group TWO --project PROJ ' \
-                  '-c id --variable VAR --prefix TST '
+                  '--security-group TWO --project PROJ '
+        allargs += self.given_all_show_options()
         parsed = self.given_args(port.CreatePort, allargs)
         self.assertEqual('too', parsed.name)
         self.assertEqual(False, parsed.admin_state)
         self.assertEqual('DI', parsed.device_id)
-        self.assertEqual(['id'], parsed.columns)
         self.assertEqual(['DO'], parsed.extra_dhcp_opts)
         self.assertEqual(['FI'], parsed.fixed_ip)
-        self.assertEqual('shell', parsed.formatter)
         self.assertEqual('MA', parsed.mac_address)
         self.assertEqual('NI', parsed.network_id)
         self.assertEqual(False, parsed.no_security_groups)
-        self.assertEqual('TST', parsed.prefix)
         self.assertEqual(['ONE', 'TWO'], parsed.security_groups)
         self.assertEqual('PROJ', parsed.tenant_id)
-        self.assertEqual(['VAR'], parsed.variables)
+        self.then_all_show_options(parsed)
 
 
-class TestDeletePort(TestPortBase):
+class TestDeletePort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(port.DeletePort, "noo")
         self.assertEqual('noo', parsed.port)
 
 
-class TestListPort(TestPortBase):
+class TestListPort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        parsed = self.given_args(port.ListPort, "")
+        given = "" + self.given_default_list_options()
+        parsed = self.given_args(port.ListPort, given)
         self.assertEqual(False, parsed.show_details)
         self.assertEqual(None, parsed.router)
-        self.assertEqual('table', parsed.formatter)
-        self.assertEqual([], parsed.columns)
-        self.assertEqual('nonnumeric', parsed.quote_mode)
+        self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long --router ROO -f csv -c id --quote all"
+        allargs = "--long --router ROO" + self.given_all_list_options()
         parsed = self.given_args(port.ListPort, allargs)
         self.assertEqual(True, parsed.show_details)
         self.assertEqual('ROO', parsed.router)
-        self.assertEqual('csv', parsed.formatter)
-        self.assertEqual(['id'], parsed.columns)
-        self.assertEqual('all', parsed.quote_mode)
+        self.then_all_list_options(parsed)
 
 
-class TestSetPort(TestPortBase):
+class TestSetPort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(port.SetPort, "noo")
         self.assertEqual('noo', parsed.port)
@@ -117,20 +93,15 @@ class TestSetPort(TestPortBase):
         self.assertEqual(['ONE', 'TWO'], parsed.security_groups)
 
 
-class TestShowPort(TestPortBase):
+class TestShowPort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        parsed = self.given_args(port.ShowPort, "noo")
+        given = "noo" + self.given_default_show_options()
+        parsed = self.given_args(port.ShowPort, given)
         self.assertEqual('noo', parsed.port)
-        self.assertEqual('table', parsed.formatter)
-        self.assertEqual([], parsed.columns)
-        self.assertEqual([], parsed.variables)
-        self.assertEqual('', parsed.prefix)
+        self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too -f shell -c id --variable VAR --prefix TST"
+        allargs = "too" + self.given_all_show_options()
         parsed = self.given_args(port.ShowPort, allargs)
         self.assertEqual('too', parsed.port)
-        self.assertEqual('shell', parsed.formatter)
-        self.assertEqual(['id'], parsed.columns)
-        self.assertEqual(['VAR'], parsed.variables)
-        self.assertEqual('TST', parsed.prefix)
+        self.then_all_show_options(parsed)
