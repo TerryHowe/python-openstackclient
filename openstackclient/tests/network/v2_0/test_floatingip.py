@@ -13,68 +13,60 @@
 #   under the License.
 #
 
-from openstackclient.network.v2_0 import network
+from openstackclient.network.v2_0 import floatingip
 from openstackclient.tests.network.v2_0 import common
 
 
-class TestCreateNetwork(common.TestNetworkBase):
+class TestCreateFloatingIp(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
-        parsed = self.given_args(network.CreateNetwork, given)
-        self.assertEqual('noo', parsed.name)
-        self.assertEqual(True, parsed.admin_state)
-        self.assertEqual(False, parsed.shared)
+        parsed = self.given_args(floatingip.CreateFloatingIp, given)
+        self.assertEqual('noo', parsed.floating_network_id)
+        self.assertEqual(None, parsed.fixed_ip_address)
+        self.assertEqual(None, parsed.port_id)
         self.assertEqual(None, parsed.tenant_id)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too --admin-state-down --shared --project sneed"
+        allargs = "too --fixed-ip 1.1.1.1 --port 123 --project sneed"
         allargs += self.given_all_show_options()
-        parsed = self.given_args(network.CreateNetwork, allargs)
-        self.assertEqual('too', parsed.name)
-        self.assertEqual(False, parsed.admin_state)
-        self.assertEqual(True, parsed.shared)
+        parsed = self.given_args(floatingip.CreateFloatingIp, allargs)
+        self.assertEqual('too', parsed.floating_network_id)
+        self.assertEqual('1.1.1.1', parsed.fixed_ip_address)
+        self.assertEqual('123', parsed.port_id)
         self.assertEqual('sneed', parsed.tenant_id)
         self.then_all_show_options(parsed)
 
 
-class TestDeleteNetwork(common.TestNetworkBase):
+class TestDeleteFloatingIp(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        parsed = self.given_args(network.DeleteNetwork, "noo")
-        self.assertEqual('noo', parsed.network)
+        parsed = self.given_args(floatingip.DeleteFloatingIp, "noo")
+        self.assertEqual('noo', parsed.id)
 
 
-class TestListNetwork(common.TestNetworkBase):
+class TestListFloatingIp(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "" + self.given_default_list_options()
-        parsed = self.given_args(network.ListNetwork, given)
+        parsed = self.given_args(floatingip.ListFloatingIp, given)
         self.assertEqual(False, parsed.show_details)
-        self.assertEqual(False, parsed.external)
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long --external" + self.given_all_list_options()
-        parsed = self.given_args(network.ListNetwork, allargs)
+        allargs = "--long" + self.given_all_list_options()
+        parsed = self.given_args(floatingip.ListFloatingIp, allargs)
         self.assertEqual(True, parsed.show_details)
-        self.assertEqual(True, parsed.external)
         self.then_all_list_options(parsed)
 
 
-class TestSetNetwork(common.TestNetworkBase):
-    def test_get_parser_nothing(self):
-        parsed = self.given_args(network.SetNetwork, "noo")
-        self.assertEqual('noo', parsed.network)
-
-
-class TestShowNetwork(common.TestNetworkBase):
+class TestShowFloatingIp(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
-        parsed = self.given_args(network.ShowNetwork, given)
-        self.assertEqual('noo', parsed.network)
+        parsed = self.given_args(floatingip.ShowFloatingIp, given)
+        self.assertEqual('noo', parsed.id)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
         allargs = "too " + self.given_all_show_options()
-        parsed = self.given_args(network.ShowNetwork, allargs)
-        self.assertEqual('too', parsed.network)
+        parsed = self.given_args(floatingip.ShowFloatingIp, allargs)
+        self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

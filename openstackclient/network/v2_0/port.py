@@ -112,11 +112,6 @@ class ListPort(lister.Lister):
 
     log = logging.getLogger(__name__ + '.ListPort')
 
-    def __init__(self, app, app_args):
-        super(ListPort, self).__init__(app, app_args)
-        self.app = app
-        self.app_args = app_args
-
     def get_parser(self, prog_name):
         parser = super(ListPort, self).get_parser(prog_name)
         parser.add_argument(

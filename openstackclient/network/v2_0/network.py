@@ -42,7 +42,7 @@ class CreateNetwork(show.ShowOne):
         parser.add_argument(
             '--project',
             dest='tenant_id',
-            default=False, help='the owner project id')
+            help='the owner project id')
         parser.add_argument(
             'name', metavar='NAME',
             help='Name of network to create')
@@ -78,11 +78,6 @@ class ListNetwork(lister.Lister):
     """List networks"""
 
     log = logging.getLogger(__name__ + '.ListNetwork')
-
-    def __init__(self, app, app_args):
-        super(ListNetwork, self).__init__(app, app_args)
-        self.app = app
-        self.app_args = app_args
 
     def get_parser(self, prog_name):
         parser = super(ListNetwork, self).get_parser(prog_name)

@@ -37,7 +37,7 @@ class TestCreatePort(common.TestNetworkBase):
         allargs = 'too --device-id DI --disable --extra-dhcp-opt DO ' \
                   '--fixed-ip FI -f shell --mac-address MA ' \
                   '--network NI --security-group ONE ' \
-                  '--security-group TWO --project PROJ '
+                  '--security-group TWO --project sneed '
         allargs += self.given_all_show_options()
         parsed = self.given_args(port.CreatePort, allargs)
         self.assertEqual('too', parsed.name)
@@ -49,7 +49,7 @@ class TestCreatePort(common.TestNetworkBase):
         self.assertEqual('NI', parsed.network_id)
         self.assertEqual(False, parsed.no_security_groups)
         self.assertEqual(['ONE', 'TWO'], parsed.security_groups)
-        self.assertEqual('PROJ', parsed.tenant_id)
+        self.assertEqual('sneed', parsed.tenant_id)
         self.then_all_show_options(parsed)
 
 
