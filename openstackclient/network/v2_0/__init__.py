@@ -92,7 +92,7 @@ class ListCommand(lister.Lister):
         return neuter.take_action(parsed_args)
 
 
-class SetCommand(show.ShowOne):
+class SetCommand(command.Command):
 
     log = logging.getLogger(__name__ + '.SetCommand')
     name = "id"

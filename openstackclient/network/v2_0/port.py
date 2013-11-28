@@ -55,10 +55,6 @@ class CreatePort(v2_0.CreateCommand):
             '--mac-address',
             help='mac address of this port')
         parser.add_argument(
-            '--network',
-            dest='network_id',
-            help='Network id or name this port belongs to')
-        parser.add_argument(
             '--no-security-groups',
             action='store_true',
             help='associate no security groups with the port')
@@ -67,6 +63,11 @@ class CreatePort(v2_0.CreateCommand):
             default=[], action='append', dest='security_groups',
             help='security group associated with the port '
             '(This option can be repeated)')
+        parser.add_argument(
+            '--network',
+            dest='network_id',
+            required=True,
+            help='Network id or name this port belongs to')
         parser.add_argument(
             'name', metavar='NAME',
             help='Name of port to create')
@@ -77,7 +78,7 @@ class DeletePort(v2_0.DeleteCommand):
     """Delete a port"""
 
     clazz = neu2.DeletePort
-    name = 'port'
+    name = 'id'
     metavar = '<port>'
     help_text = 'Name or ID of port to delete'
 
@@ -108,7 +109,7 @@ class SetPort(v2_0.SetCommand):
     """Set port values"""
 
     clazz = neu2.UpdatePort
-    name = 'port'
+    name = 'id'
     metavar = '<port>'
     help_text = 'Name or ID of port to update'
 
@@ -138,6 +139,6 @@ class ShowPort(v2_0.ShowCommand):
     """Show a port"""
 
     clazz = neu2.ShowPort
-    name = 'port'
+    name = 'id'
     metavar = '<port>'
     help_text = 'Name or ID of port to show'
