@@ -15,19 +15,14 @@
 
 """Port action implementations"""
 
-import logging
-
-from cliff import command
-from cliff import lister
-from cliff import show
-
 from neutronclient.neutron.v2_0 import port as neu2
+from openstackclient.network import v2_0 as v2_0
 
 
-class CreatePort(show.ShowOne):
+class CreatePort(v2_0.CreateCommand):
     """Create a port"""
 
-    log = logging.getLogger(__name__ + '.CreatePort')
+    clazz = neu2.CreatePort
 
     def get_parser(self, prog_name):
         parser = super(CreatePort, self).get_parser(prog_name)
@@ -73,54 +68,25 @@ class CreatePort(show.ShowOne):
             help='security group associated with the port '
             '(This option can be repeated)')
         parser.add_argument(
-            '--project',
-            dest='tenant_id',
-            help='the owner project id')
-        parser.add_argument(
             'name', metavar='NAME',
             help='Name of port to create')
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.CreatePort(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
 
-
-class DeletePort(command.Command):
+class DeletePort(v2_0.DeleteCommand):
     """Delete a port"""
 
-    log = logging.getLogger(__name__ + '.DeletePort')
-
-    def get_parser(self, prog_name):
-        parser = super(DeletePort, self).get_parser(prog_name)
-        parser.add_argument(
-            'port',
-            metavar='<port>',
-            help='Name or ID of port to delete',
-        )
-        return parser
-
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.DeletePort(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
+    clazz = neu2.DeletePort
+    name = 'port'
+    metavar = '<port>'
+    help_text = 'Name or ID of port to delete'
 
 
-class ListPort(lister.Lister):
+class ListPort(v2_0.ListCommand):
     """List port"""
-
-    log = logging.getLogger(__name__ + '.ListPort')
 
     def get_parser(self, prog_name):
         parser = super(ListPort, self).get_parser(prog_name)
-        parser.add_argument(
-            '--long',
-            dest='show_details',
-            action='store_true',
-            default=False,
-            help='Long listing',
-        )
         parser.add_argument(
             '--router',
             help='List ports that belong to a given router',
@@ -134,13 +100,17 @@ class ListPort(lister.Lister):
             neuter = neu2.ListRouterPort(self.app, self.app_args)
         else:
             neuter = neu2.ListPort(self.app, self.app_args)
+        neuter.get_client = self.get_client
         return neuter.take_action(parsed_args)
 
 
-class SetPort(command.Command):
+class SetPort(v2_0.SetCommand):
     """Set port values"""
 
-    log = logging.getLogger(__name__ + '.SetPort')
+    clazz = neu2.UpdatePort
+    name = 'port'
+    metavar = '<port>'
+    help_text = 'Name or ID of port to update'
 
     def get_parser(self, prog_name):
         parser = super(SetPort, self).get_parser(prog_name)
@@ -161,36 +131,13 @@ class SetPort(command.Command):
             help='extra dhcp options to be assigned to this port: '
             'opt_name=<dhcp_option_name>,opt_value=<value>, '
             '(This option can be repeated.)')
-        parser.add_argument(
-            'port',
-            metavar='<port>',
-            help='Name or ID of port to update',
-        )
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.UpdatePort(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
 
-
-class ShowPort(show.ShowOne):
+class ShowPort(v2_0.ShowCommand):
     """Show a port"""
 
-    log = logging.getLogger(__name__ + '.ShowPort')
-
-    def get_parser(self, prog_name):
-        parser = super(ShowPort, self).get_parser(prog_name)
-        parser.add_argument(
-            'port',
-            metavar='<port>',
-            help='Name or ID of port to show',
-        )
-        return parser
-
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        parsed_args.show_details = True
-        parsed_args.id = parsed_args.port
-        neuter = neu2.ShowPort(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
+    clazz = neu2.ShowPort
+    name = 'port'
+    metavar = '<port>'
+    help_text = 'Name or ID of port to show'

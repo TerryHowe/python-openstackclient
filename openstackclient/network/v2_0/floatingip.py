@@ -15,19 +15,14 @@
 
 """FloatingIp action implementations"""
 
-import logging
-
-from cliff import command
-from cliff import lister
-from cliff import show
-
 from neutronclient.neutron.v2_0 import floatingip as neu2
+from openstackclient.network import v2_0 as v2_0
 
 
-class CreateFloatingIp(show.ShowOne):
+class CreateFloatingIp(v2_0.CreateCommand):
     """Create a floating IP"""
 
-    log = logging.getLogger(__name__ + '.CreateFloatingIp')
+    clazz = neu2.CreateFloatingIP
 
     def get_parser(self, prog_name):
         parser = super(CreateFloatingIp, self).get_parser(prog_name)
@@ -40,78 +35,26 @@ class CreateFloatingIp(show.ShowOne):
             dest='port_id',
             help='ID of port to add the floating IP to')
         parser.add_argument(
-            '--project',
-            dest='tenant_id',
-            help='the owner project id')
-        parser.add_argument(
             'floating_network_id',
             help='ID of network to create the floating IP in')
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.CreateFloatingIP(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
 
-
-class DeleteFloatingIp(command.Command):
+class DeleteFloatingIp(v2_0.DeleteCommand):
     """Delete a floating IP"""
 
-    log = logging.getLogger(__name__ + '.DeleteFloatingIp')
-
-    def get_parser(self, prog_name):
-        parser = super(DeleteFloatingIp, self).get_parser(prog_name)
-        parser.add_argument(
-            'id',
-            metavar='<id>',
-            help='Identifier of floating IP to delete',
-        )
-        return parser
-
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.DeleteFloatingIP(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
+    clazz = neu2.DeleteFloatingIP
+    help_text = "Identifier of floating IP to delete"
 
 
-class ListFloatingIp(lister.Lister):
+class ListFloatingIp(v2_0.ListCommand):
     """List floating IPs"""
 
-    log = logging.getLogger(__name__ + '.ListFloatingIp')
-
-    def get_parser(self, prog_name):
-        parser = super(ListFloatingIp, self).get_parser(prog_name)
-        parser.add_argument(
-            '--long',
-            dest='show_details',
-            action='store_true',
-            default=False,
-            help='Long listing',
-        )
-        return parser
-
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.ListFloatingIP(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
+    clazz = neu2.ListFloatingIP
 
 
-class ShowFloatingIp(show.ShowOne):
+class ShowFloatingIp(v2_0.ShowCommand):
     """Show a floating IP"""
 
-    log = logging.getLogger(__name__ + '.ShowFloatingIp')
-
-    def get_parser(self, prog_name):
-        parser = super(ShowFloatingIp, self).get_parser(prog_name)
-        parser.add_argument(
-            'id',
-            metavar='<id>',
-            help='ID of floating IP to show',
-        )
-        return parser
-
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        parsed_args.show_details = True
-        neuter = neu2.ShowFloatingIP(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
+    clazz = neu2.ShowFloatingIP
+    help_text = "Identifier of floating IP to show"
