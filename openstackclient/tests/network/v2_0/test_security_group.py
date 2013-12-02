@@ -13,68 +13,71 @@
 #   under the License.
 #
 
-from openstackclient.network.v2_0 import network
+from openstackclient.network.v2_0 import security_group
 from openstackclient.tests.network.v2_0 import common
 
 
-class TestCreateNetwork(common.TestNetworkBase):
+class TestCreateSecurityGroup(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
-        parsed = self.given_args(network.CreateNetwork, given)
+        parsed = self.given_args(security_group.CreateSecurityGroup, given)
         self.assertEqual('noo', parsed.name)
-        self.assertEqual(True, parsed.admin_state)
-        self.assertEqual(False, parsed.shared)
+        self.assertEqual(None, parsed.description)
         self.assertEqual(None, parsed.tenant_id)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too --admin-state-down --shared --project sneed"
+        allargs = 'too --description sgtoo --project sneed '
         allargs += self.given_all_show_options()
-        parsed = self.given_args(network.CreateNetwork, allargs)
+        parsed = self.given_args(security_group.CreateSecurityGroup, allargs)
         self.assertEqual('too', parsed.name)
-        self.assertEqual(False, parsed.admin_state)
-        self.assertEqual(True, parsed.shared)
+        self.assertEqual('sgtoo', parsed.description)
         self.assertEqual('sneed', parsed.tenant_id)
         self.then_all_show_options(parsed)
 
 
-class TestDeleteNetwork(common.TestNetworkBase):
+class TestDeleteSecurityGroup(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        parsed = self.given_args(network.DeleteNetwork, "noo")
+        parsed = self.given_args(security_group.DeleteSecurityGroup, "noo")
         self.assertEqual('noo', parsed.id)
 
 
-class TestListNetwork(common.TestNetworkBase):
+class TestListSecurityGroup(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "" + self.given_default_list_options()
-        parsed = self.given_args(network.ListNetwork, given)
+        parsed = self.given_args(security_group.ListSecurityGroup, given)
         self.assertEqual(False, parsed.show_details)
-        self.assertEqual(False, parsed.external)
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long --external" + self.given_all_list_options()
-        parsed = self.given_args(network.ListNetwork, allargs)
+        allargs = "--long" + self.given_all_list_options()
+        parsed = self.given_args(security_group.ListSecurityGroup, allargs)
         self.assertEqual(True, parsed.show_details)
-        self.assertEqual(True, parsed.external)
         self.then_all_list_options(parsed)
 
 
-class TestSetNetwork(common.TestNetworkBase):
+class TestSetSecurityGroup(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        parsed = self.given_args(network.SetNetwork, "noo")
-        self.assertEqual('noo', parsed.network)
+        parsed = self.given_args(security_group.SetSecurityGroup, "noo")
+        self.assertEqual('noo', parsed.id)
+        self.assertEqual(None, parsed.description)
+
+    def test_get_parser_all(self):
+        allargs = 'too --description noosgtoo'
+        parsed = self.given_args(security_group.SetSecurityGroup, allargs)
+        self.assertEqual('too', parsed.id)
+        self.assertEqual('noosgtoo', parsed.description)
 
 
-class TestShowNetwork(common.TestNetworkBase):
+class TestShowSecurityGroup(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
-        parsed = self.given_args(network.ShowNetwork, given)
+        parsed = self.given_args(security_group.ShowSecurityGroup, given)
         self.assertEqual('noo', parsed.id)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too " + self.given_all_show_options()
-        parsed = self.given_args(network.ShowNetwork, allargs)
+        allargs = "too" + self.given_all_show_options()
+        parsed = self.given_args(security_group.ShowSecurityGroup, allargs)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

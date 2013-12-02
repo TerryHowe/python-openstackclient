@@ -19,7 +19,7 @@ from openstackclient.tests.network.v2_0 import common
 
 class TestCreatePort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        given = "noo" + self.given_default_show_options()
+        given = "noo --network netty" + self.given_default_show_options()
         parsed = self.given_args(port.CreatePort, given)
         self.assertEqual('noo', parsed.name)
         self.assertEqual(True, parsed.admin_state)
@@ -27,7 +27,7 @@ class TestCreatePort(common.TestNetworkBase):
         self.assertEqual([], parsed.extra_dhcp_opts)
         self.assertEqual(None, parsed.fixed_ip)
         self.assertEqual(None, parsed.mac_address)
-        self.assertEqual(None, parsed.network_id)
+        self.assertEqual('netty', parsed.network_id)
         self.assertEqual(False, parsed.no_security_groups)
         self.assertEqual([], parsed.security_groups)
         self.assertEqual(None, parsed.tenant_id)
@@ -56,7 +56,7 @@ class TestCreatePort(common.TestNetworkBase):
 class TestDeletePort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(port.DeletePort, "noo")
-        self.assertEqual('noo', parsed.port)
+        self.assertEqual('noo', parsed.id)
 
 
 class TestListPort(common.TestNetworkBase):
@@ -78,7 +78,7 @@ class TestListPort(common.TestNetworkBase):
 class TestSetPort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(port.SetPort, "noo")
-        self.assertEqual('noo', parsed.port)
+        self.assertEqual('noo', parsed.id)
         self.assertEqual([], parsed.extra_dhcp_opts)
         self.assertEqual(False, parsed.no_security_groups)
         self.assertEqual([], parsed.security_groups)
@@ -87,7 +87,7 @@ class TestSetPort(common.TestNetworkBase):
         allargs = 'too --extra-dhcp-opt DO --security-group ONE ' \
                   '--security-group TWO '
         parsed = self.given_args(port.SetPort, allargs)
-        self.assertEqual('too', parsed.port)
+        self.assertEqual('too', parsed.id)
         self.assertEqual(['DO'], parsed.extra_dhcp_opts)
         self.assertEqual(False, parsed.no_security_groups)
         self.assertEqual(['ONE', 'TWO'], parsed.security_groups)
@@ -97,11 +97,11 @@ class TestShowPort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
         parsed = self.given_args(port.ShowPort, given)
-        self.assertEqual('noo', parsed.port)
+        self.assertEqual('noo', parsed.id)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
         allargs = "too" + self.given_all_show_options()
         parsed = self.given_args(port.ShowPort, allargs)
-        self.assertEqual('too', parsed.port)
+        self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)
