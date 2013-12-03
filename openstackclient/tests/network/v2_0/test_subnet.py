@@ -38,10 +38,8 @@ class TestCreateSubnet(common.TestNetworkBase):
         allargs = 'too 10.1.1.1/24 --project sneed' \
                   ' --name 1 --ip-version 6 --gateway 2' \
                   ' --no-gateway ' \
-                  ' --allocation-pool start=10.1.1.1' \
-                  ' --allocation-pool end=10.1.1.4' \
-                  ' --host-route destination=10.1.1.1/1' \
-                  ' --host-route nexthop=20.1.1.1' \
+                  ' --allocation-pool start=10.1.1.1,end=10.1.1.4' \
+                  ' --host-route destination=10.1.1.1/1,nexthop=20.1.1.1' \
                   ' --dns-nameserver 5 --disable-dhcp'
         allargs += self.given_all_show_options()
         parsed = self.given_args(subnet.CreateSubnet, allargs)
@@ -51,14 +49,27 @@ class TestCreateSubnet(common.TestNetworkBase):
         self.assertEqual(6, parsed.ip_version)
         self.assertEqual('2', parsed.gateway)
         self.assertEqual(True, parsed.no_gateway)
-        self.assertEqual('10.1.1.1', parsed.allocation_pools['start'])
-        self.assertEqual('10.1.1.4', parsed.allocation_pools['end'])
-        self.assertEqual('10.1.1.1/1', parsed.host_routes['destination'])
-        self.assertEqual('20.1.1.1', parsed.host_routes['nexthop'])
+        self.assertEqual('10.1.1.1', parsed.allocation_pools[0]['start'])
+        self.assertEqual('10.1.1.4', parsed.allocation_pools[0]['end'])
+        self.assertEqual('10.1.1.1/1', parsed.host_routes[0]['destination'])
+        self.assertEqual('20.1.1.1', parsed.host_routes[0]['nexthop'])
         self.assertEqual(['5'], parsed.dns_nameservers)
         self.assertEqual(True, parsed.disable_dhcp)
         self.assertEqual('sneed', parsed.tenant_id)
         self.then_all_show_options(parsed)
+
+    def test_get_parser_alternate(self):
+        allargs = 'too 10.1.1.1/24' \
+                  ' --allocation-pool 10.1.1.1-10.1.1.4' \
+                  ' --host-route 10.1.1.1/1=20.1.1.1'
+        allargs += self.given_all_show_options()
+        parsed = self.given_args(subnet.CreateSubnet, allargs)
+        self.assertEqual('too', parsed.network_id)
+        self.assertEqual('10.1.1.1/24', parsed.cidr)
+        self.assertEqual('10.1.1.1', parsed.allocation_pools[0]['start'])
+        self.assertEqual('10.1.1.4', parsed.allocation_pools[0]['end'])
+        self.assertEqual('10.1.1.1/1', parsed.host_routes[0]['destination'])
+        self.assertEqual('20.1.1.1', parsed.host_routes[0]['nexthop'])
 
 
 class TestDeleteSubnet(common.TestNetworkBase):

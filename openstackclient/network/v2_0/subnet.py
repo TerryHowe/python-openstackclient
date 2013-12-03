@@ -16,7 +16,6 @@
 """Subnet action implementations"""
 
 from neutronclient.neutron.v2_0 import subnet as neu2
-from openstackclient.common import parseractions
 from openstackclient.network import v2_0
 
 
@@ -24,6 +23,34 @@ class CreateSubnet(v2_0.CreateCommand):
     """Create a subnet"""
 
     clazz = neu2.CreateSubnet
+
+    def allocation_pool_parse(self, param):
+        """Convert min-max range into dictionary
+        """
+        dict = {}
+        if ',' in param:
+            for kv_str in param.split(","):
+                k, v = kv_str.split("=", 1)
+                dict.update({k: v})
+        else:
+            ray = param.split('-', 1)
+            dict['start'] = ray[0]
+            dict['end'] = ray[1]
+        return dict
+
+    def host_route_parse(self, param):
+        """Convert cidr=nexthop into dictionary
+        """
+        dict = {}
+        if ',' in param:
+            for kv_str in param.split(","):
+                k, v = kv_str.split("=", 1)
+                dict.update({k: v})
+        else:
+            ray = param.split('=', 1)
+            dict['destination'] = ray[0]
+            dict['nexthop'] = ray[1]
+        return dict
 
     def get_parser(self, prog_name):
         parser = super(CreateSubnet, self).get_parser(prog_name)
@@ -43,15 +70,15 @@ class CreateSubnet(v2_0.CreateCommand):
             action='store_true',
             help='No distribution of gateway')
         parser.add_argument(
-            '--allocation-pool', metavar='start=IP_ADDR,end=IP_ADDR',
-            dest='allocation_pools',
-            action=parseractions.KeyValueAction,
+            '--allocation-pool', metavar='START_IP-END_IP',
+            action='append', dest='allocation_pools',
+            type=self.allocation_pool_parse,
             help='Allocation pool IP addresses for this subnet '
             '(repeat option to set multiple properties)')
         parser.add_argument(
-            '--host-route', metavar='destination=CIDR,nexthop=IP_ADDR',
-            dest='host_routes',
-            action=parseractions.KeyValueAction,
+            '--host-route', metavar='CIDR=IP_ADDR',
+            action='append', dest='host_routes',
+            type=self.host_route_parse,
             help='Additional route (repeat option to set multiple properties)')
         parser.add_argument(
             '--dns-nameserver', metavar='DNS_NAMESERVER',
