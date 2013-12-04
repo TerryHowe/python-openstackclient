@@ -59,26 +59,40 @@ class TestListRouter(common.TestNetworkBase):
         given = "" + self.given_default_list_options()
         parsed = self.given_args(router.ListRouter, given)
         self.assertEqual(False, parsed.show_details)
+        self.assertEqual(None, parsed.l3_agent)
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
+        allargs = "--long --l3-agent foo" + self.given_all_list_options()
         parsed = self.given_args(router.ListRouter, allargs)
         self.assertEqual(True, parsed.show_details)
+        self.assertEqual('foo', parsed.l3_agent)
         self.then_all_list_options(parsed)
 
 
 class TestSetRouter(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(router.SetRouter, "noo")
-        self.assertEqual('noo', parsed.id)
-        self.assertEqual(None, parsed.description)
+        self.assertEqual('noo', parsed.router_id)
+        self.assertEqual(None, parsed.external_network_id)
+        self.assertEqual(False, parsed.no_gateway)
+        self.assertEqual(False, parsed.disable_snat)
 
     def test_get_parser_all(self):
-        allargs = 'too --description noosgtoo'
+        allargs = 'too --disable-snat --no-gateway'
         parsed = self.given_args(router.SetRouter, allargs)
-        self.assertEqual('too', parsed.id)
-        self.assertEqual('noosgtoo', parsed.description)
+        self.assertEqual('too', parsed.router_id)
+        self.assertEqual(None, parsed.external_network_id)
+        self.assertEqual(True, parsed.no_gateway)
+        self.assertEqual(True, parsed.disable_snat)
+
+    def test_get_parser_all_enable(self):
+        allargs = 'too --gateway way --enable-snat'
+        parsed = self.given_args(router.SetRouter, allargs)
+        self.assertEqual('too', parsed.router_id)
+        self.assertEqual('way', parsed.external_network_id)
+        self.assertEqual(False, parsed.no_gateway)
+        self.assertEqual(False, parsed.disable_snat)
 
 
 class TestShowRouter(common.TestNetworkBase):

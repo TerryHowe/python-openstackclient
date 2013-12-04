@@ -15,6 +15,7 @@
 
 """Router action implementations"""
 
+from neutronclient.neutron.v2_0 import agentscheduler
 from neutronclient.neutron.v2_0 import router as neu2
 from openstackclient.network import v2_0 as v2_0
 
@@ -57,26 +58,62 @@ class DeleteRouter(v2_0.DeleteCommand):
 class ListRouter(v2_0.ListCommand):
     """List router"""
 
-    clazz = neu2.ListRouter
+    def get_parser(self, prog_name):
+        parser = super(ListRouter, self).get_parser(prog_name)
+        parser.add_argument(
+            '--l3-agent',
+            help='ID of the L3 agent to query',
+        )
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        if parsed_args.l3_agent:
+            neuter = agentscheduler.ListRoutersOnL3Agent(self.app,
+                                                         self.app_args)
+        else:
+            neuter = neu2.ListRouter(self.app, self.app_args)
+        neuter.get_client = self.get_client
+        return neuter.take_action(parsed_args)
 
 
 class SetRouter(v2_0.SetCommand):
     """Set router values"""
 
-    clazz = neu2.UpdateRouter
-    name = 'id'
+    name = 'router_id'
     metavar = '<router>'
     help_text = 'ID of router to update'
 
     def get_parser(self, prog_name):
         parser = super(SetRouter, self).get_parser(prog_name)
         parser.add_argument(
-            '--description',
-            help='Description of the router')
+            '--gateway',
+            dest='external_network_id',
+            help='External network ID for the gateway')
         parser.add_argument(
-            '--name',
-            help='Name of the router')
+            '--no-gateway',
+            action='store_true', default=False,
+            help='Clear the gateway external network from the router')
+        parser.add_argument(
+            '--enable-snat',
+            dest='disable_snat', action='store_false',
+            default=False,
+            help='Enable source NAT on the router gateway')
+        parser.add_argument(
+            '--disable-snat',
+            action='store_true', default=False,
+            help='Disable source NAT on the router gateway')
         return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        parsed_args.request_format = 'json'
+        if parsed_args.no_gateway:
+            neuter = neu2.RemoveGatewayRouter(self.app, self.app_args)
+        else:
+            neuter = neu2.SetGatewayRouter(self.app, self.app_args)
+        neuter.get_client = self.get_client
+        return neuter.run(parsed_args)
 
 
 class ShowRouter(v2_0.ShowCommand):

@@ -64,7 +64,7 @@ class DeleteCommand(command.Command):
         self.log.debug('take_action(%s)' % parsed_args)
         neuter = self.clazz(self.app, self.app_args)
         neuter.get_client = self.get_client
-        return neuter.take_action(parsed_args)
+        return neuter.run(parsed_args)
 
 
 class ListCommand(lister.Lister):
