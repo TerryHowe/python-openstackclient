@@ -147,3 +147,73 @@ class ShowCommand(show.ShowOne):
         neuter.get_client = self.get_client
         parsed_args.show_details = True
         return neuter.take_action(parsed_args)
+
+
+class AddCommand(command.Command):
+
+    log = logging.getLogger(__name__ + '.AddCommand')
+    container_name = "container_id"
+    container_metavar = "<container_id>"
+    container_help_text = "Identifier of container"
+    name = "id"
+    metavar = "<id>"
+    help_text = "Identifier of object to be added"
+
+    def get_client(self):
+        return self.app.client_manager.network
+
+    def get_parser(self, prog_name):
+        parser = super(AddCommand, self).get_parser(prog_name)
+        parser.add_argument(
+            self.container_name,
+            metavar=self.container_metavar,
+            help=self.container_help_text,
+        )
+        parser.add_argument(
+            self.name,
+            metavar=self.metavar,
+            help=self.help_text,
+        )
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        neuter = self.clazz(self.app, self.app_args)
+        neuter.get_client = self.get_client
+        parsed_args.request_format = 'json'
+        return neuter.run(parsed_args)
+
+
+class RemoveCommand(command.Command):
+
+    log = logging.getLogger(__name__ + '.RemoveCommand')
+    container_name = "container_id"
+    container_metavar = "<container_id>"
+    container_help_text = "Identifier of container"
+    name = "id"
+    metavar = "<id>"
+    help_text = "Identifier of object to be removed"
+
+    def get_client(self):
+        return self.app.client_manager.network
+
+    def get_parser(self, prog_name):
+        parser = super(RemoveCommand, self).get_parser(prog_name)
+        parser.add_argument(
+            self.container_name,
+            metavar=self.container_metavar,
+            help=self.container_help_text,
+        )
+        parser.add_argument(
+            self.name,
+            metavar=self.metavar,
+            help=self.help_text,
+        )
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        neuter = self.clazz(self.app, self.app_args)
+        neuter.get_client = self.get_client
+        parsed_args.request_format = 'json'
+        return neuter.run(parsed_args)

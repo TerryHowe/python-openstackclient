@@ -123,3 +123,33 @@ class ShowRouter(v2_0.ShowCommand):
     name = 'id'
     metavar = '<router>'
     help_text = 'Name or ID of router to show'
+
+
+class AddInterfaceRouter(v2_0.AddCommand):
+    """Show a router"""
+
+    clazz = neu2.AddInterfaceRouter
+    container_name = 'router_id'
+    container_metavar = '<router>'
+    container_help_text = 'ID of router to add an interface to'
+    name = 'interface'
+    metavar = '<interface>'
+    help_text = 'The format is "SUBNET|subnet=SUBNET|port=PORT". ' \
+                'Either a subnet or port must be specified. ' \
+                'Both ID and name are accepted as SUBNET or PORT. ' \
+                'Note that "subnet=" can be omitted when specifying subnet.'
+
+
+class RemoveInterfaceRouter(v2_0.RemoveCommand):
+    """Show a router"""
+
+    clazz = neu2.RemoveInterfaceRouter
+    container_name = 'router_id'
+    container_metavar = '<router>'
+    container_help_text = 'ID of router to add an interface to'
+    name = 'interface'
+    metavar = '<interface>'
+    help_text = 'The format is "SUBNET|subnet=SUBNET|port=PORT". ' \
+                'Either a subnet or port must be specified. ' \
+                'Both ID and name are accepted as SUBNET or PORT. ' \
+                'Note that "subnet=" can be omitted when specifying subnet.'
