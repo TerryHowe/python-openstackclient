@@ -126,7 +126,7 @@ class ShowRouter(v2_0.ShowCommand):
 
 
 class AddInterfaceRouter(v2_0.AddCommand):
-    """Show a router"""
+    """Add a port or subnet to a router"""
 
     clazz = neu2.AddInterfaceRouter
     container_name = 'router_id'
@@ -141,7 +141,7 @@ class AddInterfaceRouter(v2_0.AddCommand):
 
 
 class RemoveInterfaceRouter(v2_0.RemoveCommand):
-    """Show a router"""
+    """Remove a port or subnet from a router"""
 
     clazz = neu2.RemoveInterfaceRouter
     container_name = 'router_id'

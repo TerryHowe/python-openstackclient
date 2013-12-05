@@ -15,6 +15,7 @@
 
 """Port action implementations"""
 
+from neutronclient.neutron.v2_0 import floatingip
 from neutronclient.neutron.v2_0 import port as neu2
 from openstackclient.network import v2_0 as v2_0
 
@@ -142,3 +143,35 @@ class ShowPort(v2_0.ShowCommand):
     name = 'id'
     metavar = '<port>'
     help_text = 'Name or ID of port to show'
+
+
+class AddPort(v2_0.RemoveCommand):
+    """Add a floating IP to a port"""
+
+    clazz = floatingip.AssociateFloatingIP
+    container_name = 'port_id'
+    container_metavar = '<port>'
+    container_help_text = 'ID of port'
+    name = 'floatingip_id'
+    metavar = '<floatingip>'
+    help_text = 'ID of floating IP to add to port'
+
+    def get_parser(self, prog_name):
+        parser = super(AddPort, self).get_parser(prog_name)
+        parser.add_argument(
+            '--fixed-ip-address',
+            help=('IP address on the port (only required if port has multiple'
+                  'IPs)'))
+        return parser
+
+
+class RemovePort(v2_0.RemoveCommand):
+    """Remove a floating IP from a port"""
+
+    clazz = floatingip.DisassociateFloatingIP
+    container_name = None
+    container_metavar = None
+    container_help_text = None
+    name = 'floatingip_id'
+    metavar = '<floatingip>'
+    help_text = 'ID of the floating IP to remove'

@@ -199,11 +199,12 @@ class RemoveCommand(command.Command):
 
     def get_parser(self, prog_name):
         parser = super(RemoveCommand, self).get_parser(prog_name)
-        parser.add_argument(
-            self.container_name,
-            metavar=self.container_metavar,
-            help=self.container_help_text,
-        )
+        if self.container_name:
+            parser.add_argument(
+                self.container_name,
+                metavar=self.container_metavar,
+                help=self.container_help_text,
+            )
         parser.add_argument(
             self.name,
             metavar=self.metavar,
