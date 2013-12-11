@@ -89,6 +89,7 @@ class ListCommand(lister.Lister):
         self.log.debug('take_action(%s)' % parsed_args)
         neuter = self.clazz(self.app, self.app_args)
         neuter.get_client = self.get_client
+        parsed_args.request_format = 'json'
         return neuter.take_action(parsed_args)
 
 

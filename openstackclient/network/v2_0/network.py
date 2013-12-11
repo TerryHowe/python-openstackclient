@@ -69,6 +69,11 @@ class ListNetwork(v2_0.ListCommand):
         else:
             neuter = neu2.ListNetwork(self.app, self.app_args)
         neuter.get_client = self.get_client
+        parsed_args.request_format = 'json'
+        parsed_args.fields = []
+        parsed_args.page_size = None
+        parsed_args.sort_key = []
+        parsed_args.sort_dir = []
         return neuter.take_action(parsed_args)
 
 
