@@ -38,6 +38,7 @@ class CreateCommand(show.ShowOne):
         self.log.debug('take_action(%s)' % parsed_args)
         neuter = self.clazz(self.app, self.app_args)
         neuter.get_client = self.get_client
+        parsed_args.request_format = 'json'
         return neuter.take_action(parsed_args)
 
 
@@ -64,6 +65,7 @@ class DeleteCommand(command.Command):
         self.log.debug('take_action(%s)' % parsed_args)
         neuter = self.clazz(self.app, self.app_args)
         neuter.get_client = self.get_client
+        parsed_args.request_format = 'json'
         return neuter.run(parsed_args)
 
 
@@ -90,6 +92,7 @@ class ListCommand(lister.Lister):
         neuter = self.clazz(self.app, self.app_args)
         neuter.get_client = self.get_client
         parsed_args.request_format = 'json'
+        parsed_args.fields = []
         return neuter.take_action(parsed_args)
 
 
@@ -120,6 +123,7 @@ class SetCommand(command.Command):
         self.log.debug('take_action(%s)' % parsed_args)
         neuter = self.clazz(self.app, self.app_args)
         neuter.get_client = self.get_client
+        parsed_args.request_format = 'json'
         return neuter.take_action(parsed_args)
 
 
@@ -147,6 +151,8 @@ class ShowCommand(show.ShowOne):
         neuter = self.clazz(self.app, self.app_args)
         neuter.get_client = self.get_client
         parsed_args.show_details = True
+        parsed_args.request_format = 'json'
+        parsed_args.fields = []
         return neuter.take_action(parsed_args)
 
 
