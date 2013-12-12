@@ -16,6 +16,7 @@
 """Network action implementations"""
 
 from neutronclient.neutron.v2_0 import network as neu2
+from neutronclient.neutron.v2_0 import nvpnetworkgateway
 from openstackclient.network import v2_0 as v2_0
 
 
@@ -93,3 +94,51 @@ class ShowNetwork(v2_0.ShowCommand):
     name = 'id'
     metavar = '<network>'
     help_text = 'Name or ID of network to show'
+
+
+class AddGatewayNetwork(v2_0.AddCommand):
+    """Add a gateway to a network"""
+
+    clazz = nvpnetworkgateway.ConnectNetworkGateway
+    container_name = "network_id"
+    container_metavar = "<network_id>"
+    container_help_text = "ID of the internal network"
+    name = 'net_gateway_id'
+    metavar = '<gateway_id>'
+    help_text = 'ID of the gatway'
+
+    def get_parser(self, prog_name):
+        parser = super(AddGatewayNetwork, self).get_parser(prog_name)
+        parser.add_argument(
+            '--segmentation-type',
+            help=('L2 segmentation strategy on the external side of '
+                  'the gateway (e.g.: VLAN, FLAT)'))
+        parser.add_argument(
+            '--segmentation-id',
+            help=('Identifier for the L2 segment on the external side '
+                  'of the gateway'))
+        return parser
+
+
+class RemoveGatewayNetwork(v2_0.RemoveCommand):
+    """Remove a gateway from a network"""
+
+    clazz = nvpnetworkgateway.ConnectNetworkGateway
+    container_name = "network_id"
+    container_metavar = "<network_id>"
+    container_help_text = "ID of the internal network"
+    name = 'net_gateway_id'
+    metavar = '<gateway_id>'
+    help_text = 'ID of the gatway'
+
+    def get_parser(self, prog_name):
+        parser = super(RemoveGatewayNetwork, self).get_parser(prog_name)
+        parser.add_argument(
+            '--segmentation-type',
+            help=('L2 segmentation strategy on the external side of '
+                  'the gateway (e.g.: VLAN, FLAT)'))
+        parser.add_argument(
+            '--segmentation-id',
+            help=('Identifier for the L2 segment on the external side '
+                  'of the gateway'))
+        return parser

@@ -64,3 +64,35 @@ class TestNetworkBase(utils.TestCase):
         self.assertEqual('csv', parsed.formatter)
         self.assertEqual(['id'], parsed.columns)
         self.assertEqual('all', parsed.quote_mode)
+
+
+class FakeOptions(argparse.Namespace):
+    def __init__(self):
+        super(FakeOptions, self).__init__()
+        self.debug = False
+        self.deferred_help = False
+        self.insecure = True
+        self.os_default_domain = 'testing'
+        self.os_cacert = False
+        self.os_identity_api_version = 'idversion'
+        self.os_password = 'password'
+        self.os_project_id = 'project_id'
+        self.os_project_name = 'project_name'
+        self.os_region_name = 'region_name'
+        self.os_network_api_version = '2.0'
+        self.os_token = 'token'
+        self.os_url = 'http://127.0.0.1'
+        self.os_auth_url = 'http://127.0.0.1/identity'
+        self.os_username = 'username'
+
+
+class FakeParsedArgs(argparse.Namespace):
+    def __init__(self):
+        super(FakeParsedArgs, self).__init__()
+        self.show_details = True
+        self.request_format = 'json'
+        self.prefix = ''
+        self.fields = []
+        self.columns = []
+        self.variables = []
+        self.formatter = 'shell'
