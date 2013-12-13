@@ -15,7 +15,11 @@
 
 import argparse
 import mock
+import sys
+import traceback
 
+from openstackclient import shell
+from openstackclient.tests import fakes
 from openstackclient.tests import utils
 
 
@@ -96,3 +100,19 @@ class FakeParsedArgs(argparse.Namespace):
         self.columns = []
         self.variables = []
         self.formatter = 'shell'
+
+
+class FakeShell(shell.OpenStackShell):
+    def __init__(self):
+        super(FakeShell, self).__init__()
+        self.options = FakeOptions()
+        try:
+            self.initialize_app(["run.py", "help"])
+        except Exception:
+            print('\n'.join(traceback.format_tb(sys.exc_info()[2])))
+        try:
+            self.authenticate_user()
+        except Exception:
+            print('\n'.join(traceback.format_tb(sys.exc_info()[2])))
+        self.stdout = fakes.FakeStdout()
+        self.stderr = fakes.FakeStdout()
