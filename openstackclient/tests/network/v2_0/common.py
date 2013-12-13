@@ -14,6 +14,7 @@
 #
 
 import argparse
+import httpretty
 import mock
 import sys
 import traceback
@@ -21,53 +22,6 @@ import traceback
 from openstackclient import shell
 from openstackclient.tests import fakes
 from openstackclient.tests import utils
-
-
-class TestNetworkBase(utils.TestCase):
-    def given_args(self, clz, args):
-        args = args.split()
-        app = mock.Mock()
-        cmd = clz(app, argparse.Namespace())
-        parser = cmd.get_parser(str(clz))
-        try:
-            parsed_args = parser.parse_args(args)
-        except SystemExit:
-            self.assertEqual('Bad argument: ' + str(args), '')
-        return parsed_args
-
-    def given_default_show_options(self):
-        return ""
-
-    def then_default_show_options(self, parsed):
-        self.assertEqual('table', parsed.formatter)
-        self.assertEqual([], parsed.columns)
-        self.assertEqual([], parsed.variables)
-        self.assertEqual('', parsed.prefix)
-
-    def given_all_show_options(self):
-        return " -f shell -c id --variable VAR --prefix TST"
-
-    def then_all_show_options(self, parsed):
-        self.assertEqual('shell', parsed.formatter)
-        self.assertEqual(['id'], parsed.columns)
-        self.assertEqual(['VAR'], parsed.variables)
-        self.assertEqual('TST', parsed.prefix)
-
-    def given_default_list_options(self):
-        return ""
-
-    def then_default_list_options(self, parsed):
-        self.assertEqual('table', parsed.formatter)
-        self.assertEqual([], parsed.columns)
-        self.assertEqual('nonnumeric', parsed.quote_mode)
-
-    def given_all_list_options(self):
-        return " -f csv -c id --quote all"
-
-    def then_all_list_options(self, parsed):
-        self.assertEqual('csv', parsed.formatter)
-        self.assertEqual(['id'], parsed.columns)
-        self.assertEqual('all', parsed.quote_mode)
 
 
 class FakeOptions(argparse.Namespace):
@@ -117,3 +71,82 @@ class FakeShell(shell.OpenStackShell):
             print('\n'.join(traceback.format_tb(sys.exc_info()[2])))
         self.stdout = fakes.FakeStdout()
         self.stderr = fakes.FakeStdout()
+
+
+class TestIntegrationBase(utils.TestCase):
+    HOST = "http://127.0.0.1"
+    VER = "/v2.0"
+
+    def setUp(self):
+        super(TestIntegrationBase, self).setUp()
+        self.app = FakeShell()
+
+    def when_run(self, clazz, pargs):
+        try:
+            result = clazz(self.app, pargs).run(pargs)
+        except Exception as e:
+            print('\n'.join(traceback.format_tb(sys.exc_info()[2])))
+            print(str(e))
+            lasty = httpretty.last_request()
+            print('====================================================')
+            print("body = " + str(lasty.body))
+            print("querystring = " + str(getattr(lasty, 'querystring', '')))
+            print("command = " + str(lasty.command))
+            print("method = " + str(lasty.method))
+            print("path = " + str(lasty.path))
+            print('====================================================')
+            raise e
+        self.assertEqual(0, result)
+
+    def stdout(self):
+        return self.app.stdout.lines()
+
+    def stderr(self):
+        return self.app.stderr.lines()
+
+
+class TestNetworkBase(utils.TestCase):
+    def given_args(self, clz, args):
+        args = args.split()
+        app = mock.Mock()
+        cmd = clz(app, argparse.Namespace())
+        parser = cmd.get_parser(str(clz))
+        try:
+            parsed_args = parser.parse_args(args)
+        except SystemExit:
+            self.assertEqual('Bad argument: ' + str(args), '')
+        return parsed_args
+
+    def given_default_show_options(self):
+        return ""
+
+    def then_default_show_options(self, parsed):
+        self.assertEqual('table', parsed.formatter)
+        self.assertEqual([], parsed.columns)
+        self.assertEqual([], parsed.variables)
+        self.assertEqual('', parsed.prefix)
+
+    def given_all_show_options(self):
+        return " -f shell -c id --variable VAR --prefix TST"
+
+    def then_all_show_options(self, parsed):
+        self.assertEqual('shell', parsed.formatter)
+        self.assertEqual(['id'], parsed.columns)
+        self.assertEqual(['VAR'], parsed.variables)
+        self.assertEqual('TST', parsed.prefix)
+
+    def given_default_list_options(self):
+        return ""
+
+    def then_default_list_options(self, parsed):
+        self.assertEqual('table', parsed.formatter)
+        self.assertEqual([], parsed.columns)
+        self.assertEqual('nonnumeric', parsed.quote_mode)
+
+    def given_all_list_options(self):
+        return " -f csv -c id --quote all"
+
+    def then_all_list_options(self, parsed):
+        self.assertEqual('csv', parsed.formatter)
+        self.assertEqual(['id'], parsed.columns)
+        self.assertEqual('all', parsed.quote_mode)
