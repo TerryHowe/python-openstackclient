@@ -100,6 +100,7 @@ class FakeParsedArgs(argparse.Namespace):
         self.columns = []
         self.variables = []
         self.formatter = 'shell'
+        self.quote_mode = 'none'
 
 
 class FakeShell(shell.OpenStackShell):

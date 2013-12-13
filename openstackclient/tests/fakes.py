@@ -26,7 +26,7 @@ class FakeStdout:
         self.current = 0
 
     def write(self, text):
-        self.content.append(text)
+        self.content.append(text.replace('\r', ''))
 
     def make_string(self):
         result = ''
