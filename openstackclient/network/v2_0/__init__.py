@@ -92,6 +92,9 @@ class ListCommand(lister.Lister):
         neuter = self.clazz(self.app, self.app_args)
         neuter.get_client = self.get_client
         parsed_args.request_format = 'json'
+        parsed_args.page_size = None
+        parsed_args.sort_key = []
+        parsed_args.sort_dir = []
         parsed_args.fields = []
         return neuter.take_action(parsed_args)
 

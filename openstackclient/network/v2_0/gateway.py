@@ -20,7 +20,7 @@ from openstackclient.network import v2_0 as v2_0
 
 
 class CreateGateway(v2_0.CreateCommand):
-    """Create a network"""
+    """Create a gateway"""
 
     clazz = neu2.CreateNetworkGateway
 
@@ -28,7 +28,7 @@ class CreateGateway(v2_0.CreateCommand):
         parser = super(CreateGateway, self).get_parser(prog_name)
         parser.add_argument(
             'name', metavar='NAME',
-            help='Name of network gateway to create')
+            help='Name of gateway to create')
         parser.add_argument(
             '--device',
             action='append',
@@ -40,33 +40,33 @@ class CreateGateway(v2_0.CreateCommand):
 
 
 class DeleteGateway(v2_0.DeleteCommand):
-    """Delete a network"""
+    """Delete a gateway"""
 
     clazz = neu2.DeleteNetworkGateway
     name = 'id'
-    metavar = '<network>'
-    help_text = 'Name or ID of network to delete'
+    metavar = '<gateway>'
+    help_text = 'Name or ID of gateway to delete'
 
 
 class ListGateway(v2_0.ListCommand):
-    """List networks"""
+    """List gateways"""
 
     clazz = neu2.ListNetworkGateway
 
 
 class SetGateway(v2_0.SetCommand):
-    """Set network values"""
+    """Set gateway values"""
 
     clazz = neu2.UpdateNetworkGateway
-    name = 'network'
-    metavar = '<network>'
-    help_text = 'Name or ID of network to set'
+    name = 'gateway'
+    metavar = '<gateway>'
+    help_text = 'Name or ID of gateway to set'
 
 
 class ShowGateway(v2_0.ShowCommand):
-    """Show a network"""
+    """Show a gateway"""
 
     clazz = neu2.ShowNetworkGateway
     name = 'id'
-    metavar = '<network>'
-    help_text = 'Name or ID of network to show'
+    metavar = '<gateway>'
+    help_text = 'Name or ID of gateway to show'

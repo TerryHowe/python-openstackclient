@@ -68,6 +68,11 @@ class ListRouter(v2_0.ListCommand):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        parsed_args.request_format = 'json'
+        parsed_args.fields = []
+        parsed_args.page_size = None
+        parsed_args.sort_key = []
+        parsed_args.sort_dir = []
         if parsed_args.l3_agent:
             neuter = agentscheduler.ListRoutersOnL3Agent(self.app,
                                                          self.app_args)
