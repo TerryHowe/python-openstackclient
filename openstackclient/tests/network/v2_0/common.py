@@ -91,7 +91,7 @@ class TestIntegrationBase(utils.TestCase):
             print('====================================================')
             print("body = " + str(lasty.body))
             print("querystring = " + str(getattr(lasty, 'querystring', '')))
-            print("command = " + str(lasty.command))
+            print("command = " + str(getattr(lasty, 'command', '')))
             print("method = " + str(lasty.method))
             print("path = " + str(lasty.path))
             print('====================================================')

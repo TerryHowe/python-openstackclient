@@ -59,7 +59,7 @@ class TestListGateway(common.TestNetworkBase):
 class TestSetGateway(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(gateway.SetGateway, "noo")
-        self.assertEqual('noo', parsed.network)
+        self.assertEqual('noo', parsed.gateway)
 
 
 class TestShowGateway(common.TestNetworkBase):
