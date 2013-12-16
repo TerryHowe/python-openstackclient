@@ -92,8 +92,8 @@ class TestIntegrationBase(utils.TestCase):
             print("body = " + str(lasty.body))
             print("querystring = " + str(getattr(lasty, 'querystring', '')))
             print("command = " + str(getattr(lasty, 'command', '')))
-            print("method = " + str(lasty.method))
-            print("path = " + str(lasty.path))
+            print("method = " + str(getattr(lasty, 'method', '')))
+            print("path = " + str(getattr(lasty, 'path', '')))
             print('====================================================')
             raise e
         self.assertEqual(0, result)
