@@ -7,3 +7,5 @@ python-keystoneclient>=0.4.1
 python-novaclient>=2.15.0
 python-cinderclient>=1.0.6
 python-neutronclient
+requests>=1.1
+six>=1.4.1
