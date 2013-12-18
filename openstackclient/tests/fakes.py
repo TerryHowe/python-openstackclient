@@ -23,10 +23,9 @@ AUTH_URL = "http://0.0.0.0"
 class FakeStdout:
     def __init__(self):
         self.content = []
-        self.current = 0
 
     def write(self, text):
-        self.content.append(text.replace('\r', ''))
+        self.content.append(text)
 
     def make_string(self):
         result = ''
@@ -35,7 +34,7 @@ class FakeStdout:
         return result
 
     def lines(self):
-        return ''.join(self.content)
+        return ''.join(self.content).replace('\r', '')
 
 
 class FakeApp(object):
