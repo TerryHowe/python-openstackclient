@@ -23,6 +23,8 @@ class TestShowRouterIntegration(common.TestIntegrationBase):
     HOSTESS = common.TestIntegrationBase.HOST + common.TestIntegrationBase.VER
     SUBNET_URL = HOSTESS + "/subnets.json"
     SUBNET_ONE = '{ "subnets": [{ "id": "45456777" }] }'
+    PORT_URL = HOSTESS + "/ports.json"
+    PORT_ONE = '{ "ports": [{ "id": "23422222" }] }'
     CREATE_URL = HOSTESS + "/routers.json"
     CREATE = """
 {
@@ -174,7 +176,7 @@ tenant_id="33a40233"
 """, self.stdout())
 
     @httpretty.activate
-    def test_add(self):
+    def test_add_subnet(self):
         pargs = common.FakeParsedArgs()
         pargs.router_id = 'rooty'
         pargs.interface = 'subby'
@@ -184,13 +186,14 @@ tenant_id="33a40233"
                                body=self.SUBNET_ONE)
         httpretty.register_uri(httpretty.PUT, self.ADD_URL,
                                body=self.ADD)
-        self.when_run(router.AddInterfaceRouter, pargs)
+        expected_body = '{"subnet_id": "45456777"}'
+        self.when_run(router.AddSubnetRouter, pargs, expected_body)
         self.assertEqual('', self.stderr())
         self.assertEqual(u'Added interface 93939392 to router rooty.\n',
                          self.stdout())
 
     @httpretty.activate
-    def test_remove(self):
+    def test_remove_subnet(self):
         pargs = common.FakeParsedArgs()
         pargs.router_id = 'rooty'
         pargs.interface = 'subby'
@@ -200,7 +203,42 @@ tenant_id="33a40233"
                                body=self.SUBNET_ONE)
         httpretty.register_uri(httpretty.PUT, self.REMOVE_URL,
                                body=self.REMOVE)
-        self.when_run(router.RemoveInterfaceRouter, pargs)
+        expected_body = '{"subnet_id": "45456777"}'
+        self.when_run(router.RemoveSubnetRouter, pargs, expected_body)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u'Removed interface from router rooty.\n',
+                         self.stdout())
+
+    @httpretty.activate
+    def test_add_port(self):
+        pargs = common.FakeParsedArgs()
+        pargs.router_id = 'rooty'
+        pargs.port = 'puerto'
+        httpretty.register_uri(httpretty.GET, self.LIST_URL,
+                               body=self.LIST_ONE)
+        httpretty.register_uri(httpretty.GET, self.PORT_URL,
+                               body=self.PORT_ONE)
+        httpretty.register_uri(httpretty.PUT, self.ADD_URL,
+                               body=self.ADD)
+        expected_body = '{"port_id": "23422222"}'
+        self.when_run(router.AddPortRouter, pargs, expected_body)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u'Added interface 93939392 to router rooty.\n',
+                         self.stdout())
+
+    @httpretty.activate
+    def test_remove_port(self):
+        pargs = common.FakeParsedArgs()
+        pargs.router_id = 'rooty'
+        pargs.port = 'puerto'
+        httpretty.register_uri(httpretty.GET, self.LIST_URL,
+                               body=self.LIST_ONE)
+        httpretty.register_uri(httpretty.GET, self.PORT_URL,
+                               body=self.PORT_ONE)
+        httpretty.register_uri(httpretty.PUT, self.REMOVE_URL,
+                               body=self.REMOVE)
+        expected_body = '{"port_id": "23422222"}'
+        self.when_run(router.RemovePortRouter, pargs, expected_body)
         self.assertEqual('', self.stderr())
         self.assertEqual(u'Removed interface from router rooty.\n',
                          self.stdout())

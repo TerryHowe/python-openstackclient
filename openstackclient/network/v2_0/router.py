@@ -137,12 +137,6 @@ class AddInterfaceRouter(v2_0.AddCommand):
     container_name = 'router_id'
     container_metavar = '<router>'
     container_help_text = 'ID of router to add an interface to'
-    name = 'interface'
-    metavar = '<interface>'
-    help_text = 'The format is "SUBNET|subnet=SUBNET|port=PORT". ' \
-                'Either a subnet or port must be specified. ' \
-                'Both ID and name are accepted as SUBNET or PORT. ' \
-                'Note that "subnet=" can be omitted when specifying subnet.'
 
 
 class RemoveInterfaceRouter(v2_0.RemoveCommand):
@@ -158,3 +152,43 @@ class RemoveInterfaceRouter(v2_0.RemoveCommand):
                 'Either a subnet or port must be specified. ' \
                 'Both ID and name are accepted as SUBNET or PORT. ' \
                 'Note that "subnet=" can be omitted when specifying subnet.'
+
+
+class AddPortRouter(AddInterfaceRouter):
+    """Add a port to a router"""
+
+    name = 'port'
+    metavar = '<port>'
+    help_text = 'ID or name of port to add'
+
+    def take_action(self, parsed_args):
+        parsed_args.interface = "port=" + parsed_args.port
+        return super(AddPortRouter, self).take_action(parsed_args)
+
+
+class RemovePortRouter(RemoveInterfaceRouter):
+    """Remove a port from a router"""
+
+    name = 'port'
+    metavar = '<port>'
+    help_text = 'ID or name of port to add'
+
+    def take_action(self, parsed_args):
+        parsed_args.interface = "port=" + parsed_args.port
+        return super(RemovePortRouter, self).take_action(parsed_args)
+
+
+class AddSubnetRouter(AddInterfaceRouter):
+    """Add a port to a router"""
+
+    name = 'interface'
+    metavar = '<subnet>'
+    help_text = 'ID or name of subnet to add'
+
+
+class RemoveSubnetRouter(RemoveInterfaceRouter):
+    """Remove a port from a router"""
+
+    name = 'interface'
+    metavar = '<subnet>'
+    help_text = 'ID or name of subnet to add'

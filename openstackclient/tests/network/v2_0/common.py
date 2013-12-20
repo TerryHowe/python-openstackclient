@@ -81,7 +81,7 @@ class TestIntegrationBase(utils.TestCase):
         super(TestIntegrationBase, self).setUp()
         self.app = FakeShell()
 
-    def when_run(self, clazz, pargs):
+    def when_run(self, clazz, pargs, expected_body=None):
         try:
             result = clazz(self.app, pargs).run(pargs)
         except Exception as e:
@@ -97,6 +97,9 @@ class TestIntegrationBase(utils.TestCase):
             print('====================================================')
             raise e
         self.assertEqual(0, result)
+        if expected_body:
+            lasty = httpretty.last_request()
+            self.assertEqual(expected_body, lasty.body)
 
     def stdout(self):
         return self.app.stdout.lines()
