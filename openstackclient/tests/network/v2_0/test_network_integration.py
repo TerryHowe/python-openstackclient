@@ -23,6 +23,8 @@ class TestNetworkIntegration(common.TestIntegrationBase):
     HOSTESS = common.TestIntegrationBase.HOST + common.TestIntegrationBase.VER
     SUBNETS_URL = HOSTESS + "/subnets.json"
     SUBNETS_ONE = '{ "subnets": [{ "id": "12312311" }]}'
+    GATEWAY_URL = HOSTESS + "/network-gateways.json"
+    GATEWAY_ONE = '{ "network_gateways": [{ "id": "88888888" }]}'
     CREATE_URL = HOSTESS + "/networks.json"
     CREATE = """
 {
@@ -62,6 +64,11 @@ class TestNetworkIntegration(common.TestIntegrationBase):
 }"""
     SHOW_URL = HOSTESS + "/networks/a9254bdb.json"
     SHOW = CREATE
+    CONNECT_URL = HOSTESS + "/network-gateways/88888888/connect_network.json"
+    CONNECT = "{}"
+    DISCONNECT_URL = HOSTESS + \
+        "/network-gateways/88888888/disconnect_network.json"
+    DISCONNECT = "{}"
 
     @httpretty.activate
     def test_create(self):
@@ -155,3 +162,39 @@ name="gator"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
+
+    @httpretty.activate
+    def test_add_gateway(self):
+        pargs = common.FakeParsedArgs()
+        pargs.network_id = 'gator'
+        pargs.net_gateway_id = 'way'
+        pargs.segmentation_type = None
+        pargs.segmentation_id = None
+        httpretty.register_uri(httpretty.GET, self.GATEWAY_URL,
+                               body=self.GATEWAY_ONE)
+        httpretty.register_uri(httpretty.GET, self.LIST_URL,
+                               body=self.LIST_ONE)
+        httpretty.register_uri(httpretty.PUT, self.CONNECT_URL,
+                               body=self.CONNECT)
+        self.when_run(network.AddGatewayNetwork, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u'Connected network to gateway 88888888\n',
+                         self.stdout())
+
+    @httpretty.activate
+    def test_remove_gateway(self):
+        pargs = common.FakeParsedArgs()
+        pargs.network_id = 'gator'
+        pargs.net_gateway_id = 'way'
+        pargs.segmentation_type = None
+        pargs.segmentation_id = None
+        httpretty.register_uri(httpretty.GET, self.GATEWAY_URL,
+                               body=self.GATEWAY_ONE)
+        httpretty.register_uri(httpretty.GET, self.LIST_URL,
+                               body=self.LIST_ONE)
+        httpretty.register_uri(httpretty.PUT, self.DISCONNECT_URL,
+                               body=self.DISCONNECT)
+        self.when_run(network.RemoveGatewayNetwork, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u'Disconnected network from gateway 88888888\n',
+                         self.stdout())

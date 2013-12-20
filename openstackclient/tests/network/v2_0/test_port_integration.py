@@ -31,7 +31,7 @@ class TestPortIntegration(common.TestIntegrationBase):
    "port":
    {
        "status": "ACTIVE",
-       "name": "gator",
+       "name": "puerto",
        "tenant_id": "33a40233",
        "id": "a9254bdb"
    }
@@ -45,7 +45,7 @@ class TestPortIntegration(common.TestIntegrationBase):
    "ports": [
        {
           "status": "ACTIVE",
-          "name": "gator",
+          "name": "puerto",
           "tenant_id": "33a40233",
           "id": "a9254bdb"
        },
@@ -59,11 +59,13 @@ class TestPortIntegration(common.TestIntegrationBase):
 }"""
     SHOW_URL = HOSTESS + "/ports/a9254bdb.json"
     SHOW = CREATE
+    ADD_REMOVE_URL = HOSTESS + "/floatingips/127.0.0.1.json"
+    ADD_REMOVE = "{}"
 
     @httpretty.activate
     def test_create(self):
         pargs = common.FakeParsedArgs()
-        pargs.name = 'gator'
+        pargs.name = 'puerto'
         pargs.network_id = '44444448'
         pargs.admin_state = 'UP'
         pargs.mac_address = '1231233212'
@@ -82,7 +84,7 @@ class TestPortIntegration(common.TestIntegrationBase):
         self.assertEqual(u"""\
 Created a new port:
 id="a9254bdb"
-name="gator"
+name="puerto"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
@@ -90,14 +92,14 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_delete(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'gator'
+        pargs.id = 'puerto'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.DELETE, self.DELETE_URL,
                                body=self.DELETE)
         self.when_run(port.DeletePort, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Deleted port: gator\n',
+        self.assertEqual(u'Deleted port: puerto\n',
                          self.stdout())
 
     @httpretty.activate
@@ -116,14 +118,14 @@ tenant_id="33a40233"
         self.assertEqual('', self.stderr())
         self.assertEqual("""\
 id,name
-a9254bdb,gator
+a9254bdb,puerto
 b8408dgd,croc
 """, self.stdout())
 
     @httpretty.activate
     def test_set(self):
         pargs = common.FakeParsedArgs()
-        pargs.name = 'gator'
+        pargs.name = 'puerto'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         self.when_run(port.SetPort, pargs)
@@ -133,7 +135,7 @@ b8408dgd,croc
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'gator'
+        pargs.id = 'puerto'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,
@@ -142,7 +144,31 @@ b8408dgd,croc
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
 id="a9254bdb"
-name="gator"
+name="puerto"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
+
+    @httpretty.activate
+    def test_add(self):
+        pargs = common.FakeParsedArgs()
+        pargs.port_id = 'puerto'
+        pargs.floatingip_id = '127.0.0.1'
+        pargs.fixed_ip_address = None
+        httpretty.register_uri(httpretty.PUT, self.ADD_REMOVE_URL,
+                               body=self.ADD_REMOVE)
+        self.when_run(port.AddPort, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u'Associated floatingip 127.0.0.1\n', self.stdout())
+
+    @httpretty.activate
+    def test_remove(self):
+        pargs = common.FakeParsedArgs()
+        pargs.port_id = 'puerto'
+        pargs.floatingip_id = '127.0.0.1'
+        httpretty.register_uri(httpretty.PUT, self.ADD_REMOVE_URL,
+                               body=self.ADD_REMOVE)
+        self.when_run(port.RemovePort, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u'Disassociated floatingip 127.0.0.1\n',
+                         self.stdout())

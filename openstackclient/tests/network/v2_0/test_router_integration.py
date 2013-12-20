@@ -21,13 +21,15 @@ from openstackclient.tests.network.v2_0 import common
 
 class TestShowRouterIntegration(common.TestIntegrationBase):
     HOSTESS = common.TestIntegrationBase.HOST + common.TestIntegrationBase.VER
+    SUBNET_URL = HOSTESS + "/subnets.json"
+    SUBNET_ONE = '{ "subnets": [{ "id": "45456777" }] }'
     CREATE_URL = HOSTESS + "/routers.json"
     CREATE = """
 {
    "router":
    {
        "status": "ACTIVE",
-       "name": "gator",
+       "name": "rooty",
        "tenant_id": "33a40233",
        "id": "a9254bdb"
    }
@@ -41,7 +43,7 @@ class TestShowRouterIntegration(common.TestIntegrationBase):
    "routers": [
        {
           "status": "ACTIVE",
-          "name": "gator",
+          "name": "rooty",
           "tenant_id": "33a40233",
           "id": "a9254bdb"
        },
@@ -60,7 +62,7 @@ class TestShowRouterIntegration(common.TestIntegrationBase):
        {
             "status": "ACTIVE",
             "external_gateway_info": {},
-            "name": "gator",
+            "name": "rooty",
             "admin_state_up": true,
             "tenant_id": "3671f46ec35e4bbca6ef92ab7975e463",
             "routes": [],
@@ -70,11 +72,19 @@ class TestShowRouterIntegration(common.TestIntegrationBase):
 }"""
     SHOW_URL = HOSTESS + "/routers/a9254bdb.json"
     SHOW = CREATE
+    ADD_URL = HOSTESS + "/routers/a9254bdb/add_router_interface.json"
+    ADD = """
+{
+    "subnet_id": "45456777",
+    "port_id": "93939392"
+}"""
+    REMOVE_URL = HOSTESS + "/routers/a9254bdb/remove_router_interface.json"
+    REMOVE = "{}"
 
     @httpretty.activate
     def test_create(self):
         pargs = common.FakeParsedArgs()
-        pargs.name = 'gator'
+        pargs.name = 'rooty'
         pargs.admin_state = 'ACTIVE'
         pargs.tenant_id = '33a40233'
         httpretty.register_uri(httpretty.POST, self.CREATE_URL,
@@ -84,7 +94,7 @@ class TestShowRouterIntegration(common.TestIntegrationBase):
         self.assertEqual(u"""\
 Created a new router:
 id="a9254bdb"
-name="gator"
+name="rooty"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
@@ -92,14 +102,14 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_delete(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'gator'
+        pargs.id = 'rooty'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.DELETE, self.DELETE_URL,
                                body=self.DELETE)
         self.when_run(router.DeleteRouter, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Deleted router: gator\n',
+        self.assertEqual(u'Deleted router: rooty\n',
                          self.stdout())
 
     @httpretty.activate
@@ -113,7 +123,7 @@ tenant_id="33a40233"
         self.assertEqual('', self.stderr())
         self.assertEqual("""\
 id,name
-a9254bdb,gator
+a9254bdb,rooty
 b8408dgd,croc
 """, self.stdout())
 
@@ -128,13 +138,13 @@ b8408dgd,croc
         self.assertEqual('', self.stderr())
         self.assertEqual("""\
 id,name,external_gateway_info
-8eef2388,gator,{}
+8eef2388,rooty,{}
 """, self.stdout())
 
     @httpretty.activate
     def test_set(self):
         pargs = common.FakeParsedArgs()
-        pargs.name = 'gator'
+        pargs.name = 'rooty'
         pargs.router_id = '88888823'
         pargs.no_gateway = True
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
@@ -149,7 +159,7 @@ id,name,external_gateway_info
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'gator'
+        pargs.id = 'rooty'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,
@@ -158,7 +168,39 @@ id,name,external_gateway_info
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
 id="a9254bdb"
-name="gator"
+name="rooty"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
+
+    @httpretty.activate
+    def test_add(self):
+        pargs = common.FakeParsedArgs()
+        pargs.router_id = 'rooty'
+        pargs.interface = 'subby'
+        httpretty.register_uri(httpretty.GET, self.LIST_URL,
+                               body=self.LIST_ONE)
+        httpretty.register_uri(httpretty.GET, self.SUBNET_URL,
+                               body=self.SUBNET_ONE)
+        httpretty.register_uri(httpretty.PUT, self.ADD_URL,
+                               body=self.ADD)
+        self.when_run(router.AddInterfaceRouter, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u'Added interface 93939392 to router rooty.\n',
+                         self.stdout())
+
+    @httpretty.activate
+    def test_remove(self):
+        pargs = common.FakeParsedArgs()
+        pargs.router_id = 'rooty'
+        pargs.interface = 'subby'
+        httpretty.register_uri(httpretty.GET, self.LIST_URL,
+                               body=self.LIST_ONE)
+        httpretty.register_uri(httpretty.GET, self.SUBNET_URL,
+                               body=self.SUBNET_ONE)
+        httpretty.register_uri(httpretty.PUT, self.REMOVE_URL,
+                               body=self.REMOVE)
+        self.when_run(router.RemoveInterfaceRouter, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u'Removed interface from router rooty.\n',
+                         self.stdout())

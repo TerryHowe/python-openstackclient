@@ -123,7 +123,7 @@ class AddGatewayNetwork(v2_0.AddCommand):
 class RemoveGatewayNetwork(v2_0.RemoveCommand):
     """Remove a gateway from a network"""
 
-    clazz = nvpnetworkgateway.ConnectNetworkGateway
+    clazz = nvpnetworkgateway.DisconnectNetworkGateway
     container_name = "network_id"
     container_metavar = "<network_id>"
     container_help_text = "ID of the internal network"
