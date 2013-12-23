@@ -17,11 +17,11 @@ operations in OpenStack.  The master repository is on GitHub_.
 python-openstackclient is designed to add support for API extensions via a
 plugin mechanism.
 
-   * `Release management`_
-   * `Blueprints and feature specifications`_
-   * `Issue tracking`_
-   * `PyPi`_
-   * `Developer Docs`_
+* `Release management`_
+* `Blueprints and feature specifications`_
+* `Issue tracking`_
+* `PyPi`_
+* `Developer Docs`_
 .. _release management: https://launchpad.net/python-openstackclient
 .. _Blueprints and feature specifications: https://blueprints.launchpad.net/python-openstackclient
 .. _Issue tracking: https://bugs.launchpad.net/python-openstackclient
