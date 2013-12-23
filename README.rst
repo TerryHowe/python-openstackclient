@@ -27,6 +27,7 @@ plugin mechanism.
 .. _Issue tracking: https://bugs.launchpad.net/python-openstackclient
 .. _PyPi: https://pypi.python.org/pypi/python-openstackclient
 .. _Developer Docs: http://docs.openstack.org/developer/python-openstackclient/
+.. _install virtualenv: tools/install_venv.py
 
 Note
 ====
@@ -40,8 +41,6 @@ Getting Started
 
 We recommend using a virtualenv to install the client. This description
 uses the `install virtualenv`_ script to create the virtualenv::
-
-.. _install virtualenv: tools/install_venv.py
 
    python tools/install_venv.py
    source .venv/bin/activate
