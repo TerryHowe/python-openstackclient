@@ -20,13 +20,11 @@ plugin mechanism.
    * `Release management`_
    * `Blueprints and feature specifications`_
    * `Issue tracking`_
-   * `Bug tracking`_
    * `PyPi`_
    * `Developer Docs`_
 .. _release management: https://launchpad.net/python-openstackclient
 .. _Blueprints and feature specifications: https://blueprints.launchpad.net/python-openstackclient
 .. _Issue tracking: https://bugs.launchpad.net/python-openstackclient
-.. _Bug tracking: https://bugs.launchpad.net/python-openstackclient/+bugs
 .. _PyPi: https://pypi.python.org/pypi/python-openstackclient
 .. _Developer Docs: http://docs.openstack.org/developer/python-openstackclient/
 
@@ -41,7 +39,9 @@ Getting Started
 ===============
 
 We recommend using a virtualenv to install the client. This description
-uses the `tools/install_venv.py`_ script to create the virtualenv::
+uses the `install virtualenv`_ script to create the virtualenv::
+
+.. _install virtualenv: tools/install_venv.py
 
    python tools/install_venv.py
    source .venv/bin/activate
