@@ -63,7 +63,8 @@ class ListNetwork(v2_0.ListCommand):
             help='List external networks',
         )
         parser.add_argument(
-            '--dhcp_agent',
+            '--dhcp',
+            dest='dhcp_agent',
             help='ID of the DHCP agent')
         return parser
 

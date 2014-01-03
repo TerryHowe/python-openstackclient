@@ -50,13 +50,16 @@ class TestListNetwork(common.TestNetworkBase):
         parsed = self.given_args(network.ListNetwork, given)
         self.assertEqual(False, parsed.show_details)
         self.assertEqual(False, parsed.external)
+        self.assertEqual(None, parsed.dhcp_agent)
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long --external" + self.given_all_list_options()
+        allargs = "--long --external --dhcp dee" + \
+                  self.given_all_list_options()
         parsed = self.given_args(network.ListNetwork, allargs)
         self.assertEqual(True, parsed.show_details)
         self.assertEqual(True, parsed.external)
+        self.assertEqual('dee', parsed.dhcp_agent)
         self.then_all_list_options(parsed)
 
 
