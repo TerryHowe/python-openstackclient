@@ -25,6 +25,7 @@ class TestNetworkIntegration(common.TestIntegrationBase):
     SUBNETS_ONE = '{ "subnets": [{ "id": "12312311" }]}'
     GATEWAY_URL = HOSTESS + "/network-gateways.json"
     GATEWAY_ONE = '{ "network_gateways": [{ "id": "88888888" }]}'
+    DHCP_URL = HOSTESS + "/agents/orange/dhcp-networks.json"
     CREATE_URL = HOSTESS + "/networks.json"
     CREATE = """
 {
@@ -107,6 +108,7 @@ tenant_id="33a40233"
         pargs = common.FakeParsedArgs()
         pargs.formatter = 'csv'
         pargs.external = False
+        pargs.dhcp_agent = None
         httpretty.register_uri(httpretty.GET, self.SUBNETS_URL,
                                body=self.SUBNETS_ONE)
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
@@ -124,10 +126,29 @@ b8408dgd,croc
         pargs = common.FakeParsedArgs()
         pargs.formatter = 'csv'
         pargs.external = True
+        pargs.dhcp_agent = None
         httpretty.register_uri(httpretty.GET, self.SUBNETS_URL,
                                body=self.SUBNETS_ONE)
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST)
+        self.when_run(network.ListNetwork, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual("""\
+id,name
+a9254bdb,gator
+b8408dgd,croc
+""", self.stdout())
+
+    @httpretty.activate
+    def test_list_dhcp_agent(self):
+        pargs = common.FakeParsedArgs()
+        pargs.formatter = 'csv'
+        pargs.external = False
+        pargs.dhcp_agent = 'orange'
+        httpretty.register_uri(httpretty.GET, self.DHCP_URL,
+                               body=self.LIST)
+        httpretty.register_uri(httpretty.GET, self.SUBNETS_URL,
+                               body=self.SUBNETS_ONE)
         self.when_run(network.ListNetwork, pargs)
         self.assertEqual('', self.stderr())
         self.assertEqual("""\

@@ -15,6 +15,7 @@
 
 """Network action implementations"""
 
+from neutronclient.neutron.v2_0 import agentscheduler as agent
 from neutronclient.neutron.v2_0 import network as neu2
 from neutronclient.neutron.v2_0 import nvpnetworkgateway
 from openstackclient.network import v2_0 as v2_0
@@ -61,6 +62,9 @@ class ListNetwork(v2_0.ListCommand):
             default=False,
             help='List external networks',
         )
+        parser.add_argument(
+            '--dhcp_agent',
+            help='ID of the DHCP agent')
         return parser
 
     def take_action(self, parsed_args):
@@ -68,7 +72,10 @@ class ListNetwork(v2_0.ListCommand):
         if parsed_args.external:
             neuter = neu2.ListExternalNetwork(self.app, self.app_args)
         else:
-            neuter = neu2.ListNetwork(self.app, self.app_args)
+            if parsed_args.dhcp_agent:
+                neuter = agent.ListNetworksOnDhcpAgent(self.app, self.app_args)
+            else:
+                neuter = neu2.ListNetwork(self.app, self.app_args)
         neuter.get_client = self.get_client
         parsed_args.request_format = 'json'
         parsed_args.fields = []
