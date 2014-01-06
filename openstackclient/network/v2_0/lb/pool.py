@@ -106,7 +106,35 @@ class SetPool(v2_0.SetCommand):
 class ShowPool(v2_0.ShowCommand):
     """Show a load balancer pool"""
 
-    clazz = neu2.ShowPool
     name = 'pool'
     metavar = '<pool>'
     help_text = 'Name or ID of pool to show'
+
+    def get_parser(self, prog_name):
+        parser = super(ShowPool, self).get_parser(prog_name)
+        parser.add_argument(
+            '--agent',
+            action='store_true',
+            default=False, help='Show agents associated with this pool')
+        parser.add_argument(
+            '--stats',
+            action='store_true',
+            default=False, help='Show stats associated with this pool')
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        parsed_args.id = parsed_args.pool
+        parsed_args.show_details = True
+        parsed_args.request_format = 'json'
+        parsed_args.fields = []
+        if parsed_args.agent:
+            neuter = agentscheduler.GetLbaasAgentHostingPool(self.app,
+                                                             self.app_args)
+        else:
+            if parsed_args.stats:
+                neuter = neu2.RetrievePoolStats(self.app, self.app_args)
+            else:
+                neuter = neu2.ShowPool(self.app, self.app_args)
+        neuter.get_client = self.get_client
+        return neuter.take_action(parsed_args)

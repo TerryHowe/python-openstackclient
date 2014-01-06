@@ -59,7 +59,39 @@ class TestPoolIntegration(common.TestIntegrationBase):
    ]
 }"""
     SHOW_URL = HOSTESS + "/lb/pools/a9254bdb.json"
+    SHOW_AGENT_URL = HOSTESS + "/lb/pools/a9254bdb/loadbalancer-agent.json"
+    SHOW_AGENT = """
+{
+    "agent": {
+        "admin_state_up": true,
+        "agent_type": "Loadbalancer agent",
+        "alive": true,
+        "binary": "neutron-loadbalancer-agent",
+        "configurations": {
+            "device_driver": "neutron.services.HaproxyNSDriver",
+            "devices": 0,
+            "interface_driver": "neutron.agent.OVSInterfaceDriver"
+        },
+        "created_at": "2013-10-01 12:50:13",
+        "description": null,
+        "heartbeat_timestamp": "2013-10-01 12:56:29",
+        "host": "ostack02",
+        "id": "6ee1df7f-bae4-4ee9-910a-d33b000773b0",
+        "started_at": "2013-10-01 12:50:13",
+        "topic": "lbaas_process_on_host_agent"
+    }
+}"""
     SHOW = CREATE
+    STATS_URL = HOSTESS + "/lb/pools/nameo/stats.json"
+    STATS = """
+{
+    "stats" : {
+                         "bytes_in" : 36839202,
+                         "bytes_out" : 673193022,
+                         "active_connections" : 39,
+                         "total_connections" : 682
+              }
+}"""
     ADD_REMOVE_URL = HOSTESS + "/floatingips/127.0.0.1.json"
     ADD_REMOVE = "{}"
 
@@ -152,7 +184,9 @@ b8408dgd,croc,ACTIVE
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'nameo'
+        pargs.pool = 'nameo'
+        pargs.agent = False
+        pargs.stats = False
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,
@@ -164,4 +198,37 @@ id="a9254bdb"
 name="nameo"
 status="ACTIVE"
 tenant_id="33a40233"
+""", self.stdout())
+
+    @httpretty.activate
+    def test_show_agent(self):
+        pargs = common.FakeParsedArgs()
+        pargs.pool = 'nameo'
+        pargs.agent = True
+        pargs.stats = False
+        httpretty.register_uri(httpretty.GET, self.LIST_URL,
+                               body=self.LIST_ONE)
+        httpretty.register_uri(httpretty.GET, self.SHOW_AGENT_URL,
+                               body=self.SHOW_AGENT)
+        self.when_run(pool.ShowPool, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u"""\
+id="(u'6ee1df7f-bae4-4ee9-910a-d33b000773b0', u'ostack02', True, ':-)')"
+""", self.stdout())
+
+    @httpretty.activate
+    def test_show_stats(self):
+        pargs = common.FakeParsedArgs()
+        pargs.pool = 'nameo'
+        pargs.agent = False
+        pargs.stats = True
+        httpretty.register_uri(httpretty.GET, self.STATS_URL,
+                               body=self.STATS)
+        self.when_run(pool.ShowPool, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u"""\
+active_connections="39"
+bytes_in="36839202"
+bytes_out="673193022"
+total_connections="682"
 """, self.stdout())

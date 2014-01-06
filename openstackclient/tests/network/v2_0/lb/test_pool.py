@@ -82,10 +82,14 @@ class TestShowLbPool(common.TestNetworkBase):
         given = "noo" + self.given_default_show_options()
         parsed = self.given_args(pool.ShowPool, given)
         self.assertEqual('noo', parsed.pool)
+        self.assertEqual(False, parsed.agent)
+        self.assertEqual(False, parsed.stats)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too" + self.given_all_show_options()
+        allargs = "too --agent --stats" + self.given_all_show_options()
         parsed = self.given_args(pool.ShowPool, allargs)
         self.assertEqual('too', parsed.pool)
+        self.assertEqual(True, parsed.agent)
+        self.assertEqual(True, parsed.stats)
         self.then_all_show_options(parsed)
