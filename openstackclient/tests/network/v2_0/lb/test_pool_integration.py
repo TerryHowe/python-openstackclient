@@ -21,6 +21,7 @@ from openstackclient.tests.network.v2_0 import common
 
 class TestPoolIntegration(common.TestIntegrationBase):
     HOSTESS = common.TestIntegrationBase.HOST + common.TestIntegrationBase.VER
+    AGENTS_URL = HOSTESS + "/agents/foo/loadbalancer-pools.json"
     POOLS_URL = HOSTESS + "/lb/pools.json"
     POOLS = '{ "pools": [{ "id": "1111111" }] }'
     SUBNETS_URL = HOSTESS + "/subnets.json"
@@ -105,11 +106,30 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_list(self):
         pargs = common.FakeParsedArgs()
+        pargs.lbaas_agent = None
         pargs.page_size = None
         pargs.sort_key = []
         pargs.sort_dir = []
         pargs.formatter = 'csv'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
+                               body=self.LIST)
+        self.when_run(pool.ListPool, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual("""\
+id,name,status
+a9254bdb,nameo,ACTIVE
+b8408dgd,croc,ACTIVE
+""", self.stdout())
+
+    @httpretty.activate
+    def test_list_lbaas_agent(self):
+        pargs = common.FakeParsedArgs()
+        pargs.lbaas_agent = 'foo'
+        pargs.page_size = None
+        pargs.sort_key = []
+        pargs.sort_dir = []
+        pargs.formatter = 'csv'
+        httpretty.register_uri(httpretty.GET, self.AGENTS_URL,
                                body=self.LIST)
         self.when_run(pool.ListPool, pargs)
         self.assertEqual('', self.stderr())

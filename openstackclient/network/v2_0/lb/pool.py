@@ -15,6 +15,7 @@
 
 """Load Balancer pool action implementations"""
 
+from neutronclient.neutron.v2_0 import agentscheduler
 from neutronclient.neutron.v2_0.lb import pool as neu2
 from openstackclient.network import v2_0 as v2_0
 
@@ -69,7 +70,28 @@ class DeletePool(v2_0.DeleteCommand):
 class ListPool(v2_0.ListCommand):
     """List load balancer pool"""
 
-    clazz = neu2.ListPool
+    def get_parser(self, prog_name):
+        parser = super(ListPool, self).get_parser(prog_name)
+        parser.add_argument(
+            '--lbaas-agent',
+            help='ID of the LBaaS agent to query',
+        )
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        parsed_args.request_format = 'json'
+        parsed_args.fields = []
+        parsed_args.page_size = None
+        parsed_args.sort_key = []
+        parsed_args.sort_dir = []
+        if parsed_args.lbaas_agent:
+            neuter = agentscheduler.ListPoolsOnLbaasAgent(self.app,
+                                                          self.app_args)
+        else:
+            neuter = neu2.ListPool(self.app, self.app_args)
+        neuter.get_client = self.get_client
+        return neuter.take_action(parsed_args)
 
 
 class SetPool(v2_0.SetCommand):

@@ -59,12 +59,14 @@ class TestListLbPool(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "" + self.given_default_list_options()
         parsed = self.given_args(pool.ListPool, given)
+        self.assertEqual(None, parsed.lbaas_agent)
         self.assertEqual(False, parsed.show_details)
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
+        allargs = "--long --lbaas-agent gent" + self.given_all_list_options()
         parsed = self.given_args(pool.ListPool, allargs)
+        self.assertEqual('gent', parsed.lbaas_agent)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
