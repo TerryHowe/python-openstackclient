@@ -23,8 +23,10 @@ class TestHealthMonitorIntegration(common.TestIntegrationBase):
     HOSTESS = common.TestIntegrationBase.HOST + common.TestIntegrationBase.VER
     POOLS_URL = HOSTESS + "/lb/pools.json"
     POOLS = '{ "pools": [{ "id": "1111111" }] }'
-    SUBNETS_URL = HOSTESS + "/subnets.json"
-    SUBNETS = '{ "subnets": [{ "id": "222222" }] }'
+    ADD_URL = HOSTESS + "/lb/pools/1111111/health_monitors.json"
+    ADD = '{}'
+    REMOVE_URL = HOSTESS + "/lb/pools/1111111/health_monitors/healthy.json"
+    REMOVE = '{}'
     CREATE_URL = HOSTESS + "/lb/health_monitors.json"
     CREATE = """
 {
@@ -59,8 +61,6 @@ class TestHealthMonitorIntegration(common.TestIntegrationBase):
 }"""
     SHOW_URL = HOSTESS + "/lb/health_monitors/a9254bdb.json"
     SHOW = CREATE
-    ADD_REMOVE_URL = HOSTESS + "/floatingips/127.0.0.1.json"
-    ADD_REMOVE = "{}"
 
     @httpretty.activate
     def test_create(self):
@@ -74,10 +74,6 @@ class TestHealthMonitorIntegration(common.TestIntegrationBase):
         pargs.timeout = '80'
         pargs.type = 'PING'
         pargs.tenant_id = '33a40233'
-        #httpretty.register_uri(httpretty.GET, self.POOLS_URL,
-        #                       body=self.POOLS)
-        #httpretty.register_uri(httpretty.GET, self.SUBNETS_URL,
-        #                       body=self.SUBNETS)
         httpretty.register_uri(httpretty.POST, self.CREATE_URL,
                                body=self.CREATE)
         self.when_run(healthmonitor.CreateHealthMonitor, pargs)
@@ -146,3 +142,31 @@ name="nameo"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
+
+    @httpretty.activate
+    def test_add_pool(self):
+        pargs = common.FakeParsedArgs()
+        pargs.pool_id = 'pooly'
+        pargs.health_monitor_id = 'healthy'
+        httpretty.register_uri(httpretty.GET, self.POOLS_URL,
+                               body=self.POOLS)
+        httpretty.register_uri(httpretty.POST, self.ADD_URL,
+                               body=self.ADD)
+        self.when_run(healthmonitor.AddPool, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u"Associated health monitor healthy\n",
+                         self.stdout())
+
+    @httpretty.activate
+    def test_remove_pool(self):
+        pargs = common.FakeParsedArgs()
+        pargs.pool_id = 'pooly'
+        pargs.health_monitor_id = 'healthy'
+        httpretty.register_uri(httpretty.GET, self.POOLS_URL,
+                               body=self.POOLS)
+        httpretty.register_uri(httpretty.DELETE, self.REMOVE_URL,
+                               body=self.REMOVE)
+        self.when_run(healthmonitor.RemovePool, pargs)
+        self.assertEqual('', self.stderr())
+        self.assertEqual(u"Disassociated health monitor healthy\n",
+                         self.stdout())

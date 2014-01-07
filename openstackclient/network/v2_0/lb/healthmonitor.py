@@ -100,3 +100,27 @@ class ShowHealthMonitor(v2_0.ShowCommand):
     name = 'id'
     metavar = '<healthmonitor>'
     help_text = 'Name or ID of health monitor to show'
+
+
+class AddPool(v2_0.AddCommand):
+    """Add health monitor to a pool"""
+
+    clazz = neu2.AssociateHealthMonitor
+    container_name = 'pool_id'
+    container_metavar = '<pool>'
+    container_help_text = 'ID or name of pool'
+    name = "health_monitor_id"
+    metavar = "<health_monitor>"
+    help_text = "health monitor to associate to pool"
+
+
+class RemovePool(v2_0.RemoveCommand):
+    """Remove a port or subnet from a router"""
+
+    clazz = neu2.DisassociateHealthMonitor
+    container_name = 'pool_id'
+    container_metavar = '<pool>'
+    container_help_text = 'ID or name of pool'
+    name = "health_monitor_id"
+    metavar = "<health_monitor>"
+    help_text = "health monitor to disassociate from pool"

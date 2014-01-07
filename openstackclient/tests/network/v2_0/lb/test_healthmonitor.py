@@ -90,3 +90,17 @@ class TestShowLbHealthMonitor(common.TestNetworkBase):
         parsed = self.given_args(healthmonitor.ShowHealthMonitor, allargs)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)
+
+
+class TestAddLbPool(common.TestNetworkBase):
+    def test_get_parser_nothing(self):
+        parsed = self.given_args(healthmonitor.AddPool, "noo pool")
+        self.assertEqual('noo', parsed.pool_id)
+        self.assertEqual('pool', parsed.health_monitor_id)
+
+
+class TestRemoveLbPool(common.TestNetworkBase):
+    def test_get_parser_nothing(self):
+        parsed = self.given_args(healthmonitor.RemovePool, "woo swim")
+        self.assertEqual('woo', parsed.pool_id)
+        self.assertEqual('swim', parsed.health_monitor_id)
