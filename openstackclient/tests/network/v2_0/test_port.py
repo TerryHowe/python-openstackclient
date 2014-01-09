@@ -34,12 +34,12 @@ class TestCreatePort(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = 'too --device-id DI --disable --extra-dhcp-opt DO ' \
-                  '--fixed-ip FI -f shell --mac-address MA ' \
-                  '--network NI --security-group ONE ' \
-                  '--security-group TWO --project sneed '
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(port.CreatePort, allargs)
+        given = 'too --device-id DI --disable --extra-dhcp-opt DO ' \
+                '--fixed-ip FI -f shell --mac-address MA ' \
+                '--network NI --security-group ONE ' \
+                '--security-group TWO --project sneed '
+        given += self.given_all_show_options()
+        parsed = self.given_args(port.CreatePort, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual(False, parsed.admin_state)
         self.assertEqual('DI', parsed.device_id)
@@ -68,8 +68,8 @@ class TestListPort(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long --router ROO" + self.given_all_list_options()
-        parsed = self.given_args(port.ListPort, allargs)
+        given = "--long --router ROO" + self.given_all_list_options()
+        parsed = self.given_args(port.ListPort, given)
         self.assertEqual(True, parsed.show_details)
         self.assertEqual('ROO', parsed.router)
         self.then_all_list_options(parsed)
@@ -84,9 +84,9 @@ class TestSetPort(common.TestNetworkBase):
         self.assertEqual([], parsed.security_groups)
 
     def test_get_parser_all(self):
-        allargs = 'too --extra-dhcp-opt DO --security-group ONE ' \
-                  '--security-group TWO '
-        parsed = self.given_args(port.SetPort, allargs)
+        given = 'too --extra-dhcp-opt DO --security-group ONE ' \
+                '--security-group TWO '
+        parsed = self.given_args(port.SetPort, given)
         self.assertEqual('too', parsed.id)
         self.assertEqual(['DO'], parsed.extra_dhcp_opts)
         self.assertEqual(False, parsed.no_security_groups)
@@ -101,7 +101,7 @@ class TestShowPort(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too" + self.given_all_show_options()
-        parsed = self.given_args(port.ShowPort, allargs)
+        given = "too" + self.given_all_show_options()
+        parsed = self.given_args(port.ShowPort, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

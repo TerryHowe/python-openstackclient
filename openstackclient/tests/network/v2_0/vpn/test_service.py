@@ -30,10 +30,10 @@ class TestCreateService(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too roo soo --admin-state-down --description doo" +\
-                  " --project sneed"
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(service.CreateService, allargs)
+        given = "too roo soo --admin-state-down --description doo" +\
+                " --project sneed"
+        given += self.given_all_show_options()
+        parsed = self.given_args(service.CreateService, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual('roo', parsed.router)
         self.assertEqual('soo', parsed.subnet)
@@ -57,8 +57,8 @@ class TestListService(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(service.ListService, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(service.ListService, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -77,7 +77,7 @@ class TestShowService(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too " + self.given_all_show_options()
-        parsed = self.given_args(service.ShowService, allargs)
+        given = "too " + self.given_all_show_options()
+        parsed = self.given_args(service.ShowService, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

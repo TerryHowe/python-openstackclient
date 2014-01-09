@@ -40,8 +40,8 @@ class TestListDhcpAgent(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "netty --long" + self.given_all_list_options()
-        parsed = self.given_args(dhcp.ListDhcpAgent, allargs)
+        given = "netty --long" + self.given_all_list_options()
+        parsed = self.given_args(dhcp.ListDhcpAgent, given)
         self.assertEqual('netty', parsed.network)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)

@@ -35,14 +35,14 @@ class TestCreateSubnet(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = 'too 10.1.1.1/24 --project sneed' \
-                  ' --name 1 --ip-version 6 --gateway 2' \
-                  ' --no-gateway ' \
-                  ' --allocation-pool start=10.1.1.1,end=10.1.1.4' \
-                  ' --host-route destination=10.1.1.1/1,nexthop=20.1.1.1' \
-                  ' --dns-nameserver 5 --disable-dhcp'
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(subnet.CreateSubnet, allargs)
+        given = 'too 10.1.1.1/24 --project sneed' \
+                ' --name 1 --ip-version 6 --gateway 2' \
+                ' --no-gateway ' \
+                ' --allocation-pool start=10.1.1.1,end=10.1.1.4' \
+                ' --host-route destination=10.1.1.1/1,nexthop=20.1.1.1' \
+                ' --dns-nameserver 5 --disable-dhcp'
+        given += self.given_all_show_options()
+        parsed = self.given_args(subnet.CreateSubnet, given)
         self.assertEqual('too', parsed.network_id)
         self.assertEqual('10.1.1.1/24', parsed.cidr)
         self.assertEqual('1', parsed.name)
@@ -59,11 +59,11 @@ class TestCreateSubnet(common.TestNetworkBase):
         self.then_all_show_options(parsed)
 
     def test_get_parser_alternate(self):
-        allargs = 'too 10.1.1.1/24' \
-                  ' --allocation-pool 10.1.1.1-10.1.1.4' \
-                  ' --host-route 10.1.1.1/1=20.1.1.1'
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(subnet.CreateSubnet, allargs)
+        given = 'too 10.1.1.1/24' \
+                ' --allocation-pool 10.1.1.1-10.1.1.4' \
+                ' --host-route 10.1.1.1/1=20.1.1.1'
+        given += self.given_all_show_options()
+        parsed = self.given_args(subnet.CreateSubnet, given)
         self.assertEqual('too', parsed.network_id)
         self.assertEqual('10.1.1.1/24', parsed.cidr)
         self.assertEqual('10.1.1.1', parsed.allocation_pools[0]['start'])
@@ -86,8 +86,8 @@ class TestListSubnet(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(subnet.ListSubnet, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(subnet.ListSubnet, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -98,8 +98,8 @@ class TestSetSubnet(common.TestNetworkBase):
         self.assertEqual('noo', parsed.id)
 
     def test_get_parser_all(self):
-        allargs = 'too'
-        parsed = self.given_args(subnet.SetSubnet, allargs)
+        given = 'too'
+        parsed = self.given_args(subnet.SetSubnet, given)
         self.assertEqual('too', parsed.id)
 
 
@@ -111,7 +111,7 @@ class TestShowSubnet(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too" + self.given_all_show_options()
-        parsed = self.given_args(subnet.ShowSubnet, allargs)
+        given = "too" + self.given_all_show_options()
+        parsed = self.given_args(subnet.ShowSubnet, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

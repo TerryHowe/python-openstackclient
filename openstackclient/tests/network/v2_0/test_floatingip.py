@@ -28,9 +28,9 @@ class TestCreateFloatingIp(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too --fixed-ip 1.1.1.1 --port 123 --project sneed"
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(floatingip.CreateFloatingIp, allargs)
+        given = "too --fixed-ip 1.1.1.1 --port 123 --project sneed"
+        given += self.given_all_show_options()
+        parsed = self.given_args(floatingip.CreateFloatingIp, given)
         self.assertEqual('too', parsed.floating_network_id)
         self.assertEqual('1.1.1.1', parsed.fixed_ip_address)
         self.assertEqual('123', parsed.port_id)
@@ -52,8 +52,8 @@ class TestListFloatingIp(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(floatingip.ListFloatingIp, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(floatingip.ListFloatingIp, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -66,7 +66,7 @@ class TestShowFloatingIp(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too " + self.given_all_show_options()
-        parsed = self.given_args(floatingip.ShowFloatingIp, allargs)
+        given = "too " + self.given_all_show_options()
+        parsed = self.given_args(floatingip.ShowFloatingIp, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

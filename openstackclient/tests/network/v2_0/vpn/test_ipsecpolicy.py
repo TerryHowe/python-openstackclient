@@ -33,13 +33,13 @@ class TestCreateIpsecpolicy(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too --description doo --transform-protocol esp" +\
-                  " --auth-algorithm sha1 --encryption-algorithm aes-192" +\
-                  " --encapsulation-mode transport --pfs group2" +\
-                  " --lifetime units=seconds,value=300" +\
-                  " --project sneed"
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(ipsecpolicy.CreateIpsecpolicy, allargs)
+        given = "too --description doo --transform-protocol esp" +\
+                " --auth-algorithm sha1 --encryption-algorithm aes-192" +\
+                " --encapsulation-mode transport --pfs group2" +\
+                " --lifetime units=seconds,value=300" +\
+                " --project sneed"
+        given += self.given_all_show_options()
+        parsed = self.given_args(ipsecpolicy.CreateIpsecpolicy, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual('doo', parsed.description)
         self.assertEqual('esp', parsed.transform_protocol)
@@ -66,8 +66,8 @@ class TestListIpsecpolicy(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(ipsecpolicy.ListIpsecpolicy, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(ipsecpolicy.ListIpsecpolicy, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -86,7 +86,7 @@ class TestShowIpsecpolicy(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too " + self.given_all_show_options()
-        parsed = self.given_args(ipsecpolicy.ShowIpsecpolicy, allargs)
+        given = "too " + self.given_all_show_options()
+        parsed = self.given_args(ipsecpolicy.ShowIpsecpolicy, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

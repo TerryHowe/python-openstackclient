@@ -28,9 +28,9 @@ class TestCreateRouter(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = 'too --disable --distributed --project sneed '
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(router.CreateRouter, allargs)
+        given = 'too --disable --distributed --project sneed '
+        given += self.given_all_show_options()
+        parsed = self.given_args(router.CreateRouter, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual(False, parsed.admin_state)
         self.assertEqual(True, parsed.distributed)
@@ -38,9 +38,9 @@ class TestCreateRouter(common.TestNetworkBase):
         self.then_all_show_options(parsed)
 
     def test_get_parser_all_enable(self):
-        allargs = 'too --enable --project sneed '
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(router.CreateRouter, allargs)
+        given = 'too --enable --project sneed '
+        given += self.given_all_show_options()
+        parsed = self.given_args(router.CreateRouter, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual(True, parsed.admin_state)
         self.assertEqual(False, parsed.distributed)
@@ -63,8 +63,8 @@ class TestListRouter(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long --l3-agent foo" + self.given_all_list_options()
-        parsed = self.given_args(router.ListRouter, allargs)
+        given = "--long --l3-agent foo" + self.given_all_list_options()
+        parsed = self.given_args(router.ListRouter, given)
         self.assertEqual(True, parsed.show_details)
         self.assertEqual('foo', parsed.l3_agent)
         self.then_all_list_options(parsed)
@@ -79,16 +79,16 @@ class TestSetRouter(common.TestNetworkBase):
         self.assertEqual(False, parsed.disable_snat)
 
     def test_get_parser_all(self):
-        allargs = 'too --disable-snat --no-gateway'
-        parsed = self.given_args(router.SetRouter, allargs)
+        given = 'too --disable-snat --no-gateway'
+        parsed = self.given_args(router.SetRouter, given)
         self.assertEqual('too', parsed.router_id)
         self.assertEqual(None, parsed.external_network_id)
         self.assertEqual(True, parsed.no_gateway)
         self.assertEqual(True, parsed.disable_snat)
 
     def test_get_parser_all_enable(self):
-        allargs = 'too --gateway way --enable-snat'
-        parsed = self.given_args(router.SetRouter, allargs)
+        given = 'too --gateway way --enable-snat'
+        parsed = self.given_args(router.SetRouter, given)
         self.assertEqual('too', parsed.router_id)
         self.assertEqual('way', parsed.external_network_id)
         self.assertEqual(False, parsed.no_gateway)
@@ -103,7 +103,7 @@ class TestShowRouter(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too" + self.given_all_show_options()
-        parsed = self.given_args(router.ShowRouter, allargs)
+        given = "too" + self.given_all_show_options()
+        parsed = self.given_args(router.ShowRouter, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

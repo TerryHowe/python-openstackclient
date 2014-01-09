@@ -35,12 +35,12 @@ class TestCreateLbVip(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--protocol-port 44 --protocol TCP --subnet-id 99" + \
-                  " --address 127.0.0.1 --admin-state-down" + \
-                  " --connection-limit 5 --description wow" + \
-                  " pool2 too --project sneed "
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(vip.CreateVip, allargs)
+        given = "--protocol-port 44 --protocol TCP --subnet-id 99" + \
+                " --address 127.0.0.1 --admin-state-down" + \
+                " --connection-limit 5 --description wow" + \
+                " pool2 too --project sneed "
+        given += self.given_all_show_options()
+        parsed = self.given_args(vip.CreateVip, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual('pool2', parsed.pool_id)
         self.assertEqual('44', parsed.protocol_port)
@@ -68,8 +68,8 @@ class TestListLbVip(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(vip.ListVip, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(vip.ListVip, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -88,7 +88,7 @@ class TestShowLbVip(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too" + self.given_all_show_options()
-        parsed = self.given_args(vip.ShowVip, allargs)
+        given = "too" + self.given_all_show_options()
+        parsed = self.given_args(vip.ShowVip, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

@@ -31,11 +31,11 @@ class TestCreateLbMember(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--address 1.1.1.2 --protocol-port 34" + \
-                  " --admin-state-down --weight 99" + \
-                  " pool2 --project sneed "
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(member.CreateMember, allargs)
+        given = "--address 1.1.1.2 --protocol-port 34" + \
+                " --admin-state-down --weight 99" + \
+                " pool2 --project sneed "
+        given += self.given_all_show_options()
+        parsed = self.given_args(member.CreateMember, given)
         self.assertEqual('pool2', parsed.pool_id)
         self.assertEqual(False, parsed.admin_state)
         self.assertEqual('99', parsed.weight)
@@ -59,8 +59,8 @@ class TestListLbMember(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(member.ListMember, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(member.ListMember, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -79,7 +79,7 @@ class TestShowLbMember(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too" + self.given_all_show_options()
-        parsed = self.given_args(member.ShowMember, allargs)
+        given = "too" + self.given_all_show_options()
+        parsed = self.given_args(member.ShowMember, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

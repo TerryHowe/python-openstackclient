@@ -28,9 +28,9 @@ class TestCreateNetwork(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too --admin-state-down --shared --project sneed"
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(network.CreateNetwork, allargs)
+        given = "too --admin-state-down --shared --project sneed"
+        given += self.given_all_show_options()
+        parsed = self.given_args(network.CreateNetwork, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual(False, parsed.admin_state)
         self.assertEqual(True, parsed.shared)
@@ -54,9 +54,9 @@ class TestListNetwork(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long --external --dhcp dee" + \
-                  self.given_all_list_options()
-        parsed = self.given_args(network.ListNetwork, allargs)
+        given = "--long --external --dhcp dee" + \
+                self.given_all_list_options()
+        parsed = self.given_args(network.ListNetwork, given)
         self.assertEqual(True, parsed.show_details)
         self.assertEqual(True, parsed.external)
         self.assertEqual('dee', parsed.dhcp_agent)
@@ -77,8 +77,8 @@ class TestShowNetwork(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too " + self.given_all_show_options()
-        parsed = self.given_args(network.ShowNetwork, allargs)
+        given = "too " + self.given_all_show_options()
+        parsed = self.given_args(network.ShowNetwork, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)
 
@@ -93,8 +93,8 @@ class TestAddGatewayNetwork(common.TestNetworkBase):
         self.assertEqual(None, parsed.segmentation_id)
 
     def test_get_parser_all(self):
-        allargs = "netty getty --segmentation-type 1 --segmentation-id 2"
-        parsed = self.given_args(network.AddGatewayNetwork, allargs)
+        given = "netty getty --segmentation-type 1 --segmentation-id 2"
+        parsed = self.given_args(network.AddGatewayNetwork, given)
         self.assertEqual('netty', parsed.network_id)
         self.assertEqual('getty', parsed.net_gateway_id)
         self.assertEqual('1', parsed.segmentation_type)
@@ -111,8 +111,8 @@ class TestRemoveGatewayNetwork(common.TestNetworkBase):
         self.assertEqual(None, parsed.segmentation_id)
 
     def test_get_parser_all(self):
-        allargs = "netty getty --segmentation-type 1 --segmentation-id 2"
-        parsed = self.given_args(network.RemoveGatewayNetwork, allargs)
+        given = "netty getty --segmentation-type 1 --segmentation-id 2"
+        parsed = self.given_args(network.RemoveGatewayNetwork, given)
         self.assertEqual('netty', parsed.network_id)
         self.assertEqual('getty', parsed.net_gateway_id)
         self.assertEqual('1', parsed.segmentation_type)

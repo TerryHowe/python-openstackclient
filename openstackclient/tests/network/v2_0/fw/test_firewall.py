@@ -13,71 +13,71 @@
 #   under the License.
 #
 
-from openstackclient.network.v2_0 import security_group
+from openstackclient.network.v2_0.fw import firewall
 from openstackclient.tests.network.v2_0 import common
 
 
-class TestCreateSecurityGroup(common.TestNetworkBase):
+class TestCreateFirewall(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        given = "noo" + self.given_default_show_options()
-        parsed = self.given_args(security_group.CreateSecurityGroup, given)
-        self.assertEqual('noo', parsed.name)
+        given = "policy1 name1" + self.given_default_show_options()
+        parsed = self.given_args(firewall.CreateFirewall, given)
+        self.assertEqual('name1', parsed.name)
+        self.assertEqual('policy1', parsed.firewall_policy_id)
         self.assertEqual(None, parsed.description)
+        self.assertEqual(False, parsed.shared)
+        self.assertEqual(True, parsed.admin_state)
         self.assertEqual(None, parsed.tenant_id)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        given = 'too --description sgtoo --project sneed '
+        given = "policy2 name2 --description dee --shared --disable" + \
+                " --project sneed"
         given += self.given_all_show_options()
-        parsed = self.given_args(security_group.CreateSecurityGroup, given)
-        self.assertEqual('too', parsed.name)
-        self.assertEqual('sgtoo', parsed.description)
+        parsed = self.given_args(firewall.CreateFirewall, given)
+        self.assertEqual('name2', parsed.name)
+        self.assertEqual('policy2', parsed.firewall_policy_id)
+        self.assertEqual('dee', parsed.description)
+        self.assertEqual(True, parsed.shared)
+        self.assertEqual(False, parsed.admin_state)
         self.assertEqual('sneed', parsed.tenant_id)
         self.then_all_show_options(parsed)
 
 
-class TestDeleteSecurityGroup(common.TestNetworkBase):
+class TestDeleteFirewall(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        parsed = self.given_args(security_group.DeleteSecurityGroup, "noo")
-        self.assertEqual('noo', parsed.id)
+        parsed = self.given_args(firewall.DeleteFirewall, "noo")
+        self.assertEqual('noo', parsed.firewall)
 
 
-class TestListSecurityGroup(common.TestNetworkBase):
+class TestListFirewall(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "" + self.given_default_list_options()
-        parsed = self.given_args(security_group.ListSecurityGroup, given)
+        parsed = self.given_args(firewall.ListFirewall, given)
         self.assertEqual(False, parsed.show_details)
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
         given = "--long" + self.given_all_list_options()
-        parsed = self.given_args(security_group.ListSecurityGroup, given)
+        parsed = self.given_args(firewall.ListFirewall, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
 
-class TestSetSecurityGroup(common.TestNetworkBase):
+class TestSetFirewall(common.TestNetworkBase):
     def test_get_parser_nothing(self):
-        parsed = self.given_args(security_group.SetSecurityGroup, "noo")
-        self.assertEqual('noo', parsed.id)
-        self.assertEqual(None, parsed.description)
-
-    def test_get_parser_all(self):
-        given = 'too --description noosgtoo'
-        parsed = self.given_args(security_group.SetSecurityGroup, given)
-        self.assertEqual('too', parsed.id)
-        self.assertEqual('noosgtoo', parsed.description)
+        parsed = self.given_args(firewall.SetFirewall, "noo")
+        self.assertEqual('noo', parsed.firewall)
 
 
-class TestShowSecurityGroup(common.TestNetworkBase):
+class TestShowFirewall(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
-        parsed = self.given_args(security_group.ShowSecurityGroup, given)
-        self.assertEqual('noo', parsed.id)
+        parsed = self.given_args(firewall.ShowFirewall, given)
+        self.assertEqual('noo', parsed.firewall)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        given = "too" + self.given_all_show_options()
-        parsed = self.given_args(security_group.ShowSecurityGroup, given)
-        self.assertEqual('too', parsed.id)
+        given = "too " + self.given_all_show_options()
+        parsed = self.given_args(firewall.ShowFirewall, given)
+        self.assertEqual('too', parsed.firewall)
         self.then_all_show_options(parsed)

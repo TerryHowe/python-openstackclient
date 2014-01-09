@@ -33,11 +33,11 @@ class TestCreateLbPool(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--lb-method SOURCE_IP --protocol HTTPS --subnet-id 123" + \
-                  " --admin-state-down --description foo --provider ride" + \
-                  " pool2 --project sneed "
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(pool.CreatePool, allargs)
+        given = "--lb-method SOURCE_IP --protocol HTTPS --subnet-id 123" + \
+                " --admin-state-down --description foo --provider ride" + \
+                " pool2 --project sneed "
+        given += self.given_all_show_options()
+        parsed = self.given_args(pool.CreatePool, given)
         self.assertEqual('pool2', parsed.name)
         self.assertEqual('SOURCE_IP', parsed.lb_method)
         self.assertEqual('HTTPS', parsed.protocol)
@@ -64,8 +64,8 @@ class TestListLbPool(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long --lbaas-agent gent" + self.given_all_list_options()
-        parsed = self.given_args(pool.ListPool, allargs)
+        given = "--long --lbaas-agent gent" + self.given_all_list_options()
+        parsed = self.given_args(pool.ListPool, given)
         self.assertEqual('gent', parsed.lbaas_agent)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
@@ -87,8 +87,8 @@ class TestShowLbPool(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too --agent --stats" + self.given_all_show_options()
-        parsed = self.given_args(pool.ShowPool, allargs)
+        given = "too --agent --stats" + self.given_all_show_options()
+        parsed = self.given_args(pool.ShowPool, given)
         self.assertEqual('too', parsed.pool)
         self.assertEqual(True, parsed.agent)
         self.assertEqual(True, parsed.stats)

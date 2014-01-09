@@ -34,14 +34,14 @@ class TestCreateSecurityGroupRule(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = 'too --project sneed' \
-                  ' --direction egress --ethertype IPv6' \
-                  ' --protocol 3 --port-range-min 4' \
-                  ' --port-range-max 5 --remote-ip-prefix 6' \
-                  ' --remote-group-id 7'
-        allargs += self.given_all_show_options()
+        given = 'too --project sneed' \
+                ' --direction egress --ethertype IPv6' \
+                ' --protocol 3 --port-range-min 4' \
+                ' --port-range-max 5 --remote-ip-prefix 6' \
+                ' --remote-group-id 7'
+        given += self.given_all_show_options()
         parsed = self.given_args(security_group_rule.CreateSecurityGroupRule,
-                                 allargs)
+                                 given)
         self.assertEqual('too', parsed.security_group_id)
         self.assertEqual('egress', parsed.direction)
         self.assertEqual('IPv6', parsed.ethertype)
@@ -70,9 +70,9 @@ class TestListSecurityGroupRule(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
+        given = "--long" + self.given_all_list_options()
         parsed = self.given_args(security_group_rule.ListSecurityGroupRule,
-                                 allargs)
+                                 given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -86,8 +86,8 @@ class TestShowSecurityGroupRule(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too" + self.given_all_show_options()
+        given = "too" + self.given_all_show_options()
         parsed = self.given_args(security_group_rule.ShowSecurityGroupRule,
-                                 allargs)
+                                 given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

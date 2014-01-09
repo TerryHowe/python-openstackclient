@@ -27,9 +27,9 @@ class TestCreateGateway(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too --device device_id=1,interface_name=n --project sneed"
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(gateway.CreateGateway, allargs)
+        given = "too --device device_id=1,interface_name=n --project sneed"
+        given += self.given_all_show_options()
+        parsed = self.given_args(gateway.CreateGateway, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual(['device_id=1,interface_name=n'], parsed.device)
         self.assertEqual('sneed', parsed.tenant_id)
@@ -50,8 +50,8 @@ class TestListGateway(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(gateway.ListGateway, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(gateway.ListGateway, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -70,7 +70,7 @@ class TestShowGateway(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too " + self.given_all_show_options()
-        parsed = self.given_args(gateway.ShowGateway, allargs)
+        given = "too " + self.given_all_show_options()
+        parsed = self.given_args(gateway.ShowGateway, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)

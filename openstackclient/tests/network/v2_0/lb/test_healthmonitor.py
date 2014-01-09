@@ -34,12 +34,12 @@ class TestCreateLbHealthMonitor(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--delay 4 --max-retries 5 --timeout 6 --type HTTP" + \
-                  " --admin-state-down --expected-codes 200" + \
-                  " --http-method GET --url-path http://127.0.0.1" + \
-                  " --project sneed "
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(healthmonitor.CreateHealthMonitor, allargs)
+        given = "--delay 4 --max-retries 5 --timeout 6 --type HTTP" + \
+                " --admin-state-down --expected-codes 200" + \
+                " --http-method GET --url-path http://127.0.0.1" + \
+                " --project sneed "
+        given += self.given_all_show_options()
+        parsed = self.given_args(healthmonitor.CreateHealthMonitor, given)
         self.assertEqual(False, parsed.admin_state)
         self.assertEqual('200', parsed.expected_codes)
         self.assertEqual('GET', parsed.http_method)
@@ -66,8 +66,8 @@ class TestListLbHealthMonitor(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(healthmonitor.ListHealthMonitor, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(healthmonitor.ListHealthMonitor, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -86,8 +86,8 @@ class TestShowLbHealthMonitor(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too" + self.given_all_show_options()
-        parsed = self.given_args(healthmonitor.ShowHealthMonitor, allargs)
+        given = "too" + self.given_all_show_options()
+        parsed = self.given_args(healthmonitor.ShowHealthMonitor, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)
 

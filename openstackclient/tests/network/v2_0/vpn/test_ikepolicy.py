@@ -33,14 +33,14 @@ class TestCreateIkepolicy(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too --description doo " +\
-                  " --auth-algorithm sha1 --encryption-algorithm aes-192" +\
-                  " --phase1-negotiation-mode main --pfs group2" +\
-                  " --ike-version v2" +\
-                  " --lifetime units=seconds,value=300" +\
-                  " --project sneed"
-        allargs += self.given_all_show_options()
-        parsed = self.given_args(ikepolicy.CreateIkepolicy, allargs)
+        given = "too --description doo " +\
+                " --auth-algorithm sha1 --encryption-algorithm aes-192" +\
+                " --phase1-negotiation-mode main --pfs group2" +\
+                " --ike-version v2" +\
+                " --lifetime units=seconds,value=300" +\
+                " --project sneed"
+        given += self.given_all_show_options()
+        parsed = self.given_args(ikepolicy.CreateIkepolicy, given)
         self.assertEqual('too', parsed.name)
         self.assertEqual('doo', parsed.description)
         self.assertEqual('sha1', parsed.auth_algorithm)
@@ -67,8 +67,8 @@ class TestListIkepolicy(common.TestNetworkBase):
         self.then_default_list_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "--long" + self.given_all_list_options()
-        parsed = self.given_args(ikepolicy.ListIkepolicy, allargs)
+        given = "--long" + self.given_all_list_options()
+        parsed = self.given_args(ikepolicy.ListIkepolicy, given)
         self.assertEqual(True, parsed.show_details)
         self.then_all_list_options(parsed)
 
@@ -87,7 +87,7 @@ class TestShowIkepolicy(common.TestNetworkBase):
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
-        allargs = "too " + self.given_all_show_options()
-        parsed = self.given_args(ikepolicy.ShowIkepolicy, allargs)
+        given = "too " + self.given_all_show_options()
+        parsed = self.given_args(ikepolicy.ShowIkepolicy, given)
         self.assertEqual('too', parsed.id)
         self.then_all_show_options(parsed)
