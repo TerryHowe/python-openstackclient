@@ -16,10 +16,10 @@
 """Firewall action implementations"""
 
 from neutronclient.neutron.v2_0.fw import firewall as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateFirewall(v2_0.CreateCommand):
+class CreateFirewall(common.CreateCommand):
     """Create a firewall"""
 
     clazz = neu2.CreateFirewall
@@ -62,7 +62,7 @@ class CreateFirewall(v2_0.CreateCommand):
         return parser
 
 
-class DeleteFirewall(v2_0.DeleteCommand):
+class DeleteFirewall(common.DeleteCommand):
     """Delete a firewall"""
 
     clazz = neu2.DeleteFirewall
@@ -71,13 +71,13 @@ class DeleteFirewall(v2_0.DeleteCommand):
     help_text = 'Name or ID of firewall to delete'
 
 
-class ListFirewall(v2_0.ListCommand):
+class ListFirewall(common.ListCommand):
     """List firewall"""
 
     clazz = neu2.ListFirewall
 
 
-class SetFirewall(v2_0.SetCommand):
+class SetFirewall(common.SetCommand):
     """Set firewall values"""
 
     clazz = neu2.UpdateFirewall
@@ -86,7 +86,7 @@ class SetFirewall(v2_0.SetCommand):
     help_text = 'ID of firewall to update'
 
 
-class ShowFirewall(v2_0.ShowCommand):
+class ShowFirewall(common.ShowCommand):
     """Show a firewall"""
 
     clazz = neu2.ShowFirewall

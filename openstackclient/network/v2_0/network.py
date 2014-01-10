@@ -18,10 +18,10 @@
 from neutronclient.neutron.v2_0 import agentscheduler as agent
 from neutronclient.neutron.v2_0 import network as neu2
 from neutronclient.neutron.v2_0 import nvpnetworkgateway
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateNetwork(v2_0.CreateCommand):
+class CreateNetwork(common.CreateCommand):
     """Create a network"""
 
     clazz = neu2.CreateNetwork
@@ -42,7 +42,7 @@ class CreateNetwork(v2_0.CreateCommand):
         return parser
 
 
-class DeleteNetwork(v2_0.DeleteCommand):
+class DeleteNetwork(common.DeleteCommand):
     """Delete a network"""
 
     clazz = neu2.DeleteNetwork
@@ -51,7 +51,7 @@ class DeleteNetwork(v2_0.DeleteCommand):
     help_text = 'Name or ID of network to delete'
 
 
-class ListNetwork(v2_0.ListCommand):
+class ListNetwork(common.ListCommand):
     """List networks"""
 
     def get_parser(self, prog_name):
@@ -86,7 +86,7 @@ class ListNetwork(v2_0.ListCommand):
         return neuter.take_action(parsed_args)
 
 
-class SetNetwork(v2_0.SetCommand):
+class SetNetwork(common.SetCommand):
     """Set network values"""
 
     clazz = neu2.UpdateNetwork
@@ -95,7 +95,7 @@ class SetNetwork(v2_0.SetCommand):
     help_text = 'Name or ID of network to set'
 
 
-class ShowNetwork(v2_0.ShowCommand):
+class ShowNetwork(common.ShowCommand):
     """Show a network"""
 
     clazz = neu2.ShowNetwork
@@ -104,7 +104,7 @@ class ShowNetwork(v2_0.ShowCommand):
     help_text = 'Name or ID of network to show'
 
 
-class AddGatewayNetwork(v2_0.AddCommand):
+class AddGatewayNetwork(common.AddCommand):
     """Add a gateway to a network"""
 
     clazz = nvpnetworkgateway.ConnectNetworkGateway
@@ -128,7 +128,7 @@ class AddGatewayNetwork(v2_0.AddCommand):
         return parser
 
 
-class RemoveGatewayNetwork(v2_0.RemoveCommand):
+class RemoveGatewayNetwork(common.RemoveCommand):
     """Remove a gateway from a network"""
 
     clazz = nvpnetworkgateway.DisconnectNetworkGateway

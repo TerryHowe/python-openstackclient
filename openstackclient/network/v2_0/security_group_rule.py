@@ -18,10 +18,10 @@
 import argparse
 
 from neutronclient.neutron.v2_0 import securitygroup as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateSecurityGroupRule(v2_0.CreateCommand):
+class CreateSecurityGroupRule(common.CreateCommand):
     """Create a security group rule"""
 
     clazz = neu2.CreateSecurityGroupRule
@@ -57,7 +57,7 @@ class CreateSecurityGroupRule(v2_0.CreateCommand):
         return parser
 
 
-class DeleteSecurityGroupRule(v2_0.DeleteCommand):
+class DeleteSecurityGroupRule(common.DeleteCommand):
     """Delete a security group rule"""
 
     clazz = neu2.DeleteSecurityGroupRule
@@ -66,7 +66,7 @@ class DeleteSecurityGroupRule(v2_0.DeleteCommand):
     help_text = 'Name or ID of security group rule to delete'
 
 
-class ListSecurityGroupRule(v2_0.ListCommand):
+class ListSecurityGroupRule(common.ListCommand):
     """List security group rule"""
 
     clazz = neu2.ListSecurityGroupRule
@@ -91,7 +91,7 @@ class ListSecurityGroupRule(v2_0.ListCommand):
         return parser
 
 
-class ShowSecurityGroupRule(v2_0.ShowCommand):
+class ShowSecurityGroupRule(common.ShowCommand):
     """Show a security group rule"""
 
     clazz = neu2.ShowSecurityGroupRule

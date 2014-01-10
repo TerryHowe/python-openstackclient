@@ -16,10 +16,10 @@
 """Security Group action implementations"""
 
 from neutronclient.neutron.v2_0 import securitygroup as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateSecurityGroup(v2_0.CreateCommand):
+class CreateSecurityGroup(common.CreateCommand):
     """Create a security group"""
 
     clazz = neu2.CreateSecurityGroup
@@ -35,7 +35,7 @@ class CreateSecurityGroup(v2_0.CreateCommand):
         return parser
 
 
-class DeleteSecurityGroup(v2_0.DeleteCommand):
+class DeleteSecurityGroup(common.DeleteCommand):
     """Delete a security group"""
 
     clazz = neu2.DeleteSecurityGroup
@@ -44,13 +44,13 @@ class DeleteSecurityGroup(v2_0.DeleteCommand):
     help_text = 'Name or ID of security group to delete'
 
 
-class ListSecurityGroup(v2_0.ListCommand):
+class ListSecurityGroup(common.ListCommand):
     """List security group"""
 
     clazz = neu2.ListSecurityGroup
 
 
-class SetSecurityGroup(v2_0.SetCommand):
+class SetSecurityGroup(common.SetCommand):
     """Set security group values"""
 
     clazz = neu2.UpdateSecurityGroup
@@ -69,7 +69,7 @@ class SetSecurityGroup(v2_0.SetCommand):
         return parser
 
 
-class ShowSecurityGroup(v2_0.ShowCommand):
+class ShowSecurityGroup(common.ShowCommand):
     """Show a security group"""
 
     clazz = neu2.ShowSecurityGroup

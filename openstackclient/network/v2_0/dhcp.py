@@ -16,10 +16,10 @@
 """Gateway action implementations"""
 
 from neutronclient.neutron.v2_0 import agentscheduler as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class AddNetworkDhcpAgent(v2_0.AddCommand):
+class AddNetworkDhcpAgent(common.AddCommand):
     """Add a network to a DHCP agent."""
 
     clazz = neu2.AddNetworkToDhcpAgent
@@ -31,7 +31,7 @@ class AddNetworkDhcpAgent(v2_0.AddCommand):
     help_text = 'DHCP agent to add'
 
 
-class RemoveNetworkDhcpAgent(v2_0.RemoveCommand):
+class RemoveNetworkDhcpAgent(common.RemoveCommand):
     """Delete a gateway"""
 
     clazz = neu2.RemoveNetworkFromDhcpAgent
@@ -43,7 +43,7 @@ class RemoveNetworkDhcpAgent(v2_0.RemoveCommand):
     help_text = 'DHCP agent to remove'
 
 
-class ListDhcpAgent(v2_0.ListCommand):
+class ListDhcpAgent(common.ListCommand):
     """List DHCP agents on a network"""
 
     clazz = neu2.ListDhcpAgentsHostingNetwork

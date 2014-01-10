@@ -17,10 +17,10 @@
 
 from neutronclient.neutron.v2_0 import floatingip
 from neutronclient.neutron.v2_0 import port as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreatePort(v2_0.CreateCommand):
+class CreatePort(common.CreateCommand):
     """Create a port"""
 
     clazz = neu2.CreatePort
@@ -75,7 +75,7 @@ class CreatePort(v2_0.CreateCommand):
         return parser
 
 
-class DeletePort(v2_0.DeleteCommand):
+class DeletePort(common.DeleteCommand):
     """Delete a port"""
 
     clazz = neu2.DeletePort
@@ -84,7 +84,7 @@ class DeletePort(v2_0.DeleteCommand):
     help_text = 'Name or ID of port to delete'
 
 
-class ListPort(v2_0.ListCommand):
+class ListPort(common.ListCommand):
     """List port"""
 
     def get_parser(self, prog_name):
@@ -106,7 +106,7 @@ class ListPort(v2_0.ListCommand):
         return neuter.take_action(parsed_args)
 
 
-class SetPort(v2_0.SetCommand):
+class SetPort(common.SetCommand):
     """Set port values"""
 
     clazz = neu2.UpdatePort
@@ -136,7 +136,7 @@ class SetPort(v2_0.SetCommand):
         return parser
 
 
-class ShowPort(v2_0.ShowCommand):
+class ShowPort(common.ShowCommand):
     """Show a port"""
 
     clazz = neu2.ShowPort
@@ -145,7 +145,7 @@ class ShowPort(v2_0.ShowCommand):
     help_text = 'Name or ID of port to show'
 
 
-class AddPort(v2_0.RemoveCommand):
+class AddPort(common.RemoveCommand):
     """Add a floating IP to a port"""
 
     clazz = floatingip.AssociateFloatingIP
@@ -165,7 +165,7 @@ class AddPort(v2_0.RemoveCommand):
         return parser
 
 
-class RemovePort(v2_0.RemoveCommand):
+class RemovePort(common.RemoveCommand):
     """Remove a floating IP from a port"""
 
     clazz = floatingip.DisassociateFloatingIP

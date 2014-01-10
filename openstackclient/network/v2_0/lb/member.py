@@ -16,10 +16,10 @@
 """Load Balancer member action implementations"""
 
 from neutronclient.neutron.v2_0.lb import member as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateMember(v2_0.CreateCommand):
+class CreateMember(common.CreateCommand):
     """Create a load balancer member"""
 
     clazz = neu2.CreateMember
@@ -48,7 +48,7 @@ class CreateMember(v2_0.CreateCommand):
         return parser
 
 
-class DeleteMember(v2_0.DeleteCommand):
+class DeleteMember(common.DeleteCommand):
     """Delete a load balancer member"""
 
     clazz = neu2.DeleteMember
@@ -57,13 +57,13 @@ class DeleteMember(v2_0.DeleteCommand):
     help_text = 'Name or ID of load balancer member to delete'
 
 
-class ListMember(v2_0.ListCommand):
+class ListMember(common.ListCommand):
     """List load balancer member"""
 
     clazz = neu2.ListMember
 
 
-class SetMember(v2_0.SetCommand):
+class SetMember(common.SetCommand):
     """Set load balancer member values"""
 
     clazz = neu2.UpdateMember
@@ -72,7 +72,7 @@ class SetMember(v2_0.SetCommand):
     help_text = 'Name or ID of load balancer member to update'
 
 
-class ShowMember(v2_0.ShowCommand):
+class ShowMember(common.ShowCommand):
     """Show a load balancer member"""
 
     clazz = neu2.ShowMember

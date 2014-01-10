@@ -18,10 +18,10 @@
 from neutronclient.common import utils
 from neutronclient.neutron.v2_0.vpn import ipsecpolicy as neu2
 from neutronclient.neutron.v2_0.vpn import utils as vpn_utils
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateIpsecpolicy(v2_0.CreateCommand):
+class CreateIpsecpolicy(common.CreateCommand):
     """Create a IPSec policy"""
 
     clazz = neu2.CreateIPsecPolicy
@@ -65,7 +65,7 @@ class CreateIpsecpolicy(v2_0.CreateCommand):
         return parser
 
 
-class DeleteIpsecpolicy(v2_0.DeleteCommand):
+class DeleteIpsecpolicy(common.DeleteCommand):
     """Delete a IPSec policy"""
 
     clazz = neu2.DeleteIPsecPolicy
@@ -74,13 +74,13 @@ class DeleteIpsecpolicy(v2_0.DeleteCommand):
     help_text = 'Name or ID of IPSec policy to delete'
 
 
-class ListIpsecpolicy(v2_0.ListCommand):
+class ListIpsecpolicy(common.ListCommand):
     """List IPSec policies"""
 
     clazz = neu2.ListIPsecPolicy
 
 
-class SetIpsecpolicy(v2_0.SetCommand):
+class SetIpsecpolicy(common.SetCommand):
     """Set IPSec policy values"""
 
     clazz = neu2.UpdateIPsecPolicy
@@ -98,7 +98,7 @@ class SetIpsecpolicy(v2_0.SetCommand):
         return parser
 
 
-class ShowIpsecpolicy(v2_0.ShowCommand):
+class ShowIpsecpolicy(common.ShowCommand):
     """Show a IPSec policy"""
 
     clazz = neu2.ShowIPsecPolicy

@@ -17,10 +17,10 @@
 
 from neutronclient.neutron.v2_0 import agentscheduler
 from neutronclient.neutron.v2_0.lb import pool as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreatePool(v2_0.CreateCommand):
+class CreatePool(common.CreateCommand):
     """Create a load balancer pool"""
 
     clazz = neu2.CreatePool
@@ -58,7 +58,7 @@ class CreatePool(v2_0.CreateCommand):
         return parser
 
 
-class DeletePool(v2_0.DeleteCommand):
+class DeletePool(common.DeleteCommand):
     """Delete a load balancer pool"""
 
     clazz = neu2.DeletePool
@@ -67,7 +67,7 @@ class DeletePool(v2_0.DeleteCommand):
     help_text = 'Name or ID of load balancer pool to delete'
 
 
-class ListPool(v2_0.ListCommand):
+class ListPool(common.ListCommand):
     """List load balancer pool"""
 
     def get_parser(self, prog_name):
@@ -94,7 +94,7 @@ class ListPool(v2_0.ListCommand):
         return neuter.take_action(parsed_args)
 
 
-class SetPool(v2_0.SetCommand):
+class SetPool(common.SetCommand):
     """Set load balancer pool values"""
 
     clazz = neu2.UpdatePool
@@ -103,7 +103,7 @@ class SetPool(v2_0.SetCommand):
     help_text = 'Name or ID of load balancer pool to update'
 
 
-class ShowPool(v2_0.ShowCommand):
+class ShowPool(common.ShowCommand):
     """Show a load balancer pool"""
 
     name = 'pool'

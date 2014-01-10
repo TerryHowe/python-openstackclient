@@ -16,10 +16,10 @@
 """FloatingIp action implementations"""
 
 from neutronclient.neutron.v2_0 import floatingip as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateFloatingIp(v2_0.CreateCommand):
+class CreateFloatingIp(common.CreateCommand):
     """Create a floating IP"""
 
     clazz = neu2.CreateFloatingIP
@@ -40,20 +40,20 @@ class CreateFloatingIp(v2_0.CreateCommand):
         return parser
 
 
-class DeleteFloatingIp(v2_0.DeleteCommand):
+class DeleteFloatingIp(common.DeleteCommand):
     """Delete a floating IP"""
 
     clazz = neu2.DeleteFloatingIP
     help_text = "Identifier of floating IP to delete"
 
 
-class ListFloatingIp(v2_0.ListCommand):
+class ListFloatingIp(common.ListCommand):
     """List floating IPs"""
 
     clazz = neu2.ListFloatingIP
 
 
-class ShowFloatingIp(v2_0.ShowCommand):
+class ShowFloatingIp(common.ShowCommand):
     """Show a floating IP"""
 
     clazz = neu2.ShowFloatingIP

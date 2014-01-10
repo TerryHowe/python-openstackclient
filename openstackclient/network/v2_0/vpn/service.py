@@ -16,10 +16,10 @@
 """VPN action implementations"""
 
 from neutronclient.neutron.v2_0.vpn import vpnservice as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateService(v2_0.CreateCommand):
+class CreateService(common.CreateCommand):
     """Create a VPN service"""
 
     clazz = neu2.CreateVPNService
@@ -45,7 +45,7 @@ class CreateService(v2_0.CreateCommand):
         return parser
 
 
-class DeleteService(v2_0.DeleteCommand):
+class DeleteService(common.DeleteCommand):
     """Delete a VPN service"""
 
     clazz = neu2.DeleteVPNService
@@ -54,13 +54,13 @@ class DeleteService(v2_0.DeleteCommand):
     help_text = 'Name or ID of VPN service to delete'
 
 
-class ListService(v2_0.ListCommand):
+class ListService(common.ListCommand):
     """List VPN service"""
 
     clazz = neu2.ListVPNService
 
 
-class SetService(v2_0.SetCommand):
+class SetService(common.SetCommand):
     """Set VPN service values"""
 
     clazz = neu2.UpdateVPNService
@@ -69,7 +69,7 @@ class SetService(v2_0.SetCommand):
     help_text = 'Name or ID of VPN service to set'
 
 
-class ShowService(v2_0.ShowCommand):
+class ShowService(common.ShowCommand):
     """Show a VPN service"""
 
     clazz = neu2.ShowVPNService

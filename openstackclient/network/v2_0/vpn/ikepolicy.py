@@ -18,10 +18,10 @@
 from neutronclient.common import utils
 from neutronclient.neutron.v2_0.vpn import ikepolicy as neu2
 from neutronclient.neutron.v2_0.vpn import utils as vpn_utils
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateIkepolicy(v2_0.CreateCommand):
+class CreateIkepolicy(common.CreateCommand):
     """Create a IKE policy"""
 
     clazz = neu2.CreateIKEPolicy
@@ -66,7 +66,7 @@ class CreateIkepolicy(v2_0.CreateCommand):
         return parser
 
 
-class DeleteIkepolicy(v2_0.DeleteCommand):
+class DeleteIkepolicy(common.DeleteCommand):
     """Delete a IKE policy"""
 
     clazz = neu2.DeleteIKEPolicy
@@ -75,13 +75,13 @@ class DeleteIkepolicy(v2_0.DeleteCommand):
     help_text = 'Name or ID of IKE policy to delete'
 
 
-class ListIkepolicy(v2_0.ListCommand):
+class ListIkepolicy(common.ListCommand):
     """List IKE policies"""
 
     clazz = neu2.ListIKEPolicy
 
 
-class SetIkepolicy(v2_0.SetCommand):
+class SetIkepolicy(common.SetCommand):
     """Set IKE policy values"""
 
     clazz = neu2.UpdateIKEPolicy
@@ -99,7 +99,7 @@ class SetIkepolicy(v2_0.SetCommand):
         return parser
 
 
-class ShowIkepolicy(v2_0.ShowCommand):
+class ShowIkepolicy(common.ShowCommand):
     """Show a IKE policy"""
 
     clazz = neu2.ShowIKEPolicy

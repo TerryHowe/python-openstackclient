@@ -16,10 +16,10 @@
 """Load Balancer health monitor action implementations"""
 
 from neutronclient.neutron.v2_0.lb import healthmonitor as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateHealthMonitor(v2_0.CreateCommand):
+class CreateHealthMonitor(common.CreateCommand):
     """Create a load balancer health monitor"""
 
     clazz = neu2.CreateHealthMonitor
@@ -69,7 +69,7 @@ class CreateHealthMonitor(v2_0.CreateCommand):
         return parser
 
 
-class DeleteHealthMonitor(v2_0.DeleteCommand):
+class DeleteHealthMonitor(common.DeleteCommand):
     """Delete a load balancer health monitor"""
 
     clazz = neu2.DeleteHealthMonitor
@@ -78,13 +78,13 @@ class DeleteHealthMonitor(v2_0.DeleteCommand):
     help_text = 'Name or ID of load balancer health monitor to delete'
 
 
-class ListHealthMonitor(v2_0.ListCommand):
+class ListHealthMonitor(common.ListCommand):
     """List load balancer health monitor"""
 
     clazz = neu2.ListHealthMonitor
 
 
-class SetHealthMonitor(v2_0.SetCommand):
+class SetHealthMonitor(common.SetCommand):
     """Set load balancer health monitor values"""
 
     clazz = neu2.UpdateHealthMonitor
@@ -93,7 +93,7 @@ class SetHealthMonitor(v2_0.SetCommand):
     help_text = 'Name or ID of load balancer health monitor to update'
 
 
-class ShowHealthMonitor(v2_0.ShowCommand):
+class ShowHealthMonitor(common.ShowCommand):
     """Show a load balancer health monitor"""
 
     clazz = neu2.ShowHealthMonitor
@@ -102,7 +102,7 @@ class ShowHealthMonitor(v2_0.ShowCommand):
     help_text = 'Name or ID of health monitor to show'
 
 
-class AddPool(v2_0.AddCommand):
+class AddPool(common.AddCommand):
     """Add health monitor to a pool"""
 
     clazz = neu2.AssociateHealthMonitor
@@ -114,7 +114,7 @@ class AddPool(v2_0.AddCommand):
     help_text = "health monitor to associate to pool"
 
 
-class RemovePool(v2_0.RemoveCommand):
+class RemovePool(common.RemoveCommand):
     """Remove a port or subnet from a router"""
 
     clazz = neu2.DisassociateHealthMonitor

@@ -16,10 +16,10 @@
 """Subnet action implementations"""
 
 from neutronclient.neutron.v2_0 import subnet as neu2
-from openstackclient.network import v2_0
+from openstackclient.network import common
 
 
-class CreateSubnet(v2_0.CreateCommand):
+class CreateSubnet(common.CreateCommand):
     """Create a subnet"""
 
     clazz = neu2.CreateSubnet
@@ -98,7 +98,7 @@ class CreateSubnet(v2_0.CreateCommand):
         return parser
 
 
-class DeleteSubnet(v2_0.DeleteCommand):
+class DeleteSubnet(common.DeleteCommand):
     """Delete a subnet"""
 
     clazz = neu2.DeleteSubnet
@@ -107,13 +107,13 @@ class DeleteSubnet(v2_0.DeleteCommand):
     help_text = 'Name or ID of subnet to delete'
 
 
-class ListSubnet(v2_0.ListCommand):
+class ListSubnet(common.ListCommand):
     """List subnet"""
 
     clazz = neu2.ListSubnet
 
 
-class SetSubnet(v2_0.SetCommand):
+class SetSubnet(common.SetCommand):
     """Set subnet values"""
 
     clazz = neu2.UpdateSubnet
@@ -122,7 +122,7 @@ class SetSubnet(v2_0.SetCommand):
     help_text = 'ID of subnet to update'
 
 
-class ShowSubnet(v2_0.ShowCommand):
+class ShowSubnet(common.ShowCommand):
     """Show a subnet"""
 
     clazz = neu2.ShowSubnet

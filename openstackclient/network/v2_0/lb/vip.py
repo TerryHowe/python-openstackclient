@@ -16,10 +16,10 @@
 """Load Balancer VIP action implementations"""
 
 from neutronclient.neutron.v2_0.lb import vip as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateVip(v2_0.CreateCommand):
+class CreateVip(common.CreateCommand):
     """Create a load balancer VIP"""
 
     clazz = neu2.CreateVip
@@ -62,7 +62,7 @@ class CreateVip(v2_0.CreateCommand):
         return parser
 
 
-class DeleteVip(v2_0.DeleteCommand):
+class DeleteVip(common.DeleteCommand):
     """Delete a load balancer VIP"""
 
     clazz = neu2.DeleteVip
@@ -71,13 +71,13 @@ class DeleteVip(v2_0.DeleteCommand):
     help_text = 'Name or ID of load balancer VIP to delete'
 
 
-class ListVip(v2_0.ListCommand):
+class ListVip(common.ListCommand):
     """List load balancer VIP"""
 
     clazz = neu2.ListVip
 
 
-class SetVip(v2_0.SetCommand):
+class SetVip(common.SetCommand):
     """Set load balancer VIP values"""
 
     clazz = neu2.UpdateVip
@@ -86,7 +86,7 @@ class SetVip(v2_0.SetCommand):
     help_text = 'Name or ID of load balancer VIP to update'
 
 
-class ShowVip(v2_0.ShowCommand):
+class ShowVip(common.ShowCommand):
     """Show a load balancer VIP"""
 
     clazz = neu2.ShowVip

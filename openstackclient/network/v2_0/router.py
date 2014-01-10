@@ -17,10 +17,10 @@
 
 from neutronclient.neutron.v2_0 import agentscheduler
 from neutronclient.neutron.v2_0 import router as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateRouter(v2_0.CreateCommand):
+class CreateRouter(common.CreateCommand):
     """Create a router"""
 
     clazz = neu2.CreateRouter
@@ -46,7 +46,7 @@ class CreateRouter(v2_0.CreateCommand):
         return parser
 
 
-class DeleteRouter(v2_0.DeleteCommand):
+class DeleteRouter(common.DeleteCommand):
     """Delete a router"""
 
     clazz = neu2.DeleteRouter
@@ -55,7 +55,7 @@ class DeleteRouter(v2_0.DeleteCommand):
     help_text = 'Name or ID of router to delete'
 
 
-class ListRouter(v2_0.ListCommand):
+class ListRouter(common.ListCommand):
     """List router"""
 
     def get_parser(self, prog_name):
@@ -82,7 +82,7 @@ class ListRouter(v2_0.ListCommand):
         return neuter.take_action(parsed_args)
 
 
-class SetRouter(v2_0.SetCommand):
+class SetRouter(common.SetCommand):
     """Set router values"""
 
     name = 'router_id'
@@ -121,7 +121,7 @@ class SetRouter(v2_0.SetCommand):
         return neuter.run(parsed_args)
 
 
-class ShowRouter(v2_0.ShowCommand):
+class ShowRouter(common.ShowCommand):
     """Show a router"""
 
     clazz = neu2.ShowRouter
@@ -130,7 +130,7 @@ class ShowRouter(v2_0.ShowCommand):
     help_text = 'Name or ID of router to show'
 
 
-class AddInterfaceRouter(v2_0.AddCommand):
+class AddInterfaceRouter(common.AddCommand):
     """Add a port or subnet to a router"""
 
     clazz = neu2.AddInterfaceRouter
@@ -139,7 +139,7 @@ class AddInterfaceRouter(v2_0.AddCommand):
     container_help_text = 'ID of router to add an interface to'
 
 
-class RemoveInterfaceRouter(v2_0.RemoveCommand):
+class RemoveInterfaceRouter(common.RemoveCommand):
     """Remove a port or subnet from a router"""
 
     clazz = neu2.RemoveInterfaceRouter

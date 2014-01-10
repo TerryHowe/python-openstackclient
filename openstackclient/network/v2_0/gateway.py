@@ -16,10 +16,10 @@
 """Gateway action implementations"""
 
 from neutronclient.neutron.v2_0 import nvpnetworkgateway as neu2
-from openstackclient.network import v2_0 as v2_0
+from openstackclient.network import common
 
 
-class CreateGateway(v2_0.CreateCommand):
+class CreateGateway(common.CreateCommand):
     """Create a gateway"""
 
     clazz = neu2.CreateNetworkGateway
@@ -39,7 +39,7 @@ class CreateGateway(v2_0.CreateCommand):
         return parser
 
 
-class DeleteGateway(v2_0.DeleteCommand):
+class DeleteGateway(common.DeleteCommand):
     """Delete a gateway"""
 
     clazz = neu2.DeleteNetworkGateway
@@ -48,13 +48,13 @@ class DeleteGateway(v2_0.DeleteCommand):
     help_text = 'Name or ID of gateway to delete'
 
 
-class ListGateway(v2_0.ListCommand):
+class ListGateway(common.ListCommand):
     """List gateways"""
 
     clazz = neu2.ListNetworkGateway
 
 
-class SetGateway(v2_0.SetCommand):
+class SetGateway(common.SetCommand):
     """Set gateway values"""
 
     clazz = neu2.UpdateNetworkGateway
@@ -63,7 +63,7 @@ class SetGateway(v2_0.SetCommand):
     help_text = 'Name or ID of gateway to set'
 
 
-class ShowGateway(v2_0.ShowCommand):
+class ShowGateway(common.ShowCommand):
     """Show a gateway"""
 
     clazz = neu2.ShowNetworkGateway
