@@ -96,7 +96,7 @@ class SetNetwork(common.SetCommand):
 
 
 class ShowNetwork(common.ShowCommand):
-    """Show a network"""
+    """Show network details"""
 
     clazz = neu2.ShowNetwork
     name = 'id'

@@ -104,7 +104,7 @@ class SetPool(common.SetCommand):
 
 
 class ShowPool(common.ShowCommand):
-    """Show a load balancer pool"""
+    """Show load balancer pool details"""
 
     name = 'pool'
     metavar = '<pool>'

@@ -87,7 +87,7 @@ class SetFirewall(common.SetCommand):
 
 
 class ShowFirewall(common.ShowCommand):
-    """Show a firewall"""
+    """Show firewall details"""
 
     clazz = neu2.ShowFirewall
     name = 'firewall'

@@ -92,7 +92,7 @@ class ListSecurityGroupRule(common.ListCommand):
 
 
 class ShowSecurityGroupRule(common.ShowCommand):
-    """Show a security group rule"""
+    """Show security group rule details"""
 
     clazz = neu2.ShowSecurityGroupRule
     name = 'id'

@@ -137,7 +137,7 @@ class SetPort(common.SetCommand):
 
 
 class ShowPort(common.ShowCommand):
-    """Show a port"""
+    """Show port details"""
 
     clazz = neu2.ShowPort
     name = 'id'

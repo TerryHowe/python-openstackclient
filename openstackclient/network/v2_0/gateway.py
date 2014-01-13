@@ -64,7 +64,7 @@ class SetGateway(common.SetCommand):
 
 
 class ShowGateway(common.ShowCommand):
-    """Show a gateway"""
+    """Show gateway details"""
 
     clazz = neu2.ShowNetworkGateway
     name = 'id'

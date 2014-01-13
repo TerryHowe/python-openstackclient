@@ -70,7 +70,7 @@ class SetService(common.SetCommand):
 
 
 class ShowService(common.ShowCommand):
-    """Show a VPN service"""
+    """Show VPN service details"""
 
     clazz = neu2.ShowVPNService
     name = 'id'

@@ -122,7 +122,7 @@ class SetRouter(common.SetCommand):
 
 
 class ShowRouter(common.ShowCommand):
-    """Show a router"""
+    """Show router details"""
 
     clazz = neu2.ShowRouter
     name = 'id'

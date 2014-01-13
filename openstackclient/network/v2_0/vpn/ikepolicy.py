@@ -100,7 +100,7 @@ class SetIkepolicy(common.SetCommand):
 
 
 class ShowIkepolicy(common.ShowCommand):
-    """Show a IKE policy"""
+    """Show IKE policy details"""
 
     clazz = neu2.ShowIKEPolicy
     name = 'id'

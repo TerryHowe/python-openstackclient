@@ -99,7 +99,7 @@ class SetIpsecpolicy(common.SetCommand):
 
 
 class ShowIpsecpolicy(common.ShowCommand):
-    """Show a IPSec policy"""
+    """Show IPSec policy details"""
 
     clazz = neu2.ShowIPsecPolicy
     name = 'id'

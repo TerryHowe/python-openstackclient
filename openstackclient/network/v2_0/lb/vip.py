@@ -87,7 +87,7 @@ class SetVip(common.SetCommand):
 
 
 class ShowVip(common.ShowCommand):
-    """Show a load balancer VIP"""
+    """Show load balancer VIP details"""
 
     clazz = neu2.ShowVip
     name = 'id'

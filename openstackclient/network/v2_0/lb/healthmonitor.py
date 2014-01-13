@@ -94,7 +94,7 @@ class SetHealthMonitor(common.SetCommand):
 
 
 class ShowHealthMonitor(common.ShowCommand):
-    """Show a load balancer health monitor"""
+    """Show load balancer health monitor details"""
 
     clazz = neu2.ShowHealthMonitor
     name = 'id'

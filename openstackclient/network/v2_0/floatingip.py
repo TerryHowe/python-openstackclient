@@ -54,7 +54,7 @@ class ListFloatingIp(common.ListCommand):
 
 
 class ShowFloatingIp(common.ShowCommand):
-    """Show a floating IP"""
+    """Show floating IP details"""
 
     clazz = neu2.ShowFloatingIP
     help_text = "Identifier of floating IP to show"

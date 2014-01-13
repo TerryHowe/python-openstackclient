@@ -73,7 +73,7 @@ class SetMember(common.SetCommand):
 
 
 class ShowMember(common.ShowCommand):
-    """Show a load balancer member"""
+    """Show load balancer member details"""
 
     clazz = neu2.ShowMember
     name = 'id'

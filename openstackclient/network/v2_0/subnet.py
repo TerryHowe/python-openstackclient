@@ -123,7 +123,7 @@ class SetSubnet(common.SetCommand):
 
 
 class ShowSubnet(common.ShowCommand):
-    """Show a subnet"""
+    """Show subnet details"""
 
     clazz = neu2.ShowSubnet
     name = 'id'
