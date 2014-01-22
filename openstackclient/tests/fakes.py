@@ -33,6 +33,9 @@ class FakeStdout:
             result = result + line
         return result
 
+    def lines(self):
+        return ''.join(self.content).replace('\r', '')
+
 
 class FakeApp(object):
     def __init__(self, _stdout):

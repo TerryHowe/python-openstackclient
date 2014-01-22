@@ -15,19 +15,16 @@
 
 """Network action implementations"""
 
-import logging
-
-from cliff import command
-from cliff import lister
-from cliff import show
-
+from neutronclient.neutron.v2_0 import agentscheduler as agent
 from neutronclient.neutron.v2_0 import network as neu2
+from neutronclient.neutron.v2_0 import nvpnetworkgateway
+from openstackclient.network import common
 
 
-class CreateNetwork(show.ShowOne):
+class CreateNetwork(common.CreateCommand):
     """Create a network"""
 
-    log = logging.getLogger(__name__ + '.CreateNetwork')
+    clazz = neu2.CreateNetwork
 
     def get_parser(self, prog_name):
         parser = super(CreateNetwork, self).get_parser(prog_name)
@@ -40,65 +37,35 @@ class CreateNetwork(show.ShowOne):
             action='store_true',
             default=False, help='Set the network as shared')
         parser.add_argument(
-            '--project',
-            dest='tenant_id',
-            default=False, help='the owner project id')
-        parser.add_argument(
             'name', metavar='NAME',
             help='Name of network to create')
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.CreateNetwork(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
 
-
-class DeleteNetwork(command.Command):
+class DeleteNetwork(common.DeleteCommand):
     """Delete a network"""
 
-    log = logging.getLogger(__name__ + '.DeleteNetwork')
-
-    def get_parser(self, prog_name):
-        parser = super(DeleteNetwork, self).get_parser(prog_name)
-        parser.add_argument(
-            'network',
-            metavar='<network>',
-            help='Name or ID of network to delete',
-        )
-        return parser
-
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.DeleteNetwork(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
+    clazz = neu2.DeleteNetwork
+    name = 'id'
+    metavar = '<network>'
+    help_text = 'Name or ID of network to delete'
 
 
-class ListNetwork(lister.Lister):
+class ListNetwork(common.ListCommand):
     """List networks"""
-
-    log = logging.getLogger(__name__ + '.ListNetwork')
-
-    def __init__(self, app, app_args):
-        super(ListNetwork, self).__init__(app, app_args)
-        self.app = app
-        self.app_args = app_args
 
     def get_parser(self, prog_name):
         parser = super(ListNetwork, self).get_parser(prog_name)
-        parser.add_argument(
-            '--long',
-            dest='show_details',
-            action='store_true',
-            default=False,
-            help='Long listing',
-        )
         parser.add_argument(
             '--external',
             action='store_true',
             default=False,
             help='List external networks',
         )
+        parser.add_argument(
+            '--dhcp',
+            dest='dhcp_agent',
+            help='ID of the DHCP agent')
         return parser
 
     def take_action(self, parsed_args):
@@ -106,47 +73,80 @@ class ListNetwork(lister.Lister):
         if parsed_args.external:
             neuter = neu2.ListExternalNetwork(self.app, self.app_args)
         else:
-            neuter = neu2.ListNetwork(self.app, self.app_args)
+            if parsed_args.dhcp_agent:
+                neuter = agent.ListNetworksOnDhcpAgent(self.app, self.app_args)
+            else:
+                neuter = neu2.ListNetwork(self.app, self.app_args)
+        neuter.get_client = self.get_client
+        parsed_args.request_format = 'json'
+        parsed_args.fields = []
+        parsed_args.page_size = None
+        parsed_args.sort_key = []
+        parsed_args.sort_dir = []
         return neuter.take_action(parsed_args)
 
 
-class SetNetwork(command.Command):
+class SetNetwork(common.SetCommand):
     """Set network values"""
 
-    log = logging.getLogger(__name__ + '.SetNetwork')
+    clazz = neu2.UpdateNetwork
+    name = 'network'
+    metavar = '<network>'
+    help_text = 'Name or ID of network to set'
+
+
+class ShowNetwork(common.ShowCommand):
+    """Show network details"""
+
+    clazz = neu2.ShowNetwork
+    name = 'id'
+    metavar = '<network>'
+    help_text = 'Name or ID of network to show'
+
+
+class AddGatewayNetwork(common.AddCommand):
+    """Add a gateway to a network"""
+
+    clazz = nvpnetworkgateway.ConnectNetworkGateway
+    container_name = "network_id"
+    container_metavar = "<network_id>"
+    container_help_text = "ID of the internal network"
+    name = 'net_gateway_id'
+    metavar = '<gateway_id>'
+    help_text = 'ID of the gatway'
 
     def get_parser(self, prog_name):
-        parser = super(SetNetwork, self).get_parser(prog_name)
+        parser = super(AddGatewayNetwork, self).get_parser(prog_name)
         parser.add_argument(
-            'network',
-            metavar='<network>',
-            help='Name or ID of network to update',
-        )
+            '--segmentation-type',
+            help=('L2 segmentation strategy on the external side of '
+                  'the gateway (e.g.: VLAN, FLAT)'))
+        parser.add_argument(
+            '--segmentation-id',
+            help=('Identifier for the L2 segment on the external side '
+                  'of the gateway'))
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        neuter = neu2.UpdateNetwork(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
 
+class RemoveGatewayNetwork(common.RemoveCommand):
+    """Remove a gateway from a network"""
 
-class ShowNetwork(show.ShowOne):
-    """Show a network"""
-
-    log = logging.getLogger(__name__ + '.ShowNetwork')
+    clazz = nvpnetworkgateway.DisconnectNetworkGateway
+    container_name = "network_id"
+    container_metavar = "<network_id>"
+    container_help_text = "ID of the internal network"
+    name = 'net_gateway_id'
+    metavar = '<gateway_id>'
+    help_text = 'ID of the gatway'
 
     def get_parser(self, prog_name):
-        parser = super(ShowNetwork, self).get_parser(prog_name)
+        parser = super(RemoveGatewayNetwork, self).get_parser(prog_name)
         parser.add_argument(
-            'network',
-            metavar='<network>',
-            help='Name or ID of network to show',
-        )
+            '--segmentation-type',
+            help=('L2 segmentation strategy on the external side of '
+                  'the gateway (e.g.: VLAN, FLAT)'))
+        parser.add_argument(
+            '--segmentation-id',
+            help=('Identifier for the L2 segment on the external side '
+                  'of the gateway'))
         return parser
-
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        parsed_args.show_details = True
-        parsed_args.id = parsed_args.network
-        neuter = neu2.ShowNetwork(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
