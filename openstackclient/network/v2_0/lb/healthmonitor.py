@@ -96,10 +96,7 @@ class SetHealthMonitor(common.SetCommand):
 class ShowHealthMonitor(common.ShowCommand):
     """Show load balancer health monitor details"""
 
-    clazz = neu2.ShowHealthMonitor
-    name = 'id'
-    metavar = '<healthmonitor>'
-    help_text = 'Name or ID of health monitor to show'
+    name = 'health_monitor'
 
 
 class AddPool(common.AddCommand):

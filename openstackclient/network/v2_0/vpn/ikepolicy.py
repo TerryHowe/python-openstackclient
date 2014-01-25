@@ -102,7 +102,4 @@ class SetIkepolicy(common.SetCommand):
 class ShowIkepolicy(common.ShowCommand):
     """Show IKE policy details"""
 
-    clazz = neu2.ShowIKEPolicy
-    name = 'id'
-    metavar = '<ikepolicy>'
-    help_text = 'Name or ID of IKE policy to show'
+    name = 'ikepolicy'

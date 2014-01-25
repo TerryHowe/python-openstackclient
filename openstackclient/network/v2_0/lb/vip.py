@@ -89,7 +89,4 @@ class SetVip(common.SetCommand):
 class ShowVip(common.ShowCommand):
     """Show load balancer VIP details"""
 
-    clazz = neu2.ShowVip
-    name = 'id'
-    metavar = '<vip>'
-    help_text = 'Name or ID of VIP to show'
+    name = 'vip'

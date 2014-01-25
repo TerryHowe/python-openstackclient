@@ -13,14 +13,48 @@
 #   under the License.
 #
 
+import json
 import logging
+import six
 
 from cliff import command
 from cliff import lister
 from cliff import show
 
 
-class CreateCommand(show.ShowOne):
+class BaseShowCommand(show.ShowOne):
+    json_indent = None
+
+    def dumps(self, value, indent=None):
+        try:
+            return json.dumps(value, indent=indent)
+        except TypeError:
+            pass
+        return json.dumps(to_primitive(value))
+
+    def format_data(self, data):
+        # Modify data to make it more readable
+        if not(self.name in data):
+            return data
+        for k, v in data[self.name].iteritems():
+            if isinstance(v, list):
+                value = '\n'.join(self.dumps(
+                    i, indent=self.json_indent) if isinstance(i, dict)
+                    else str(i) for i in v)
+                data[self.name][k] = value
+                print '***********************************'
+                print value.__class__.__name__
+                print str(value)
+                print '***********************************'
+            elif isinstance(v, dict):
+                value = self.dumps(v, indent=self.json_indent)
+                data[self.name][k] = value
+            elif v is None:
+                data[self.name][k] = ''
+        return data[self.name]
+
+
+class CreateCommand(BaseShowCommand):
 
     log = logging.getLogger(__name__ + '.CreateCommand')
 
@@ -131,12 +165,17 @@ class SetCommand(command.Command):
         return neuter.take_action(parsed_args)
 
 
-class ShowCommand(show.ShowOne):
+class ShowCommand(BaseShowCommand):
 
     log = logging.getLogger(__name__ + '.ShowCommand')
-    name = "id"
-    metavar = "<id>"
-    help_text = "Identifier of object to delete"
+
+    def __init__(self, app, app_args):
+        super(ShowCommand, self).__init__(app, app_args)
+        self.metavar = "<" + self.name + ">"
+        self.help_text = "Name or identifier of " + \
+                         self.name.replace('_', ' ') + " to show"
+        self.func = self.name
+        self.response = self.name
 
     def get_client(self):
         return self.app.client_manager.network
@@ -144,20 +183,18 @@ class ShowCommand(show.ShowOne):
     def get_parser(self, prog_name):
         parser = super(ShowCommand, self).get_parser(prog_name)
         parser.add_argument(
-            self.name,
+            'identifier',
             metavar=self.metavar,
-            help=self.help_text,
+            help=self.help_text
         )
         return parser
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        neuter = self.clazz(self.app, self.app_args)
-        neuter.get_client = self.get_client
-        parsed_args.show_details = True
-        parsed_args.request_format = 'json'
-        parsed_args.fields = []
-        return neuter.take_action(parsed_args)
+        method = getattr(self.app.client_manager.network, "show_" + self.func)
+        data = method(parsed_args.identifier)
+        data = self.format_data(data)
+        return zip(*sorted(six.iteritems(data)))
 
 
 class AddCommand(command.Command):

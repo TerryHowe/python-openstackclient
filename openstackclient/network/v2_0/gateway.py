@@ -66,7 +66,8 @@ class SetGateway(common.SetCommand):
 class ShowGateway(common.ShowCommand):
     """Show gateway details"""
 
-    clazz = neu2.ShowNetworkGateway
-    name = 'id'
-    metavar = '<gateway>'
-    help_text = 'Name or ID of gateway to show'
+    name = 'gateway'
+
+    def __init__(self, app, app_args):
+        super(ShowGateway, self).__init__(app, app_args)
+        self.func = "network_gatway"

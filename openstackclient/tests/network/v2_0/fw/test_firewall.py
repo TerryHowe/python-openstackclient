@@ -14,7 +14,7 @@
 #
 
 from openstackclient.network.v2_0.fw import firewall
-from openstackclient.tests.network.v2_0 import common
+from openstackclient.tests.network import common
 
 
 class TestCreateFirewall(common.TestNetworkBase):
@@ -73,11 +73,11 @@ class TestShowFirewall(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
         parsed = self.given_args(firewall.ShowFirewall, given)
-        self.assertEqual('noo', parsed.firewall)
+        self.assertEqual('noo', parsed.identifier)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
         given = "too " + self.given_all_show_options()
         parsed = self.given_args(firewall.ShowFirewall, given)
-        self.assertEqual('too', parsed.firewall)
+        self.assertEqual('too', parsed.identifier)
         self.then_all_show_options(parsed)

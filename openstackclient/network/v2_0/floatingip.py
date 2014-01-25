@@ -56,5 +56,8 @@ class ListFloatingIp(common.ListCommand):
 class ShowFloatingIp(common.ShowCommand):
     """Show floating IP details"""
 
-    clazz = neu2.ShowFloatingIP
-    help_text = "Identifier of floating IP to show"
+    name = "floatingip"
+
+    def __init__(self, app, app_args):
+        super(ShowFloatingIp, self).__init__(app, app_args)
+        self.help_text = "Identitifer of floating IP to show"

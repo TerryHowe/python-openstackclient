@@ -14,7 +14,7 @@
 #
 
 from openstackclient.network.v2_0.vpn import ipsecpolicy
-from openstackclient.tests.network.v2_0 import common
+from openstackclient.tests.network import common
 
 
 class TestCreateIpsecpolicy(common.TestNetworkBase):
@@ -82,11 +82,11 @@ class TestShowIpsecpolicy(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
         parsed = self.given_args(ipsecpolicy.ShowIpsecpolicy, given)
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
         self.then_default_show_options(parsed)
 
     def test_get_parser_all(self):
         given = "too " + self.given_all_show_options()
         parsed = self.given_args(ipsecpolicy.ShowIpsecpolicy, given)
-        self.assertEqual('too', parsed.id)
+        self.assertEqual('too', parsed.identifier)
         self.then_all_show_options(parsed)

@@ -72,7 +72,4 @@ class SetSecurityGroup(common.SetCommand):
 class ShowSecurityGroup(common.ShowCommand):
     """Show security group details"""
 
-    clazz = neu2.ShowSecurityGroup
-    name = 'id'
-    metavar = '<securitygroup>'
-    help_text = 'Name or ID of security group to show'
+    name = 'security_group'

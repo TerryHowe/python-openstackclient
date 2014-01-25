@@ -75,7 +75,4 @@ class SetMember(common.SetCommand):
 class ShowMember(common.ShowCommand):
     """Show load balancer member details"""
 
-    clazz = neu2.ShowMember
-    name = 'id'
-    metavar = '<member>'
-    help_text = 'Name or ID of member to show'
+    name = 'member'

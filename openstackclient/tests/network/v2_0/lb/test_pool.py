@@ -14,7 +14,7 @@
 #
 
 from openstackclient.network.v2_0.lb import pool
-from openstackclient.tests.network.v2_0 import common
+from openstackclient.tests.network import common
 
 
 class TestCreateLbPool(common.TestNetworkBase):
@@ -81,7 +81,7 @@ class TestShowLbPool(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "noo" + self.given_default_show_options()
         parsed = self.given_args(pool.ShowPool, given)
-        self.assertEqual('noo', parsed.pool)
+        self.assertEqual('noo', parsed.identifier)
         self.assertEqual(False, parsed.agent)
         self.assertEqual(False, parsed.stats)
         self.then_default_show_options(parsed)
@@ -89,7 +89,7 @@ class TestShowLbPool(common.TestNetworkBase):
     def test_get_parser_all(self):
         given = "too --agent --stats" + self.given_all_show_options()
         parsed = self.given_args(pool.ShowPool, given)
-        self.assertEqual('too', parsed.pool)
+        self.assertEqual('too', parsed.identifier)
         self.assertEqual(True, parsed.agent)
         self.assertEqual(True, parsed.stats)
         self.then_all_show_options(parsed)

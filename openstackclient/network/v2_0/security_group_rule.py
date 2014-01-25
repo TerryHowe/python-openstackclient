@@ -94,7 +94,8 @@ class ListSecurityGroupRule(common.ListCommand):
 class ShowSecurityGroupRule(common.ShowCommand):
     """Show security group rule details"""
 
-    clazz = neu2.ShowSecurityGroupRule
-    name = 'id'
-    metavar = '<rule>'
-    help_text = 'Name or ID of security group rule to show'
+    name = 'security_group_rule'
+
+    def __init__(self, app, app_args):
+        super(ShowSecurityGroupRule, self).__init__(app, app_args)
+        self.help_text = "Identifier of security group rule to show"

@@ -101,7 +101,4 @@ class SetIpsecpolicy(common.SetCommand):
 class ShowIpsecpolicy(common.ShowCommand):
     """Show IPSec policy details"""
 
-    clazz = neu2.ShowIPsecPolicy
-    name = 'id'
-    metavar = '<ipsecpolicy>'
-    help_text = 'Name or ID of IPSec policy to show'
+    name = 'ipsecpolicy'

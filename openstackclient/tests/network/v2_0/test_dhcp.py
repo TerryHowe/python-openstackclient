@@ -14,7 +14,7 @@
 #
 
 from openstackclient.network.v2_0 import dhcp
-from openstackclient.tests.network.v2_0 import common
+from openstackclient.tests.network import common
 
 
 class TestAddNetworkDhcpAgent(common.TestNetworkBase):

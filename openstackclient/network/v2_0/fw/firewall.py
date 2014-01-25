@@ -89,7 +89,4 @@ class SetFirewall(common.SetCommand):
 class ShowFirewall(common.ShowCommand):
     """Show firewall details"""
 
-    clazz = neu2.ShowFirewall
     name = 'firewall'
-    metavar = '<firewall>'
-    help_text = 'Name or ID of firewall to show'

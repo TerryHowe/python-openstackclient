@@ -98,10 +98,7 @@ class SetNetwork(common.SetCommand):
 class ShowNetwork(common.ShowCommand):
     """Show network details"""
 
-    clazz = neu2.ShowNetwork
-    name = 'id'
-    metavar = '<network>'
-    help_text = 'Name or ID of network to show'
+    name = 'network'
 
 
 class AddGatewayNetwork(common.AddCommand):

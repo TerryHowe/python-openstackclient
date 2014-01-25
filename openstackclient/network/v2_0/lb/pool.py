@@ -107,8 +107,6 @@ class ShowPool(common.ShowCommand):
     """Show load balancer pool details"""
 
     name = 'pool'
-    metavar = '<pool>'
-    help_text = 'Name or ID of pool to show'
 
     def get_parser(self, prog_name):
         parser = super(ShowPool, self).get_parser(prog_name)
