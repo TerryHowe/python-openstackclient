@@ -42,10 +42,6 @@ class BaseShowCommand(show.ShowOne):
                     i, indent=self.json_indent) if isinstance(i, dict)
                     else str(i) for i in v)
                 data[self.name][k] = value
-                print '***********************************'
-                print value.__class__.__name__
-                print str(value)
-                print '***********************************'
             elif isinstance(v, dict):
                 value = self.dumps(v, indent=self.json_indent)
                 data[self.name][k] = value
