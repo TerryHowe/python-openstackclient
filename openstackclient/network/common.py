@@ -173,9 +173,6 @@ class ShowCommand(BaseShowCommand):
         self.func = self.name
         self.response = self.name
 
-    def get_client(self):
-        return self.app.client_manager.network
-
     def get_parser(self, prog_name):
         parser = super(ShowCommand, self).get_parser(prog_name)
         parser.add_argument(
