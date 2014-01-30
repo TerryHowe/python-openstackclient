@@ -74,7 +74,7 @@ class DeleteFirewall(common.DeleteCommand):
 class ListFirewall(common.ListCommand):
     """List firewall"""
 
-    clazz = neu2.ListFirewall
+    resource = 'firewalls'
 
 
 class SetFirewall(common.SetCommand):

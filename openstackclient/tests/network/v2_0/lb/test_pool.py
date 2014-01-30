@@ -74,7 +74,7 @@ class TestListLbPool(common.TestNetworkBase):
 class TestSetLbPool(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(pool.SetPool, "noo")
-        self.assertEqual('noo', parsed.pool)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestShowLbPool(common.TestNetworkBase):

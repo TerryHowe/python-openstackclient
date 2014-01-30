@@ -60,7 +60,7 @@ class DeleteMember(common.DeleteCommand):
 class ListMember(common.ListCommand):
     """List load balancer member"""
 
-    clazz = neu2.ListMember
+    resource = 'members'
 
 
 class SetMember(common.SetCommand):

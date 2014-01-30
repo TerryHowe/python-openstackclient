@@ -75,7 +75,7 @@ class TestListLbHealthMonitor(common.TestNetworkBase):
 class TestSetLbHealthMonitor(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(healthmonitor.SetHealthMonitor, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestShowLbHealthMonitor(common.TestNetworkBase):

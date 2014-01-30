@@ -47,6 +47,7 @@ class ListDhcpAgent(common.ListCommand):
     """List DHCP agents on a network"""
 
     clazz = neu2.ListDhcpAgentsHostingNetwork
+    resource = 'dhcp_agent'
 
     def get_parser(self, prog_name):
         parser = super(ListDhcpAgent, self).get_parser(prog_name)

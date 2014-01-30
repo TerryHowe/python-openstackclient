@@ -69,7 +69,7 @@ class DeleteSecurityGroupRule(common.DeleteCommand):
 class ListSecurityGroupRule(common.ListCommand):
     """List security group rule"""
 
-    clazz = neu2.ListSecurityGroupRule
+    resource = 'security_group_rules'
 
     def get_parser(self, prog_name):
         parser = super(ListSecurityGroupRule, self).get_parser(prog_name)

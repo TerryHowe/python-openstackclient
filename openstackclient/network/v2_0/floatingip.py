@@ -50,7 +50,7 @@ class DeleteFloatingIp(common.DeleteCommand):
 class ListFloatingIp(common.ListCommand):
     """List floating IPs"""
 
-    clazz = neu2.ListFloatingIP
+    resource = 'floatingips'
 
 
 class ShowFloatingIp(common.ShowCommand):

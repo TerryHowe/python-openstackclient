@@ -73,7 +73,7 @@ class TestListRouter(common.TestNetworkBase):
 class TestSetRouter(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(router.SetRouter, "noo")
-        self.assertEqual('noo', parsed.router_id)
+        self.assertEqual('noo', parsed.identifier)
         self.assertEqual(None, parsed.external_network_id)
         self.assertEqual(False, parsed.no_gateway)
         self.assertEqual(False, parsed.disable_snat)
@@ -81,7 +81,7 @@ class TestSetRouter(common.TestNetworkBase):
     def test_get_parser_all(self):
         given = 'too --disable-snat --no-gateway'
         parsed = self.given_args(router.SetRouter, given)
-        self.assertEqual('too', parsed.router_id)
+        self.assertEqual('too', parsed.identifier)
         self.assertEqual(None, parsed.external_network_id)
         self.assertEqual(True, parsed.no_gateway)
         self.assertEqual(True, parsed.disable_snat)
@@ -89,7 +89,7 @@ class TestSetRouter(common.TestNetworkBase):
     def test_get_parser_all_enable(self):
         given = 'too --gateway way --enable-snat'
         parsed = self.given_args(router.SetRouter, given)
-        self.assertEqual('too', parsed.router_id)
+        self.assertEqual('too', parsed.identifier)
         self.assertEqual('way', parsed.external_network_id)
         self.assertEqual(False, parsed.no_gateway)
         self.assertEqual(False, parsed.disable_snat)

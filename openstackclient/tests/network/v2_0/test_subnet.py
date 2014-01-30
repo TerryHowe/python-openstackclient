@@ -95,12 +95,12 @@ class TestListSubnet(common.TestNetworkBase):
 class TestSetSubnet(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(subnet.SetSubnet, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
     def test_get_parser_all(self):
         given = 'too'
         parsed = self.given_args(subnet.SetSubnet, given)
-        self.assertEqual('too', parsed.id)
+        self.assertEqual('too', parsed.identifier)
 
 
 class TestShowSubnet(common.TestNetworkBase):

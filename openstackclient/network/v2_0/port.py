@@ -87,6 +87,8 @@ class DeletePort(common.DeleteCommand):
 class ListPort(common.ListCommand):
     """List port"""
 
+    resource = 'ports'
+
     def get_parser(self, prog_name):
         parser = super(ListPort, self).get_parser(prog_name)
         parser.add_argument(

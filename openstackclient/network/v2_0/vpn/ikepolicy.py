@@ -78,7 +78,7 @@ class DeleteIkepolicy(common.DeleteCommand):
 class ListIkepolicy(common.ListCommand):
     """List IKE policies"""
 
-    clazz = neu2.ListIKEPolicy
+    resource = 'ike_policies'
 
 
 class SetIkepolicy(common.SetCommand):

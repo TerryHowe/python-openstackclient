@@ -66,7 +66,7 @@ class TestListService(common.TestNetworkBase):
 class TestSetService(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(service.SetService, "noo")
-        self.assertEqual('noo', parsed.service)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestShowService(common.TestNetworkBase):

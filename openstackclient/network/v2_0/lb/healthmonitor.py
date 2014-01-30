@@ -81,7 +81,7 @@ class DeleteHealthMonitor(common.DeleteCommand):
 class ListHealthMonitor(common.ListCommand):
     """List load balancer health monitor"""
 
-    clazz = neu2.ListHealthMonitor
+    resource = 'health_monitors'
 
 
 class SetHealthMonitor(common.SetCommand):

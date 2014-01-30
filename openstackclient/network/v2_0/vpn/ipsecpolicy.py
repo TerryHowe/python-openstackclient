@@ -77,7 +77,7 @@ class DeleteIpsecpolicy(common.DeleteCommand):
 class ListIpsecpolicy(common.ListCommand):
     """List IPSec policies"""
 
-    clazz = neu2.ListIPsecPolicy
+    resource = 'ipsec_policies'
 
 
 class SetIpsecpolicy(common.SetCommand):

@@ -110,7 +110,7 @@ class DeleteSubnet(common.DeleteCommand):
 class ListSubnet(common.ListCommand):
     """List subnet"""
 
-    clazz = neu2.ListSubnet
+    resource = 'subnets'
 
 
 class SetSubnet(common.SetCommand):

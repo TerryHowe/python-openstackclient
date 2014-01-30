@@ -22,8 +22,10 @@ from cliff import lister
 from cliff import show
 
 
-class BaseShowCommand(show.ShowOne):
+class BaseCommand(object):
     json_indent = None
+
+    matters = {}
 
     def dumps(self, value, indent=None):
         try:
@@ -34,28 +36,25 @@ class BaseShowCommand(show.ShowOne):
 
     def format_data(self, data):
         # Modify data to make it more readable
-        if not(self.name in data):
-            return data
-        for k, v in data[self.name].iteritems():
-            if isinstance(v, list):
+        for k, v in data.iteritems():
+            if k in self.matters:
+                data[k] = self.matters[k](v)
+            elif isinstance(v, list):
                 value = '\n'.join(self.dumps(
                     i, indent=self.json_indent) if isinstance(i, dict)
                     else str(i) for i in v)
-                data[self.name][k] = value
+                data[k] = value
             elif isinstance(v, dict):
                 value = self.dumps(v, indent=self.json_indent)
-                data[self.name][k] = value
+                data[k] = value
             elif v is None:
-                data[self.name][k] = ''
-        return data[self.name]
+                data[k] = ''
+        return data
 
 
-class CreateCommand(BaseShowCommand):
+class CreateCommand(show.ShowOne, BaseCommand):
 
     log = logging.getLogger(__name__ + '.CreateCommand')
-
-    def get_client(self):
-        return self.app.client_manager.network
 
     def get_parser(self, prog_name):
         parser = super(CreateCommand, self).get_parser(prog_name)
@@ -103,9 +102,12 @@ class DeleteCommand(command.Command):
 class ListCommand(lister.Lister):
 
     log = logging.getLogger(__name__ + '.ListCommand')
+    columns = []
 
-    def get_client(self):
-        return self.app.client_manager.network
+    def __init__(self, app, app_args):
+        super(ListCommand, self).__init__(app, app_args)
+        self.func = self.resource
+        self.name = self.resource
 
     def get_parser(self, prog_name):
         parser = super(ListCommand, self).get_parser(prog_name)
@@ -120,25 +122,25 @@ class ListCommand(lister.Lister):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        neuter = self.clazz(self.app, self.app_args)
-        neuter.get_client = self.get_client
-        parsed_args.request_format = 'json'
-        parsed_args.page_size = None
-        parsed_args.sort_key = []
-        parsed_args.sort_dir = []
-        parsed_args.fields = []
-        return neuter.take_action(parsed_args)
+        method = getattr(self.app.client_manager.network, "list_" + self.func)
+        data = method()[self.resource]
+        if not self.columns:
+            self.columns = len(data) > 0 and data[0].keys() or []
+        self.columns = [w.replace(':', ' ') for w in self.columns]
+        return (self.columns, (self.format_data(item) for item in data))
 
 
 class SetCommand(command.Command):
 
     log = logging.getLogger(__name__ + '.SetCommand')
-    name = "id"
-    metavar = "<id>"
-    help_text = "Identifier of object to set"
 
-    def get_client(self):
-        return self.app.client_manager.network
+    def __init__(self, app, app_args):
+        super(SetCommand, self).__init__(app, app_args)
+        self.metavar = "<" + self.name + ">"
+        self.help_text = "Name or identifier of " + \
+                         self.name.replace('_', ' ') + " to set"
+        self.func = self.name
+        self.body = {}
 
     def get_parser(self, prog_name):
         parser = super(SetCommand, self).get_parser(prog_name)
@@ -147,7 +149,7 @@ class SetCommand(command.Command):
             dest='tenant_id',
             help='the owner project id')
         parser.add_argument(
-            self.name,
+            'identifier',
             metavar=self.metavar,
             help=self.help_text,
         )
@@ -155,13 +157,12 @@ class SetCommand(command.Command):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        neuter = self.clazz(self.app, self.app_args)
-        neuter.get_client = self.get_client
-        parsed_args.request_format = 'json'
-        return neuter.take_action(parsed_args)
+        _manager = self.app.client_manager.network
+        method = getattr(_manager, "update_" + self.func)
+        return method(parsed_args.identifier, self.body)
 
 
-class ShowCommand(BaseShowCommand):
+class ShowCommand(show.ShowOne, BaseCommand):
 
     log = logging.getLogger(__name__ + '.ShowCommand')
 
@@ -185,8 +186,7 @@ class ShowCommand(BaseShowCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         method = getattr(self.app.client_manager.network, "show_" + self.func)
-        data = method(parsed_args.identifier)
-        data = self.format_data(data)
+        data = self.format_data(method(parsed_args.identifier))
         return zip(*sorted(six.iteritems(data)))
 
 

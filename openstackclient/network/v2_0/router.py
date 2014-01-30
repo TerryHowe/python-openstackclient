@@ -58,6 +58,8 @@ class DeleteRouter(common.DeleteCommand):
 class ListRouter(common.ListCommand):
     """List router"""
 
+    resource = 'routers'
+
     def get_parser(self, prog_name):
         parser = super(ListRouter, self).get_parser(prog_name)
         parser.add_argument(

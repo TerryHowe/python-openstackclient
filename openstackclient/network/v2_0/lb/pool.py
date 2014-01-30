@@ -70,6 +70,8 @@ class DeletePool(common.DeleteCommand):
 class ListPool(common.ListCommand):
     """List load balancer pool"""
 
+    resource = 'pools'
+
     def get_parser(self, prog_name):
         parser = super(ListPool, self).get_parser(prog_name)
         parser.add_argument(

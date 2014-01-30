@@ -78,7 +78,7 @@ class TestListPort(common.TestNetworkBase):
 class TestSetPort(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(port.SetPort, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
         self.assertEqual([], parsed.extra_dhcp_opts)
         self.assertEqual(False, parsed.no_security_groups)
         self.assertEqual([], parsed.security_groups)
@@ -87,7 +87,7 @@ class TestSetPort(common.TestNetworkBase):
         given = 'too --extra-dhcp-opt DO --security-group ONE ' \
                 '--security-group TWO '
         parsed = self.given_args(port.SetPort, given)
-        self.assertEqual('too', parsed.id)
+        self.assertEqual('too', parsed.identifier)
         self.assertEqual(['DO'], parsed.extra_dhcp_opts)
         self.assertEqual(False, parsed.no_security_groups)
         self.assertEqual(['ONE', 'TWO'], parsed.security_groups)

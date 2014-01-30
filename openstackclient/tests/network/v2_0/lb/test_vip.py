@@ -77,7 +77,7 @@ class TestListLbVip(common.TestNetworkBase):
 class TestSetLbVip(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(vip.SetVip, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestShowLbVip(common.TestNetworkBase):

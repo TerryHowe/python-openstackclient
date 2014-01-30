@@ -66,7 +66,7 @@ class TestListNetwork(common.TestNetworkBase):
 class TestSetNetwork(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(network.SetNetwork, "noo")
-        self.assertEqual('noo', parsed.network)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestShowNetwork(common.TestNetworkBase):

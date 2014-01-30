@@ -74,7 +74,7 @@ class DeleteVip(common.DeleteCommand):
 class ListVip(common.ListCommand):
     """List load balancer VIP"""
 
-    clazz = neu2.ListVip
+    resource = 'vips'
 
 
 class SetVip(common.SetCommand):

@@ -51,7 +51,7 @@ class DeleteGateway(common.DeleteCommand):
 class ListGateway(common.ListCommand):
     """List gateways"""
 
-    clazz = neu2.ListNetworkGateway
+    resource = 'network_gateways'
 
 
 class SetGateway(common.SetCommand):

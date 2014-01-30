@@ -57,7 +57,7 @@ class DeleteService(common.DeleteCommand):
 class ListService(common.ListCommand):
     """List VPN service"""
 
-    clazz = neu2.ListVPNService
+    resource = 'services'
 
 
 class SetService(common.SetCommand):

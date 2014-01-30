@@ -59,13 +59,13 @@ class TestListSecurityGroup(common.TestNetworkBase):
 class TestSetSecurityGroup(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(security_group.SetSecurityGroup, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
         self.assertEqual(None, parsed.description)
 
     def test_get_parser_all(self):
         given = 'too --description noosgtoo'
         parsed = self.given_args(security_group.SetSecurityGroup, given)
-        self.assertEqual('too', parsed.id)
+        self.assertEqual('too', parsed.identifier)
         self.assertEqual('noosgtoo', parsed.description)
 
 

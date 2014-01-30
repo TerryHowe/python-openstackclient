@@ -54,6 +54,8 @@ class DeleteNetwork(common.DeleteCommand):
 class ListNetwork(common.ListCommand):
     """List networks"""
 
+    resource = "networks"
+
     def get_parser(self, prog_name):
         parser = super(ListNetwork, self).get_parser(prog_name)
         parser.add_argument(
@@ -76,7 +78,7 @@ class ListNetwork(common.ListCommand):
             if parsed_args.dhcp_agent:
                 neuter = agent.ListNetworksOnDhcpAgent(self.app, self.app_args)
             else:
-                neuter = neu2.ListNetwork(self.app, self.app_args)
+                return super(ListNetwork, self).take_action(parsed_args)
         neuter.get_client = self.get_client
         parsed_args.request_format = 'json'
         parsed_args.fields = []

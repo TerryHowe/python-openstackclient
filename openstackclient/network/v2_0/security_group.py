@@ -47,7 +47,7 @@ class DeleteSecurityGroup(common.DeleteCommand):
 class ListSecurityGroup(common.ListCommand):
     """List security group"""
 
-    clazz = neu2.ListSecurityGroup
+    resource = 'security_groups'
 
 
 class SetSecurityGroup(common.SetCommand):
