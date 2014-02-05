@@ -101,28 +101,22 @@ class CreateSubnet(common.CreateCommand):
 class DeleteSubnet(common.DeleteCommand):
     """Delete a subnet"""
 
-    clazz = neu2.DeleteSubnet
-    name = 'id'
-    metavar = '<subnet>'
-    help_text = 'Name or ID of subnet to delete'
+    resource = 'subnet'
 
 
 class ListSubnet(common.ListCommand):
     """List subnet"""
 
-    resource = 'subnets'
+    resource = 'subnet'
 
 
 class SetSubnet(common.SetCommand):
     """Set subnet values"""
 
-    clazz = neu2.UpdateSubnet
-    name = 'id'
-    metavar = '<subnet>'
-    help_text = 'ID of subnet to update'
+    resource = 'subnet'
 
 
 class ShowSubnet(common.ShowCommand):
     """Show subnet details"""
 
-    name = 'subnet'
+    resource = 'subnet'

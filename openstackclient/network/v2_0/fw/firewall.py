@@ -65,28 +65,24 @@ class CreateFirewall(common.CreateCommand):
 class DeleteFirewall(common.DeleteCommand):
     """Delete a firewall"""
 
-    clazz = neu2.DeleteFirewall
-    name = 'firewall'
-    metavar = '<firewall>'
+    resource = 'firewall'
     help_text = 'Name or ID of firewall to delete'
 
 
 class ListFirewall(common.ListCommand):
     """List firewall"""
 
-    resource = 'firewalls'
+    resource = 'firewall'
 
 
 class SetFirewall(common.SetCommand):
     """Set firewall values"""
 
-    clazz = neu2.UpdateFirewall
-    name = 'firewall'
-    metavar = '<firewall>'
-    help_text = 'ID of firewall to update'
+    resource = 'firewall'
+    help_text = 'ID of firewall to set'
 
 
 class ShowFirewall(common.ShowCommand):
     """Show firewall details"""
 
-    name = 'firewall'
+    resource = 'firewall'

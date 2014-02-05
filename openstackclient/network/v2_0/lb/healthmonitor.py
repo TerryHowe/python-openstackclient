@@ -72,31 +72,27 @@ class CreateHealthMonitor(common.CreateCommand):
 class DeleteHealthMonitor(common.DeleteCommand):
     """Delete a load balancer health monitor"""
 
-    clazz = neu2.DeleteHealthMonitor
-    name = 'id'
-    metavar = '<healthmonitor>'
+    resource = 'health_monitor'
     help_text = 'Name or ID of load balancer health monitor to delete'
 
 
 class ListHealthMonitor(common.ListCommand):
     """List load balancer health monitor"""
 
-    resource = 'health_monitors'
+    resource = 'health_monitor'
 
 
 class SetHealthMonitor(common.SetCommand):
     """Set load balancer health monitor values"""
 
-    clazz = neu2.UpdateHealthMonitor
-    name = 'id'
-    metavar = '<healthmonitor>'
-    help_text = 'Name or ID of load balancer health monitor to update'
+    resource = 'health_monitor'
+    help_text = 'Name or ID of load balancer health monitor to set'
 
 
 class ShowHealthMonitor(common.ShowCommand):
     """Show load balancer health monitor details"""
 
-    name = 'health_monitor'
+    resource = 'health_monitor'
 
 
 class AddPool(common.AddCommand):

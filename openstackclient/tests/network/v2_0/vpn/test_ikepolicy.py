@@ -56,7 +56,7 @@ class TestCreateIkepolicy(common.TestNetworkBase):
 class TestDeleteIkepolicy(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(ikepolicy.DeleteIkepolicy, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListIkepolicy(common.TestNetworkBase):

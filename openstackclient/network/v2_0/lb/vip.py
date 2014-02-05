@@ -65,28 +65,24 @@ class CreateVip(common.CreateCommand):
 class DeleteVip(common.DeleteCommand):
     """Delete a load balancer VIP"""
 
-    clazz = neu2.DeleteVip
-    name = 'id'
-    metavar = '<vip>'
+    resource = 'vip'
     help_text = 'Name or ID of load balancer VIP to delete'
 
 
 class ListVip(common.ListCommand):
     """List load balancer VIP"""
 
-    resource = 'vips'
+    resource = 'vip'
 
 
 class SetVip(common.SetCommand):
     """Set load balancer VIP values"""
 
-    clazz = neu2.UpdateVip
-    name = 'id'
-    metavar = '<vip>'
-    help_text = 'Name or ID of load balancer VIP to update'
+    resource = 'vip'
+    help_text = 'Name or ID of load balancer VIP to set'
 
 
 class ShowVip(common.ShowCommand):
     """Show load balancer VIP details"""
 
-    name = 'vip'
+    resource = 'vip'

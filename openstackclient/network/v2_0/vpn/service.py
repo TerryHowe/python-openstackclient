@@ -48,28 +48,24 @@ class CreateService(common.CreateCommand):
 class DeleteService(common.DeleteCommand):
     """Delete a VPN service"""
 
-    clazz = neu2.DeleteVPNService
-    name = 'id'
-    metavar = '<service>'
+    resource = 'vpnservice'
     help_text = 'Name or ID of VPN service to delete'
 
 
 class ListService(common.ListCommand):
     """List VPN service"""
 
-    resource = 'services'
+    resource = 'vpnservice'
 
 
 class SetService(common.SetCommand):
     """Set VPN service values"""
 
-    clazz = neu2.UpdateVPNService
-    name = 'service'
-    metavar = '<service>'
+    resource = 'vpnservice'
     help_text = 'Name or ID of VPN service to set'
 
 
 class ShowService(common.ShowCommand):
     """Show VPN service details"""
 
-    name = 'vpnservice'
+    resource = 'vpnservice'

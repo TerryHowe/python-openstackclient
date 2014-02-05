@@ -45,16 +45,13 @@ class CreateNetwork(common.CreateCommand):
 class DeleteNetwork(common.DeleteCommand):
     """Delete a network"""
 
-    clazz = neu2.DeleteNetwork
-    name = 'id'
-    metavar = '<network>'
-    help_text = 'Name or ID of network to delete'
+    resource = 'network'
 
 
 class ListNetwork(common.ListCommand):
     """List networks"""
 
-    resource = "networks"
+    resource = "network"
 
     def get_parser(self, prog_name):
         parser = super(ListNetwork, self).get_parser(prog_name)
@@ -73,34 +70,23 @@ class ListNetwork(common.ListCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         if parsed_args.external:
-            neuter = neu2.ListExternalNetwork(self.app, self.app_args)
-        else:
-            if parsed_args.dhcp_agent:
-                neuter = agent.ListNetworksOnDhcpAgent(self.app, self.app_args)
-            else:
-                return super(ListNetwork, self).take_action(parsed_args)
-        neuter.get_client = self.get_client
-        parsed_args.request_format = 'json'
-        parsed_args.fields = []
-        parsed_args.page_size = None
-        parsed_args.sort_key = []
-        parsed_args.sort_dir = []
-        return neuter.take_action(parsed_args)
+            self.report_filter={'router:external': True}
+        elif parsed_args.dhcp_agent:
+            self.resources = 'networks_on_dhcp_agent'
+            self.report_filter = {'dhcp_agent': parsed_args.dhcp_agent}
+        return super(ListNetwork, self).take_action(parsed_args)
 
 
 class SetNetwork(common.SetCommand):
     """Set network values"""
 
-    clazz = neu2.UpdateNetwork
-    name = 'network'
-    metavar = '<network>'
-    help_text = 'Name or ID of network to set'
+    resource = 'network'
 
 
 class ShowNetwork(common.ShowCommand):
     """Show network details"""
 
-    name = 'network'
+    resource = 'network'
 
 
 class AddGatewayNetwork(common.AddCommand):

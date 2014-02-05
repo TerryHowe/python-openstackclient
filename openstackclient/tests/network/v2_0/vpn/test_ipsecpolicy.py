@@ -55,7 +55,7 @@ class TestCreateIpsecpolicy(common.TestNetworkBase):
 class TestDeleteIpsecpolicy(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(ipsecpolicy.DeleteIpsecpolicy, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListIpsecpolicy(common.TestNetworkBase):

@@ -48,7 +48,7 @@ class TestCreateLbMember(common.TestNetworkBase):
 class TestDeleteLbMember(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(member.DeleteMember, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListLbMember(common.TestNetworkBase):

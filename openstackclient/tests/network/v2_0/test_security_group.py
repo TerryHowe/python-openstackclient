@@ -39,7 +39,7 @@ class TestCreateSecurityGroup(common.TestNetworkBase):
 class TestDeleteSecurityGroup(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(security_group.DeleteSecurityGroup, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListSecurityGroup(common.TestNetworkBase):

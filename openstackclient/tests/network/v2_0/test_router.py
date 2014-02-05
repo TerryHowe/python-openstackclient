@@ -51,7 +51,7 @@ class TestCreateRouter(common.TestNetworkBase):
 class TestDeleteRouter(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(router.DeleteRouter, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListRouter(common.TestNetworkBase):

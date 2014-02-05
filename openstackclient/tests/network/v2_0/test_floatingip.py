@@ -41,7 +41,7 @@ class TestCreateFloatingIp(common.TestNetworkBase):
 class TestDeleteFloatingIp(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(floatingip.DeleteFloatingIp, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListFloatingIp(common.TestNetworkBase):

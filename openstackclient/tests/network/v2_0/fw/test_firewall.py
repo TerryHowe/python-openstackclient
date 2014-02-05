@@ -46,7 +46,7 @@ class TestCreateFirewall(common.TestNetworkBase):
 class TestDeleteFirewall(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(firewall.DeleteFirewall, "noo")
-        self.assertEqual('noo', parsed.firewall)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListFirewall(common.TestNetworkBase):

@@ -46,7 +46,7 @@ class TestCreateService(common.TestNetworkBase):
 class TestDeleteService(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(service.DeleteService, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListService(common.TestNetworkBase):

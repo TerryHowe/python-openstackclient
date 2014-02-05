@@ -49,16 +49,13 @@ class CreateRouter(common.CreateCommand):
 class DeleteRouter(common.DeleteCommand):
     """Delete a router"""
 
-    clazz = neu2.DeleteRouter
-    name = 'id'
-    metavar = '<router>'
-    help_text = 'Name or ID of router to delete'
+    resource = 'router'
 
 
 class ListRouter(common.ListCommand):
     """List router"""
 
-    resource = 'routers'
+    resource = 'router'
 
     def get_parser(self, prog_name):
         parser = super(ListRouter, self).get_parser(prog_name)
@@ -80,16 +77,14 @@ class ListRouter(common.ListCommand):
                                                          self.app_args)
         else:
             neuter = neu2.ListRouter(self.app, self.app_args)
-        neuter.get_client = self.get_client
         return neuter.take_action(parsed_args)
 
 
 class SetRouter(common.SetCommand):
     """Set router values"""
 
-    name = 'router_id'
-    metavar = '<router>'
-    help_text = 'ID of router to update'
+    resource = 'router'
+    help_text = 'ID of router to set'
 
     def get_parser(self, prog_name):
         parser = super(SetRouter, self).get_parser(prog_name)
@@ -126,7 +121,7 @@ class SetRouter(common.SetCommand):
 class ShowRouter(common.ShowCommand):
     """Show router details"""
 
-    name = 'router'
+    resource = 'router'
 
 
 class AddInterfaceRouter(common.AddCommand):

@@ -75,7 +75,7 @@ class TestCreateSubnet(common.TestNetworkBase):
 class TestDeleteSubnet(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(subnet.DeleteSubnet, "noo")
-        self.assertEqual('noo', parsed.id)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListSubnet(common.TestNetworkBase):

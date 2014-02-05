@@ -60,16 +60,14 @@ class CreateSecurityGroupRule(common.CreateCommand):
 class DeleteSecurityGroupRule(common.DeleteCommand):
     """Delete a security group rule"""
 
-    clazz = neu2.DeleteSecurityGroupRule
-    name = 'id'
-    metavar = '<rule>'
-    help_text = 'Name or ID of security group rule to delete'
+    resource = 'security_group_rule'
+    allow_names = False
 
 
 class ListSecurityGroupRule(common.ListCommand):
     """List security group rule"""
 
-    resource = 'security_group_rules'
+    resource = 'security_group_rule'
 
     def get_parser(self, prog_name):
         parser = super(ListSecurityGroupRule, self).get_parser(prog_name)
@@ -94,8 +92,6 @@ class ListSecurityGroupRule(common.ListCommand):
 class ShowSecurityGroupRule(common.ShowCommand):
     """Show security group rule details"""
 
-    name = 'security_group_rule'
-
-    def __init__(self, app, app_args):
-        super(ShowSecurityGroupRule, self).__init__(app, app_args)
-        self.help_text = "Identifier of security group rule to show"
+    resource = 'security_group_rule'
+    help_text = "Identifier of security group rule to show"
+    allow_names = False

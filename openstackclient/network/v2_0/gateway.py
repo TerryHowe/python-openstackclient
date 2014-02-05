@@ -42,31 +42,31 @@ class CreateGateway(common.CreateCommand):
 class DeleteGateway(common.DeleteCommand):
     """Delete a gateway"""
 
-    clazz = neu2.DeleteNetworkGateway
-    name = 'id'
-    metavar = '<gateway>'
-    help_text = 'Name or ID of gateway to delete'
+    resource = 'gateway'
+    resources = 'network_gateways'
 
 
 class ListGateway(common.ListCommand):
     """List gateways"""
 
-    resource = 'network_gateways'
+    resource = 'network_gateway'
+    resources = 'network_gateways'
 
 
 class SetGateway(common.SetCommand):
     """Set gateway values"""
 
-    clazz = neu2.UpdateNetworkGateway
-    name = 'gateway'
-    metavar = '<gateway>'
-    help_text = 'Name or ID of gateway to set'
+    resource = 'gateway'
+    resources = 'network_gateways'
+    func = 'network_gateway'
 
 
 class ShowGateway(common.ShowCommand):
     """Show gateway details"""
 
-    name = 'gateway'
+    resource = 'gateway'
+    resources = 'network_gateways'
+    func = 'network_gateway'
 
     def __init__(self, app, app_args):
         super(ShowGateway, self).__init__(app, app_args)

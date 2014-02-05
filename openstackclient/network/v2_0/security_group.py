@@ -38,25 +38,19 @@ class CreateSecurityGroup(common.CreateCommand):
 class DeleteSecurityGroup(common.DeleteCommand):
     """Delete a security group"""
 
-    clazz = neu2.DeleteSecurityGroup
-    name = 'id'
-    metavar = '<securitygroup>'
-    help_text = 'Name or ID of security group to delete'
+    resource = 'security_group'
 
 
 class ListSecurityGroup(common.ListCommand):
     """List security group"""
 
-    resource = 'security_groups'
+    resource = 'security_group'
 
 
 class SetSecurityGroup(common.SetCommand):
     """Set security group values"""
 
-    clazz = neu2.UpdateSecurityGroup
-    name = 'id'
-    metavar = '<securitygroup>'
-    help_text = 'ID of security group to update'
+    resource = 'security_group'
 
     def get_parser(self, prog_name):
         parser = super(SetSecurityGroup, self).get_parser(prog_name)
@@ -72,4 +66,4 @@ class SetSecurityGroup(common.SetCommand):
 class ShowSecurityGroup(common.ShowCommand):
     """Show security group details"""
 
-    name = 'security_group'
+    resource = 'security_group'

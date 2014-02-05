@@ -69,24 +69,25 @@ class CreateIkepolicy(common.CreateCommand):
 class DeleteIkepolicy(common.DeleteCommand):
     """Delete a IKE policy"""
 
-    clazz = neu2.DeleteIKEPolicy
-    name = 'id'
-    metavar = '<ikepolicy>'
+    resource = 'ikepolicy'
+    resources = 'ikepolicies'
     help_text = 'Name or ID of IKE policy to delete'
 
 
 class ListIkepolicy(common.ListCommand):
     """List IKE policies"""
 
-    resource = 'ike_policies'
+    resource = 'ikepolicy'
+    resources = 'ikepolicies'
+    list_columns = ['id', 'name', 'auth_algorithm',
+                    'encryption_algorithm', 'ike_version', 'pfs']
 
 
 class SetIkepolicy(common.SetCommand):
     """Set IKE policy values"""
 
-    clazz = neu2.UpdateIKEPolicy
-    name = 'id'
-    metavar = '<id>'
+    resource = 'ikepolicy'
+    resources = 'ikepolicies'
     help_text = 'Name or ID of IKE policy to set'
 
     def get_parser(self, prog_name):
@@ -102,4 +103,5 @@ class SetIkepolicy(common.SetCommand):
 class ShowIkepolicy(common.ShowCommand):
     """Show IKE policy details"""
 
-    name = 'ikepolicy'
+    resource = 'ikepolicy'
+    resources = 'ikepolicies'

@@ -68,24 +68,23 @@ class CreateIpsecpolicy(common.CreateCommand):
 class DeleteIpsecpolicy(common.DeleteCommand):
     """Delete a IPSec policy"""
 
-    clazz = neu2.DeleteIPsecPolicy
-    name = 'id'
-    metavar = '<ipsecpolicy>'
+    resource = 'ipsecpolicy'
+    resources = 'ipsecpolicies'
     help_text = 'Name or ID of IPSec policy to delete'
 
 
 class ListIpsecpolicy(common.ListCommand):
     """List IPSec policies"""
 
-    resource = 'ipsec_policies'
+    resource = 'ipsecpolicie'
+    resources = 'ipsecpolicies'
 
 
 class SetIpsecpolicy(common.SetCommand):
     """Set IPSec policy values"""
 
-    clazz = neu2.UpdateIPsecPolicy
-    name = 'id'
-    metavar = '<id>'
+    resource = 'ipsecpolicy'
+    resources = 'ipsecpolicies'
     help_text = 'Name or ID of IPSec policy to set'
 
     def get_parser(self, prog_name):
@@ -101,4 +100,5 @@ class SetIpsecpolicy(common.SetCommand):
 class ShowIpsecpolicy(common.ShowCommand):
     """Show IPSec policy details"""
 
-    name = 'ipsecpolicy'
+    resource = 'ipsecpolicy'
+    resources = 'ipsecpolicies'

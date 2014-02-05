@@ -32,7 +32,7 @@ class AddNetworkDhcpAgent(common.AddCommand):
 
 
 class RemoveNetworkDhcpAgent(common.RemoveCommand):
-    """Delete a gateway"""
+    """Remove network DHCP Agent"""
 
     clazz = neu2.RemoveNetworkFromDhcpAgent
     container_name = "network"

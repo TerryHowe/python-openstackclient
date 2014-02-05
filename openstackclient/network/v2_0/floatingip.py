@@ -43,21 +43,20 @@ class CreateFloatingIp(common.CreateCommand):
 class DeleteFloatingIp(common.DeleteCommand):
     """Delete a floating IP"""
 
-    clazz = neu2.DeleteFloatingIP
+    resource = 'floatingip'
+    allow_names = False
     help_text = "Identifier of floating IP to delete"
 
 
 class ListFloatingIp(common.ListCommand):
     """List floating IPs"""
 
-    resource = 'floatingips'
+    resource = 'floatingip'
 
 
 class ShowFloatingIp(common.ShowCommand):
     """Show floating IP details"""
 
-    name = "floatingip"
-
-    def __init__(self, app, app_args):
-        super(ShowFloatingIp, self).__init__(app, app_args)
-        self.help_text = "Identitifer of floating IP to show"
+    resource = "floatingip"
+    help_text = "Identitifer of floating IP to show"
+    allow_names = False

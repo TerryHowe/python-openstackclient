@@ -51,28 +51,24 @@ class CreateMember(common.CreateCommand):
 class DeleteMember(common.DeleteCommand):
     """Delete a load balancer member"""
 
-    clazz = neu2.DeleteMember
-    name = 'id'
-    metavar = '<member>'
+    resource = 'member'
     help_text = 'Name or ID of load balancer member to delete'
 
 
 class ListMember(common.ListCommand):
     """List load balancer member"""
 
-    resource = 'members'
+    resource = 'member'
 
 
 class SetMember(common.SetCommand):
     """Set load balancer member values"""
 
-    clazz = neu2.UpdateMember
-    name = 'id'
-    metavar = '<member>'
-    help_text = 'Name or ID of load balancer member to update'
+    resource = 'member'
+    help_text = 'Name or ID of load balancer member to set'
 
 
 class ShowMember(common.ShowCommand):
     """Show load balancer member details"""
 
-    name = 'member'
+    resource = 'member'

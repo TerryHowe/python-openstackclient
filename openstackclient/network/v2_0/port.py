@@ -78,16 +78,13 @@ class CreatePort(common.CreateCommand):
 class DeletePort(common.DeleteCommand):
     """Delete a port"""
 
-    clazz = neu2.DeletePort
-    name = 'id'
-    metavar = '<port>'
-    help_text = 'Name or ID of port to delete'
+    resource = 'port'
 
 
 class ListPort(common.ListCommand):
     """List port"""
 
-    resource = 'ports'
+    resource = 'port'
 
     def get_parser(self, prog_name):
         parser = super(ListPort, self).get_parser(prog_name)
@@ -116,10 +113,7 @@ class ListPort(common.ListCommand):
 class SetPort(common.SetCommand):
     """Set port values"""
 
-    clazz = neu2.UpdatePort
-    name = 'id'
-    metavar = '<port>'
-    help_text = 'Name or ID of port to update'
+    resource = 'port'
 
     def get_parser(self, prog_name):
         parser = super(SetPort, self).get_parser(prog_name)
@@ -146,7 +140,7 @@ class SetPort(common.SetCommand):
 class ShowPort(common.ShowCommand):
     """Show port details"""
 
-    name = "port"
+    resource = "port"
 
 
 class AddPort(common.RemoveCommand):

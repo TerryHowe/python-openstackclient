@@ -61,16 +61,14 @@ class CreatePool(common.CreateCommand):
 class DeletePool(common.DeleteCommand):
     """Delete a load balancer pool"""
 
-    clazz = neu2.DeletePool
-    name = 'pool'
-    metavar = '<pool>'
+    resource = 'pool'
     help_text = 'Name or ID of load balancer pool to delete'
 
 
 class ListPool(common.ListCommand):
     """List load balancer pool"""
 
-    resource = 'pools'
+    resource = 'pool'
 
     def get_parser(self, prog_name):
         parser = super(ListPool, self).get_parser(prog_name)
@@ -99,16 +97,14 @@ class ListPool(common.ListCommand):
 class SetPool(common.SetCommand):
     """Set load balancer pool values"""
 
-    clazz = neu2.UpdatePool
-    name = 'pool'
-    metavar = '<pool>'
-    help_text = 'Name or ID of load balancer pool to update'
+    resource = 'pool'
+    help_text = 'Name or ID of load balancer pool to set'
 
 
 class ShowPool(common.ShowCommand):
     """Show load balancer pool details"""
 
-    name = 'pool'
+    resource = 'pool'
 
     def get_parser(self, prog_name):
         parser = super(ShowPool, self).get_parser(prog_name)
