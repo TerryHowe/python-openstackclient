@@ -24,7 +24,7 @@ from openstackclient.network import common
 class CreateNetwork(common.CreateCommand):
     """Create a network"""
 
-    clazz = neu2.CreateNetwork
+    resource = 'network'
 
     def get_parser(self, prog_name):
         parser = super(CreateNetwork, self).get_parser(prog_name)
@@ -40,6 +40,12 @@ class CreateNetwork(common.CreateCommand):
             'name', metavar='NAME',
             help='Name of network to create')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: {
+                 'name': str(parsed_args.name),
+                 'admin_state_up': str(parsed_args.admin_state),
+                 'shared': str(parsed_args.shared) } }
 
 
 class DeleteNetwork(common.DeleteCommand):

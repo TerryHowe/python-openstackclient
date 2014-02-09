@@ -112,10 +112,15 @@ class CreateCommand(show.ShowOne, BaseCommand):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        neuter = self.clazz(self.app, self.app_args)
-        neuter.get_client = self.get_client
-        parsed_args.request_format = 'json'
-        return neuter.take_action(parsed_args)
+        _manager = self.app.client_manager.network
+        body = self.get_body(parsed_args)
+        create_method = getattr(_manager, "create_%s" % self.resource)
+        data = self.data_formatter(create_method(body)[self.resource])
+        if data:
+            print >>self.app.stdout, 'Created a new %s:' % self.resource
+        else:
+            data = {'': ''}
+        return zip(*sorted(six.iteritems(data)))
 
 
 class DeleteCommand(command.Command, BaseCommand):
