@@ -95,16 +95,8 @@ class ShowNetwork(common.ShowCommand):
     resource = 'network'
 
 
-class AddGatewayNetwork(common.AddCommand):
+class AddGatewayNetwork(command.Command, BaseCommand):
     """Add a gateway to a network"""
-
-    clazz = nvpnetworkgateway.ConnectNetworkGateway
-    container_name = "network_id"
-    container_metavar = "<network_id>"
-    container_help_text = "ID of the internal network"
-    name = 'net_gateway_id'
-    metavar = '<gateway_id>'
-    help_text = 'ID of the gatway'
 
     def get_parser(self, prog_name):
         parser = super(AddGatewayNetwork, self).get_parser(prog_name)
@@ -116,19 +108,34 @@ class AddGatewayNetwork(common.AddCommand):
             '--segmentation-id',
             help=('Identifier for the L2 segment on the external side '
                   'of the gateway'))
+        parser.add_argument(
+            'network',
+            metavar='<network>',
+            help='Name or identifier of the internal network'
+        )
+        parser.add_argument(
+            'gateway',
+            metavar='<gateway>',
+            help='Name or identifier of the gatway'
+        )
         return parser
 
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        _client = self.app.client_manager.network
+        _network_id = self.find_resource('network', parsed_args.network)
+        _gateway_id = self.find_resource('network_gateway',
+                                         parsed_args.gateway)
+        _client.connect_network_gateway(_gateway_id,
+                         {'network_id': _network_id,
+                          'segmentation_type': parsed_args.segmentation_type,
+                          'segmentation_id': parsed_args.segmentation_id})
+        print >>self.app.stdout, ('Connected network to gateway %s' %
+                                  _gateway_id)
 
-class RemoveGatewayNetwork(common.RemoveCommand):
+
+class RemoveGatewayNetwork(command.Command, BaseCommand):
     """Remove a gateway from a network"""
-
-    clazz = nvpnetworkgateway.DisconnectNetworkGateway
-    container_name = "network_id"
-    container_metavar = "<network_id>"
-    container_help_text = "ID of the internal network"
-    name = 'net_gateway_id'
-    metavar = '<gateway_id>'
-    help_text = 'ID of the gatway'
 
     def get_parser(self, prog_name):
         parser = super(RemoveGatewayNetwork, self).get_parser(prog_name)
@@ -140,4 +147,27 @@ class RemoveGatewayNetwork(common.RemoveCommand):
             '--segmentation-id',
             help=('Identifier for the L2 segment on the external side '
                   'of the gateway'))
+        parser.add_argument(
+            'network',
+            metavar='<network>',
+            help='Name or identifier of the internal network'
+        )
+        parser.add_argument(
+            'gateway',
+            metavar='<gateway>',
+            help='Name or identifier of the gatway'
+        )
         return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        _client = self.app.client_manager.network
+        _network_id = self.find_resource('network', parsed_args.network)
+        _gateway_id = self.find_resource('network_gateway',
+                                         parsed_args.gateway)
+        _client.disconnect_network_gateway((_gateway_id,
+                         {'network_id': _network_id,
+                          'segmentation_type': parsed_args.segmentation_type,
+                          'segmentation_id': parsed_args.segmentation_id})
+        print >>self.app.stdout, ('Disconnected network to gateway %s' %
+                                  _gateway_id)

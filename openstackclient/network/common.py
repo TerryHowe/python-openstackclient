@@ -75,23 +75,23 @@ class BaseCommand(object):
         return getattr(self.app.client_manager.network,
                        "list_%s" % self.resources)
 
-    def find_resource(self, name):
+    def find_resource(self, resource, name):
         client = self.app.client_manager.network
         list_method = self.get_list_method()
         data = list_method(name=name, fields='id')
-        info = data[self.resources]
+        info = data[resources]
         if len(info) == 1:
             return info[0]['id']
         if len(info) > 1:
             msg = "More than one %s exists with the name '%s'." % \
-                (self.resource, name)
+                (resource, name)
             raise exceptions.CommandError(msg)
         data = list_method(id=name, fields='id')
-        info = data[self.resources]
+        info = data[resources]
         if len(info) == 1:
             return info[0]['id']
         msg = "No %s with a name or ID of '%s' exists." % \
-            (self.resource, name)
+            (resource, name)
         raise exceptions.CommandError(msg)
 
 
@@ -112,9 +112,9 @@ class CreateCommand(show.ShowOne, BaseCommand):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        _manager = self.app.client_manager.network
+        _client = self.app.client_manager.network
         body = self.get_body(parsed_args)
-        create_method = getattr(_manager, "create_%s" % self.resource)
+        create_method = getattr(_client, "create_%s" % self.resource)
         data = self.data_formatter(create_method(body)[self.resource])
         if data:
             print >>self.app.stdout, 'Created a new %s:' % self.resource
@@ -150,7 +150,7 @@ class DeleteCommand(command.Command, BaseCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         if self.allow_names:
-            _id = self.find_resource(parsed_args.identifier)
+            _id = self.find_resource(self.resource, parsed_args.identifier)
         else:
             _id = parsed_args.identifier
         delete_method = getattr(self.app.client_manager.network, "delete_" +
@@ -222,12 +222,12 @@ class SetCommand(command.Command, BaseCommand):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        _manager = self.app.client_manager.network
+        _client = self.app.client_manager.network
         if self.allow_names:
-            _id = self.find_resource(parsed_args.identifier)
+            _id = self.find_resource(self.resource, parsed_args.identifier)
         else:
             _id = parsed_args.identifier
-        update_method = getattr(_manager, "update_" + self.func)
+        update_method = getattr(_client, "update_" + self.func)
         update_method(_id, self.body)
         print >>self.app.stdout, ('Updated %(resource)s: %(id)s' %
             {'id': parsed_args.identifier, 'resource': self.resource})
@@ -261,7 +261,7 @@ class ShowCommand(show.ShowOne, BaseCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         if self.allow_names:
-            _id = self.find_resource(parsed_args.identifier)
+            _id = self.find_resource(self.resource, parsed_args.identifier)
         else:
             _id = parsed_args.identifier
         show_method = getattr(self.app.client_manager.network,
@@ -270,15 +270,18 @@ class ShowCommand(show.ShowOne, BaseCommand):
         return zip(*sorted(six.iteritems(data)))
 
 
-class AddCommand(command.Command):
+class AddCommand(command.Command, BaseCommand):
 
     log = logging.getLogger(__name__ + '.AddCommand')
     container_name = "container_id"
-    container_metavar = "<container_id>"
     container_help_text = "Identifier of container"
     name = "id"
-    metavar = "<id>"
     help_text = "Identifier of object to be added"
+
+    def __init__(self, app, app_args):
+        super(AddCommand, self).__init__(app, app_args)
+        self.container_metavar = '<' + self.container_name + '>'
+        self.metavar = '<' + self.name + '>'
 
     def get_client(self):
         return self.app.client_manager.network
