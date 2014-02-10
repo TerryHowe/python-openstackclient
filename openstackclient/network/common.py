@@ -75,7 +75,10 @@ class BaseCommand(object):
         return getattr(self.app.client_manager.network,
                        "list_%s" % self.resources)
 
-    def find_resource(self, resource, name):
+    def find_resource(self, name):
+        return self.find(self.resource, self.resources, name)
+
+    def find(self, resource, resources, name):
         client = self.app.client_manager.network
         list_method = self.get_list_method()
         data = list_method(name=name, fields='id')
@@ -150,7 +153,7 @@ class DeleteCommand(command.Command, BaseCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         if self.allow_names:
-            _id = self.find_resource(self.resource, parsed_args.identifier)
+            _id = self.find_resource(parsed_args.identifier)
         else:
             _id = parsed_args.identifier
         delete_method = getattr(self.app.client_manager.network, "delete_" +
@@ -224,7 +227,7 @@ class SetCommand(command.Command, BaseCommand):
         self.log.debug('take_action(%s)' % parsed_args)
         _client = self.app.client_manager.network
         if self.allow_names:
-            _id = self.find_resource(self.resource, parsed_args.identifier)
+            _id = self.find_resource(parsed_args.identifier)
         else:
             _id = parsed_args.identifier
         update_method = getattr(_client, "update_" + self.func)
@@ -261,7 +264,7 @@ class ShowCommand(show.ShowOne, BaseCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         if self.allow_names:
-            _id = self.find_resource(self.resource, parsed_args.identifier)
+            _id = self.find_resource(parsed_args.identifier)
         else:
             _id = parsed_args.identifier
         show_method = getattr(self.app.client_manager.network,

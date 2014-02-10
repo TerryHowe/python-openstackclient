@@ -123,9 +123,9 @@ class AddGatewayNetwork(command.Command, BaseCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         _client = self.app.client_manager.network
-        _network_id = self.find_resource('network', parsed_args.network)
-        _gateway_id = self.find_resource('network_gateway',
-                                         parsed_args.gateway)
+        _network_id = self.find_resource(parsed_args.network)
+        _gateway_id = self.find('network_gateway', 'network_gateways',
+                                parsed_args.gateway)
         _client.connect_network_gateway(_gateway_id,
                          {'network_id': _network_id,
                           'segmentation_type': parsed_args.segmentation_type,
@@ -162,9 +162,9 @@ class RemoveGatewayNetwork(command.Command, BaseCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         _client = self.app.client_manager.network
-        _network_id = self.find_resource('network', parsed_args.network)
-        _gateway_id = self.find_resource('network_gateway',
-                                         parsed_args.gateway)
+        _network_id = self.find_resource(parsed_args.network)
+        _gateway_id = self.find('network_gateway', 'network_gateways',
+                                parsed_args.gateway)
         _client.disconnect_network_gateway((_gateway_id,
                          {'network_id': _network_id,
                           'segmentation_type': parsed_args.segmentation_type,
