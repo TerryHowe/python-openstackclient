@@ -48,6 +48,7 @@ class ListDhcpAgent(common.ListCommand):
 
     clazz = neu2.ListDhcpAgentsHostingNetwork
     resource = 'dhcp_agent'
+    list_columns = ['id', 'host', 'admin_state_up', 'alive']
 
     def get_parser(self, prog_name):
         parser = super(ListDhcpAgent, self).get_parser(prog_name)

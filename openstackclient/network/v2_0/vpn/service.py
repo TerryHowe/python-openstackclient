@@ -56,6 +56,7 @@ class ListService(common.ListCommand):
     """List VPN service"""
 
     resource = 'vpnservice'
+    list_columns = ['id', 'name', 'router_id', 'status']
 
 
 class SetService(common.SetCommand):

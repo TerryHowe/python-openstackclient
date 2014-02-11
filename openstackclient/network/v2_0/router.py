@@ -56,6 +56,7 @@ class ListRouter(common.ListCommand):
     """List router"""
 
     resource = 'router'
+    list_columns = ['id', 'name', 'external_gateway_info']
 
     def get_parser(self, prog_name):
         parser = super(ListRouter, self).get_parser(prog_name)

@@ -59,6 +59,8 @@ class ListMember(common.ListCommand):
     """List load balancer member"""
 
     resource = 'member'
+    list_columns = ['id', 'address', 'protocol_port', 'admin_state_up',
+                    'status']
 
 
 class SetMember(common.SetCommand):

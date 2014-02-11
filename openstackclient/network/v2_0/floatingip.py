@@ -52,6 +52,7 @@ class ListFloatingIp(common.ListCommand):
     """List floating IPs"""
 
     resource = 'floatingip'
+    list_columns = ['id', 'fixed_ip_address', 'floating_ip_address', 'port_id']
 
 
 class ShowFloatingIp(common.ShowCommand):

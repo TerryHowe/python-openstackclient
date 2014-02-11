@@ -51,6 +51,7 @@ class ListGateway(common.ListCommand):
 
     resource = 'network_gateway'
     resources = 'network_gateways'
+    list_columns = ['id', 'name']
 
 
 class SetGateway(common.SetCommand):

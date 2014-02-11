@@ -73,6 +73,7 @@ class ListFirewall(common.ListCommand):
     """List firewall"""
 
     resource = 'firewall'
+    list_columns = ['id', 'name', 'firewall_policy_id']
 
 
 class SetFirewall(common.SetCommand):

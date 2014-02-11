@@ -45,6 +45,7 @@ class ListSecurityGroup(common.ListCommand):
     """List security group"""
 
     resource = 'security_group'
+    list_columns = ['id', 'name', 'description']
 
 
 class SetSecurityGroup(common.SetCommand):

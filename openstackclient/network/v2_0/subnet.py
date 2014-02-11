@@ -108,6 +108,7 @@ class ListSubnet(common.ListCommand):
     """List subnet"""
 
     resource = 'subnet'
+    list_columns = ['id', 'name', 'cidr', 'allocation_pools']
 
 
 class SetSubnet(common.SetCommand):

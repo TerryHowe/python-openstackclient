@@ -68,6 +68,8 @@ class ListSecurityGroupRule(common.ListCommand):
     """List security group rule"""
 
     resource = 'security_group_rule'
+    list_columns = ['id', 'security_group_id', 'direction', 'protocol',
+                    'remote_ip_prefix','remote_group_id']
 
     def get_parser(self, prog_name):
         parser = super(ListSecurityGroupRule, self).get_parser(prog_name)

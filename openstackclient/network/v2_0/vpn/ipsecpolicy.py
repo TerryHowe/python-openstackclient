@@ -78,6 +78,8 @@ class ListIpsecpolicy(common.ListCommand):
 
     resource = 'ipsecpolicie'
     resources = 'ipsecpolicies'
+    list_columns = ['id', 'name', 'auth_algorithm', 'encryption_algorithm',
+                    'pfs']
 
 
 class SetIpsecpolicy(common.SetCommand):

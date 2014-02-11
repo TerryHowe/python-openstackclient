@@ -73,6 +73,8 @@ class ListVip(common.ListCommand):
     """List load balancer VIP"""
 
     resource = 'vip'
+    list_columns = ['id', 'name', 'algorithm', 'address', 'protocol',
+                    'admin_state_up', 'status']
 
 
 class SetVip(common.SetCommand):

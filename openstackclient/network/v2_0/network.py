@@ -15,6 +15,8 @@
 
 """Network action implementations"""
 
+from cliff import command
+
 from neutronclient.neutron.v2_0 import agentscheduler as agent
 from neutronclient.neutron.v2_0 import network as neu2
 from neutronclient.neutron.v2_0 import nvpnetworkgateway
@@ -58,6 +60,7 @@ class ListNetwork(common.ListCommand):
     """List networks"""
 
     resource = "network"
+    list_columns = ['id', 'name', 'subnets']
 
     def get_parser(self, prog_name):
         parser = super(ListNetwork, self).get_parser(prog_name)
@@ -95,7 +98,7 @@ class ShowNetwork(common.ShowCommand):
     resource = 'network'
 
 
-class AddGatewayNetwork(command.Command, BaseCommand):
+class AddGatewayNetwork(command.Command, common.BaseCommand):
     """Add a gateway to a network"""
 
     def get_parser(self, prog_name):
@@ -134,7 +137,7 @@ class AddGatewayNetwork(command.Command, BaseCommand):
                                   _gateway_id)
 
 
-class RemoveGatewayNetwork(command.Command, BaseCommand):
+class RemoveGatewayNetwork(command.Command, common.BaseCommand):
     """Remove a gateway from a network"""
 
     def get_parser(self, prog_name):
@@ -165,9 +168,9 @@ class RemoveGatewayNetwork(command.Command, BaseCommand):
         _network_id = self.find_resource(parsed_args.network)
         _gateway_id = self.find('network_gateway', 'network_gateways',
                                 parsed_args.gateway)
-        _client.disconnect_network_gateway((_gateway_id,
+        _client.disconnect_network_gateway(_gateway_id,
                          {'network_id': _network_id,
                           'segmentation_type': parsed_args.segmentation_type,
                           'segmentation_id': parsed_args.segmentation_id})
-        print >>self.app.stdout, ('Disconnected network to gateway %s' %
+        print >> self.app.stdout, ('Disconnected network to gateway %s' %
                                   _gateway_id)

@@ -69,6 +69,8 @@ class ListPool(common.ListCommand):
     """List load balancer pool"""
 
     resource = 'pool'
+    list_columns = ['id', 'name', 'provider', 'lb_method', 'protocol',
+                    'admin_state_up', 'status']
 
     def get_parser(self, prog_name):
         parser = super(ListPool, self).get_parser(prog_name)
@@ -86,6 +88,8 @@ class ListPool(common.ListCommand):
         parsed_args.sort_key = []
         parsed_args.sort_dir = []
         if parsed_args.lbaas_agent:
+            self.list_columns = ['id', 'name', 'lb_method', 'protocol',
+                    'admin_state_up', 'status']
             neuter = agentscheduler.ListPoolsOnLbaasAgent(self.app,
                                                           self.app_args)
         else:

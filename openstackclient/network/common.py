@@ -36,9 +36,10 @@ class BaseCommand(object):
             pass
         return json.dumps(to_primitive(value))
 
-    def format_row(self, data):
+    def format_row(self, columns, data):
         row = []
-        for k, v in data.iteritems():
+        for k in columns:
+            v = data[k]
             if k in self.matters:
                 row.append(self.matters[k](v))
             elif isinstance(v, list):
@@ -167,7 +168,7 @@ class DeleteCommand(command.Command, BaseCommand):
 class ListCommand(lister.Lister, BaseCommand):
 
     log = logging.getLogger(__name__ + '.ListCommand')
-    columns = []
+    list_columns = []
     report_filter = {}
 
     def __init__(self, app, app_args):
@@ -190,10 +191,14 @@ class ListCommand(lister.Lister, BaseCommand):
         self.log.debug('take_action(%s)' % parsed_args)
         list_method = self.get_list_method()
         data = list_method(**self.report_filter)[self.resources]
-        if not self.columns:
-            self.columns = len(data) > 0 and data[0].keys() or []
-        self.columns = [w.replace(':', ' ') for w in self.columns]
-        return (self.columns, (self.format_row(item) for item in data))
+        _columns = len(data) > 0 and sorted(data[0].keys()) or []
+        if not _columns:
+            parsed_args.columns = []
+        elif parsed_args.columns:
+            _columns = [x for x in parsed_args.columns if x in _columns]
+        elif self.list_columns:
+            _columns = [x for x in self.list_columns if x in _columns]
+        return (_columns, (self.format_row(_columns, item) for item in data))
 
 
 class SetCommand(command.Command, BaseCommand):

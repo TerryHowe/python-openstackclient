@@ -80,6 +80,7 @@ class ListHealthMonitor(common.ListCommand):
     """List load balancer health monitor"""
 
     resource = 'health_monitor'
+    list_columns = ['id', 'type', 'admin_state_up']
 
 
 class SetHealthMonitor(common.SetCommand):
