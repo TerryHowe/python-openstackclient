@@ -72,16 +72,13 @@ class BaseCommand(object):
                 d[k] = v
         return d
 
-    def get_list_method(self):
-        return getattr(self.app.client_manager.network,
-                       "list_%s" % self.resources)
-
     def find_resource(self, name):
         return self.find(self.resource, self.resources, name)
 
     def find(self, resource, resources, name):
         client = self.app.client_manager.network
-        list_method = self.get_list_method()
+        list_method = getattr(self.app.client_manager.network,
+                       "list_%s" % resources)
         data = list_method(name=name, fields='id')
         info = data[resources]
         if len(info) == 1:
@@ -103,8 +100,9 @@ class CreateCommand(show.ShowOne, BaseCommand):
 
     log = logging.getLogger(__name__ + '.CreateCommand')
 
-    def get_client(self):
-        return self.app.client_manager.network
+    def __init__(self, app, app_args):
+        super(CreateCommand, self).__init__(app, app_args)
+        self.func = getattr(self, 'func', self.resource)
 
     def get_parser(self, prog_name):
         parser = super(CreateCommand, self).get_parser(prog_name)
@@ -118,7 +116,7 @@ class CreateCommand(show.ShowOne, BaseCommand):
         self.log.debug('take_action(%s)' % parsed_args)
         _client = self.app.client_manager.network
         body = self.get_body(parsed_args)
-        create_method = getattr(_client, "create_%s" % self.resource)
+        create_method = getattr(_client, "create_%s" % self.func)
         data = self.data_formatter(create_method(body)[self.resource])
         if data:
             print >>self.app.stdout, 'Created a new %s:' % self.resource
@@ -189,7 +187,8 @@ class ListCommand(lister.Lister, BaseCommand):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        list_method = self.get_list_method()
+        list_method = getattr(self.app.client_manager.network,
+                       "list_%s" % self.func)
         data = list_method(**self.report_filter)[self.resources]
         _columns = len(data) > 0 and sorted(data[0].keys()) or []
         if not _columns:

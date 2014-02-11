@@ -22,7 +22,7 @@ from openstackclient.network import common
 class CreateService(common.CreateCommand):
     """Create a VPN service"""
 
-    clazz = neu2.CreateVPNService
+    resource = 'vpnservice'
 
     def get_parser(self, prog_name):
         parser = super(CreateService, self).get_parser(prog_name)
@@ -43,6 +43,9 @@ class CreateService(common.CreateCommand):
             '--description',
             help='Set a description for the vpnservice')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteService(common.DeleteCommand):

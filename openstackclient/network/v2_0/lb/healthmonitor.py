@@ -22,7 +22,7 @@ from openstackclient.network import common
 class CreateHealthMonitor(common.CreateCommand):
     """Create a load balancer health monitor"""
 
-    clazz = neu2.CreateHealthMonitor
+    resource = 'health_monitor'
 
     def get_parser(self, prog_name):
         parser = super(CreateHealthMonitor, self).get_parser(prog_name)
@@ -67,6 +67,9 @@ class CreateHealthMonitor(common.CreateCommand):
             required=True, choices=['PING', 'TCP', 'HTTP', 'HTTPS'],
             help='One of predefined health monitor types')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteHealthMonitor(common.DeleteCommand):

@@ -22,7 +22,7 @@ from openstackclient.network import common
 class CreateFloatingIp(common.CreateCommand):
     """Create a floating IP"""
 
-    clazz = neu2.CreateFloatingIP
+    resource = 'floatingip'
 
     def get_parser(self, prog_name):
         parser = super(CreateFloatingIp, self).get_parser(prog_name)
@@ -38,6 +38,9 @@ class CreateFloatingIp(common.CreateCommand):
             'floating_network_id',
             help='ID of network to create the floating IP in')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteFloatingIp(common.DeleteCommand):

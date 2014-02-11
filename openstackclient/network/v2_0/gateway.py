@@ -22,7 +22,8 @@ from openstackclient.network import common
 class CreateGateway(common.CreateCommand):
     """Create a gateway"""
 
-    clazz = neu2.CreateNetworkGateway
+    resource = 'gateway'
+    func = 'network_gateway'
 
     def get_parser(self, prog_name):
         parser = super(CreateGateway, self).get_parser(prog_name)
@@ -38,12 +39,16 @@ class CreateGateway(common.CreateCommand):
             'It can be repeated for multiple devices for HA gateways')
         return parser
 
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
+
 
 class DeleteGateway(common.DeleteCommand):
     """Delete a gateway"""
 
     resource = 'gateway'
-    resources = 'network_gateways'
+    resources = 'gateways'
+    func = 'network_gateway'
 
 
 class ListGateway(common.ListCommand):
@@ -65,10 +70,6 @@ class SetGateway(common.SetCommand):
 class ShowGateway(common.ShowCommand):
     """Show gateway details"""
 
-    resource = 'gateway'
+    resource = 'network_gateway'
     resources = 'network_gateways'
     func = 'network_gateway'
-
-    def __init__(self, app, app_args):
-        super(ShowGateway, self).__init__(app, app_args)
-        self.func = "network_gatway"

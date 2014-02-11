@@ -22,7 +22,7 @@ from openstackclient.network import common
 class CreateMember(common.CreateCommand):
     """Create a load balancer member"""
 
-    clazz = neu2.CreateMember
+    resource = 'member'
 
     def get_parser(self, prog_name):
         parser = super(CreateMember, self).get_parser(prog_name)
@@ -46,6 +46,9 @@ class CreateMember(common.CreateCommand):
             help='Port on which the pool member listens for requests or '
                     'connections. ')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteMember(common.DeleteCommand):

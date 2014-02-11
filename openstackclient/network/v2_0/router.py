@@ -23,7 +23,7 @@ from openstackclient.network import common
 class CreateRouter(common.CreateCommand):
     """Create a router"""
 
-    clazz = neu2.CreateRouter
+    resource = 'router'
 
     def get_parser(self, prog_name):
         parser = super(CreateRouter, self).get_parser(prog_name)
@@ -44,6 +44,9 @@ class CreateRouter(common.CreateCommand):
             'name', metavar='NAME',
             help='Name of router to create')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteRouter(common.DeleteCommand):
@@ -66,26 +69,25 @@ class ListRouter(common.ListCommand):
         )
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        parsed_args.request_format = 'json'
-        parsed_args.fields = []
-        parsed_args.page_size = None
-        parsed_args.sort_key = []
-        parsed_args.sort_dir = []
-        if parsed_args.l3_agent:
-            neuter = agentscheduler.ListRoutersOnL3Agent(self.app,
-                                                         self.app_args)
-        else:
-            neuter = neu2.ListRouter(self.app, self.app_args)
-        return neuter.take_action(parsed_args)
+    #def take_action(self, parsed_args):
+        #self.log.debug('take_action(%s)' % parsed_args)
+        #parsed_args.request_format = 'json'
+        #parsed_args.fields = []
+        #parsed_args.page_size = None
+        #parsed_args.sort_key = []
+        #parsed_args.sort_dir = []
+        #if parsed_args.l3_agent:
+        #    neuter = agentscheduler.ListRoutersOnL3Agent(self.app,
+        #                                                 self.app_args)
+        #else:
+        #    neuter = neu2.ListRouter(self.app, self.app_args)
+        #return neuter.take_action(parsed_args)
 
 
 class SetRouter(common.SetCommand):
     """Set router values"""
 
     resource = 'router'
-    help_text = 'ID of router to set'
 
     def get_parser(self, prog_name):
         parser = super(SetRouter, self).get_parser(prog_name)
@@ -108,15 +110,15 @@ class SetRouter(common.SetCommand):
             help='Disable source NAT on the router gateway')
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        parsed_args.request_format = 'json'
-        if parsed_args.no_gateway:
-            neuter = neu2.RemoveGatewayRouter(self.app, self.app_args)
-        else:
-            neuter = neu2.SetGatewayRouter(self.app, self.app_args)
-        neuter.get_client = self.get_client
-        return neuter.run(parsed_args)
+    #def take_action(self, parsed_args):
+        #self.log.debug('take_action(%s)' % parsed_args)
+        #parsed_args.request_format = 'json'
+        #if parsed_args.no_gateway:
+            #neuter = neu2.RemoveGatewayRouter(self.app, self.app_args)
+        #else:
+            #neuter = neu2.SetGatewayRouter(self.app, self.app_args)
+        #neuter.get_client = self.get_client
+        #return neuter.run(parsed_args)
 
 
 class ShowRouter(common.ShowCommand):

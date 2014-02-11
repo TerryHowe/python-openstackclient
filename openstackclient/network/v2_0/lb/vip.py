@@ -22,7 +22,7 @@ from openstackclient.network import common
 class CreateVip(common.CreateCommand):
     """Create a load balancer VIP"""
 
-    clazz = neu2.CreateVip
+    resource = 'vip'
 
     def get_parser(self, prog_name):
         parser = super(CreateVip, self).get_parser(prog_name)
@@ -60,6 +60,9 @@ class CreateVip(common.CreateCommand):
             required=True,
             help='the subnet on which to allocate the vip address')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteVip(common.DeleteCommand):

@@ -22,7 +22,7 @@ from openstackclient.network import common
 class CreateFirewall(common.CreateCommand):
     """Create a firewall"""
 
-    clazz = neu2.CreateFirewall
+    resource = 'firewall'
 
     def get_parser(self, prog_name):
         parser = super(CreateFirewall, self).get_parser(prog_name)
@@ -60,6 +60,9 @@ class CreateFirewall(common.CreateCommand):
             help="Disable firewall",
             action="store_false")
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteFirewall(common.DeleteCommand):

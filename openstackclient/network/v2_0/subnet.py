@@ -22,7 +22,7 @@ from openstackclient.network import common
 class CreateSubnet(common.CreateCommand):
     """Create a subnet"""
 
-    clazz = neu2.CreateSubnet
+    resource = 'subnet'
 
     def allocation_pool_parse(self, param):
         """Convert min-max range into dictionary
@@ -96,6 +96,9 @@ class CreateSubnet(common.CreateCommand):
             'cidr',
             help='CIDR of the subnet to create')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteSubnet(common.DeleteCommand):

@@ -24,7 +24,7 @@ from openstackclient.network import common
 class CreateIpsecpolicy(common.CreateCommand):
     """Create a IPSec policy"""
 
-    clazz = neu2.CreateIPsecPolicy
+    resource = 'ipsecpolicy'
 
     def get_parser(self, prog_name):
         parser = super(CreateIpsecpolicy, self).get_parser(prog_name)
@@ -63,6 +63,9 @@ class CreateIpsecpolicy(common.CreateCommand):
             'name', metavar='NAME',
             help='Name of the IPsecPolicy')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteIpsecpolicy(common.DeleteCommand):

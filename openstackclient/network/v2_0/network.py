@@ -15,6 +15,8 @@
 
 """Network action implementations"""
 
+import logging
+
 from cliff import command
 
 from neutronclient.neutron.v2_0 import agentscheduler as agent
@@ -101,6 +103,10 @@ class ShowNetwork(common.ShowCommand):
 class AddGatewayNetwork(command.Command, common.BaseCommand):
     """Add a gateway to a network"""
 
+    log = logging.getLogger(__name__ + '.AddGatewayNetwork')
+    resource = 'network'
+    resources = 'networks'
+
     def get_parser(self, prog_name):
         parser = super(AddGatewayNetwork, self).get_parser(prog_name)
         parser.add_argument(
@@ -139,6 +145,10 @@ class AddGatewayNetwork(command.Command, common.BaseCommand):
 
 class RemoveGatewayNetwork(command.Command, common.BaseCommand):
     """Remove a gateway from a network"""
+
+    log = logging.getLogger(__name__ + '.RemoveGatewayNetwork')
+    resource = 'network'
+    resources = 'networks'
 
     def get_parser(self, prog_name):
         parser = super(RemoveGatewayNetwork, self).get_parser(prog_name)

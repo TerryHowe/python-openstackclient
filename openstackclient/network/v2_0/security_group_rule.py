@@ -24,7 +24,7 @@ from openstackclient.network import common
 class CreateSecurityGroupRule(common.CreateCommand):
     """Create a security group rule"""
 
-    clazz = neu2.CreateSecurityGroupRule
+    resource = 'security_group_rule'
 
     def get_parser(self, prog_name):
         parser = super(CreateSecurityGroupRule, self).get_parser(prog_name)
@@ -55,6 +55,9 @@ class CreateSecurityGroupRule(common.CreateCommand):
             '--remote-group-id', metavar='REMOTE_GROUP',
             help='remote security group name or id to apply rule')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteSecurityGroupRule(common.DeleteCommand):

@@ -24,7 +24,7 @@ from openstackclient.network import common
 class CreateIkepolicy(common.CreateCommand):
     """Create a IKE policy"""
 
-    clazz = neu2.CreateIKEPolicy
+    resource = 'ikepolicy'
 
     def get_parser(self, prog_name):
         parser = super(CreateIkepolicy, self).get_parser(prog_name)
@@ -64,6 +64,9 @@ class CreateIkepolicy(common.CreateCommand):
             'name', metavar='NAME',
             help='Name of the IKE Policy')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteIkepolicy(common.DeleteCommand):

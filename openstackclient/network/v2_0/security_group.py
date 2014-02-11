@@ -22,7 +22,7 @@ from openstackclient.network import common
 class CreateSecurityGroup(common.CreateCommand):
     """Create a security group"""
 
-    clazz = neu2.CreateSecurityGroup
+    resource = 'security_group'
 
     def get_parser(self, prog_name):
         parser = super(CreateSecurityGroup, self).get_parser(prog_name)
@@ -33,6 +33,9 @@ class CreateSecurityGroup(common.CreateCommand):
             'name', metavar='NAME',
             help='Name of security group to create')
         return parser
+
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
 
 
 class DeleteSecurityGroup(common.DeleteCommand):

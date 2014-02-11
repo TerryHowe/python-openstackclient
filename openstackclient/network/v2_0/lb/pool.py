@@ -23,7 +23,7 @@ from openstackclient.network import common
 class CreatePool(common.CreateCommand):
     """Create a load balancer pool"""
 
-    clazz = neu2.CreatePool
+    resource = 'pool'
 
     def get_parser(self, prog_name):
         parser = super(CreatePool, self).get_parser(prog_name)
@@ -57,6 +57,9 @@ class CreatePool(common.CreateCommand):
             help='Provider name of loadbalancer service')
         return parser
 
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
+
 
 class DeletePool(common.DeleteCommand):
     """Delete a load balancer pool"""
@@ -80,22 +83,22 @@ class ListPool(common.ListCommand):
         )
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        parsed_args.request_format = 'json'
-        parsed_args.fields = []
-        parsed_args.page_size = None
-        parsed_args.sort_key = []
-        parsed_args.sort_dir = []
-        if parsed_args.lbaas_agent:
-            self.list_columns = ['id', 'name', 'lb_method', 'protocol',
-                    'admin_state_up', 'status']
-            neuter = agentscheduler.ListPoolsOnLbaasAgent(self.app,
-                                                          self.app_args)
-        else:
-            neuter = neu2.ListPool(self.app, self.app_args)
-        neuter.get_client = self.get_client
-        return neuter.take_action(parsed_args)
+    #def take_action(self, parsed_args):
+        #self.log.debug('take_action(%s)' % parsed_args)
+        #parsed_args.request_format = 'json'
+        #parsed_args.fields = []
+        #parsed_args.page_size = None
+        #parsed_args.sort_key = []
+        #parsed_args.sort_dir = []
+        #if parsed_args.lbaas_agent:
+            #self.list_columns = ['id', 'name', 'lb_method', 'protocol',
+                    #'admin_state_up', 'status']
+            #neuter = agentscheduler.ListPoolsOnLbaasAgent(self.app,
+                                                          #self.app_args)
+        #else:
+            #neuter = neu2.ListPool(self.app, self.app_args)
+        #neuter.get_client = self.get_client
+        #return neuter.take_action(parsed_args)
 
 
 class SetPool(common.SetCommand):
@@ -122,19 +125,19 @@ class ShowPool(common.ShowCommand):
             default=False, help='Show stats associated with this pool')
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        parsed_args.id = parsed_args.pool
-        parsed_args.show_details = True
-        parsed_args.request_format = 'json'
-        parsed_args.fields = []
-        if parsed_args.agent:
-            neuter = agentscheduler.GetLbaasAgentHostingPool(self.app,
-                                                             self.app_args)
-        else:
-            if parsed_args.stats:
-                neuter = neu2.RetrievePoolStats(self.app, self.app_args)
-            else:
-                neuter = neu2.ShowPool(self.app, self.app_args)
-        neuter.get_client = self.get_client
-        return neuter.take_action(parsed_args)
+    #def take_action(self, parsed_args):
+        #self.log.debug('take_action(%s)' % parsed_args)
+        #parsed_args.id = parsed_args.pool
+        #parsed_args.show_details = True
+        #parsed_args.request_format = 'json'
+        #parsed_args.fields = []
+        #if parsed_args.agent:
+            #neuter = agentscheduler.GetLbaasAgentHostingPool(self.app,
+                                                             #self.app_args)
+        #else:
+            #if parsed_args.stats:
+                #neuter = neu2.RetrievePoolStats(self.app, self.app_args)
+            #else:
+                #neuter = neu2.ShowPool(self.app, self.app_args)
+        #neuter.get_client = self.get_client
+        #return neuter.take_action(parsed_args)

@@ -23,7 +23,7 @@ from openstackclient.network import common
 class CreatePort(common.CreateCommand):
     """Create a port"""
 
-    clazz = neu2.CreatePort
+    resource = 'port'
 
     def get_parser(self, prog_name):
         parser = super(CreatePort, self).get_parser(prog_name)
@@ -74,6 +74,9 @@ class CreatePort(common.CreateCommand):
             help='Name of port to create')
         return parser
 
+    def get_body(self, parsed_args):
+        return { self.resource: { } }
+
 
 class DeletePort(common.DeleteCommand):
     """Delete a port"""
@@ -95,20 +98,20 @@ class ListPort(common.ListCommand):
         )
         return parser
 
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        parsed_args.request_format = 'json'
-        parsed_args.fields = []
-        parsed_args.page_size = None
-        parsed_args.sort_key = []
-        parsed_args.sort_dir = []
-        if parsed_args.router:
-            parsed_args.id = parsed_args.router
-            neuter = neu2.ListRouterPort(self.app, self.app_args)
-        else:
-            neuter = neu2.ListPort(self.app, self.app_args)
-        neuter.get_client = self.get_client
-        return neuter.take_action(parsed_args)
+    #def take_action(self, parsed_args):
+        #self.log.debug('take_action(%s)' % parsed_args)
+        #parsed_args.request_format = 'json'
+        #parsed_args.fields = []
+        #parsed_args.page_size = None
+        #parsed_args.sort_key = []
+        #parsed_args.sort_dir = []
+        #if parsed_args.router:
+        #    parsed_args.id = parsed_args.router
+        #    neuter = neu2.ListRouterPort(self.app, self.app_args)
+        #else:
+        #    neuter = neu2.ListPort(self.app, self.app_args)
+        #neuter.get_client = self.get_client
+        #return neuter.take_action(parsed_args)
 
 
 class SetPort(common.SetCommand):
