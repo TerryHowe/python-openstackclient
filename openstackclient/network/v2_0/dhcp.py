@@ -47,7 +47,7 @@ class ListDhcpAgent(common.ListCommand):
     """List DHCP agents on a network"""
 
     resource = 'dhcp_agent'
-    func = 'dhcp_agent_hosting_networks'
+    resources = 'dhcp_agent_hosting_networks'
     list_columns = ['id', 'host', 'admin_state_up', 'alive']
 
     def get_parser(self, prog_name):

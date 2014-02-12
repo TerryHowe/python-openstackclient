@@ -40,21 +40,21 @@ class CreateGateway(common.CreateCommand):
         return parser
 
     def get_body(self, parsed_args):
-        return { self.resource: { } }
+        return { self.func: { } }
 
 
 class DeleteGateway(common.DeleteCommand):
     """Delete a gateway"""
 
     resource = 'gateway'
-    resources = 'gateways'
+    resources = 'network_gateways'
     func = 'network_gateway'
 
 
 class ListGateway(common.ListCommand):
     """List gateways"""
 
-    resource = 'network_gateway'
+    resource = 'gateway'
     resources = 'network_gateways'
     list_columns = ['id', 'name']
 
@@ -70,6 +70,7 @@ class SetGateway(common.SetCommand):
 class ShowGateway(common.ShowCommand):
     """Show gateway details"""
 
-    resource = 'network_gateway'
+    resource = 'gateway'
     resources = 'network_gateways'
     func = 'network_gateway'
+    # show agents, show stats

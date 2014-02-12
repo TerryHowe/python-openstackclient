@@ -24,15 +24,15 @@ def format_subnet(value):
 class TestBaseCommand(test_common.TestNetworkBase):
     class Shower(common.ShowCommand):
 
-        name = "testable"
+        resource = "testable"
         matters = {"subnet": format_subnet}
 
-    def test_format_output(self):
+    def test_format_show(self):
         shower = self.Shower(None, None)
         _listo = [{"ka1": "va1", "ka2": "va2"},
                   {"ka3": "va3", "ka4": "va4"},
                   {"ka5": "va5", "ka6": "va6"}]
-        result = shower.format_data({"ka": _listo,
+        result = shower.format_show({"ka": _listo,
                                      "kb": {"k4": "v4"},
                                      "kc": {"ka1": {"ka2": "v3"}},
                                      "kd": None,

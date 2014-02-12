@@ -52,7 +52,7 @@ class TestCreateLbPool(common.TestNetworkBase):
 class TestDeleteLbPool(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         parsed = self.given_args(pool.DeletePool, "noo")
-        self.assertEqual('noo', parsed.pool)
+        self.assertEqual('noo', parsed.identifier)
 
 
 class TestListLbPool(common.TestNetworkBase):

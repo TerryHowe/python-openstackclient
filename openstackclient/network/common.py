@@ -36,7 +36,7 @@ class BaseCommand(object):
             pass
         return json.dumps(to_primitive(value))
 
-    def format_row(self, columns, data):
+    def format_list(self, columns, data):
         row = []
         for k in columns:
             v = data[k]
@@ -55,13 +55,13 @@ class BaseCommand(object):
                 row.append(v)
         return row
 
-    def data_formatter(self, data):
+    def format_show(self, data):
         d = {}
         for k, v in data.iteritems():
             if k in self.matters:
                 d[k] = self.matters[k](v)
             elif isinstance(v, list):
-                d[k] = ','.join(self.dumps(
+                d[k] = '\n'.join(self.dumps(
                     i, indent=self.json_indent) if isinstance(i, dict)
                     else str(i) for i in v)
             elif isinstance(v, dict):
@@ -117,7 +117,7 @@ class CreateCommand(show.ShowOne, BaseCommand):
         _client = self.app.client_manager.network
         body = self.get_body(parsed_args)
         create_method = getattr(_client, "create_%s" % self.func)
-        data = self.data_formatter(create_method(body)[self.resource])
+        data = self.format_show(create_method(body)[self.func])
         if data:
             print >>self.app.stdout, 'Created a new %s:' % self.resource
         else:
@@ -137,7 +137,6 @@ class DeleteCommand(command.Command, BaseCommand):
         self.help_text = getattr(self, 'help_text', "Name or identifier " + \
                          "of " + self.resource.replace('_', ' ') + " to delete")
         self.func = getattr(self, 'func', self.resource)
-        self.response = self.resource
 
 
     def get_parser(self, prog_name):
@@ -172,7 +171,6 @@ class ListCommand(lister.Lister, BaseCommand):
     def __init__(self, app, app_args):
         super(ListCommand, self).__init__(app, app_args)
         self.resources = getattr(self, 'resources', (self.resource + "s"))
-        self.func = getattr(self, 'func', self.resources)
 
     def get_parser(self, prog_name):
         parser = super(ListCommand, self).get_parser(prog_name)
@@ -188,7 +186,7 @@ class ListCommand(lister.Lister, BaseCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         list_method = getattr(self.app.client_manager.network,
-                       "list_%s" % self.func)
+                       "list_%s" % self.resources)
         data = list_method(**self.report_filter)[self.resources]
         _columns = len(data) > 0 and sorted(data[0].keys()) or []
         if not _columns:
@@ -197,7 +195,7 @@ class ListCommand(lister.Lister, BaseCommand):
             _columns = [x for x in parsed_args.columns if x in _columns]
         elif self.list_columns:
             _columns = [x for x in self.list_columns if x in _columns]
-        return (_columns, (self.format_row(_columns, item) for item in data))
+        return (_columns, (self.format_list(_columns, item) for item in data))
 
 
 class SetCommand(command.Command, BaseCommand):
@@ -235,7 +233,7 @@ class SetCommand(command.Command, BaseCommand):
         else:
             _id = parsed_args.identifier
         update_method = getattr(_client, "update_" + self.func)
-        update_method(_id, self.body)
+        update_method(str(_id), self.body)
         print >>self.app.stdout, ('Updated %(resource)s: %(id)s' %
             {'id': parsed_args.identifier, 'resource': self.resource})
         return
@@ -254,7 +252,6 @@ class ShowCommand(show.ShowOne, BaseCommand):
         self.help_text = getattr(self, 'help_text', "Name or identifier " + \
                          "of " + self.resource.replace('_', ' ') + " to show")
         self.func = getattr(self, 'func', self.resource)
-        self.response = self.resource
 
     def get_parser(self, prog_name):
         parser = super(ShowCommand, self).get_parser(prog_name)
@@ -273,7 +270,7 @@ class ShowCommand(show.ShowOne, BaseCommand):
             _id = parsed_args.identifier
         show_method = getattr(self.app.client_manager.network,
                               "show_" + self.func)
-        data = self.data_formatter(show_method(_id)[self.resource])
+        data = self.format_show(show_method(_id)[self.func])
         return zip(*sorted(six.iteritems(data)))
 
 

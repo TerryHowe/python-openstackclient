@@ -83,6 +83,7 @@ class ListNetwork(common.ListCommand):
         if parsed_args.external:
             self.report_filter={'router:external': True}
         elif parsed_args.dhcp_agent:
+            self.func = 'networks_on_dhcp_agent'
             self.resources = 'networks_on_dhcp_agent'
             self.report_filter = {'dhcp_agent': parsed_args.dhcp_agent}
         return super(ListNetwork, self).take_action(parsed_args)
@@ -182,5 +183,5 @@ class RemoveGatewayNetwork(command.Command, common.BaseCommand):
                          {'network_id': _network_id,
                           'segmentation_type': parsed_args.segmentation_type,
                           'segmentation_id': parsed_args.segmentation_id})
-        print >> self.app.stdout, ('Disconnected network to gateway %s' %
+        print >> self.app.stdout, ('Disconnected network from gateway %s' %
                                   _gateway_id)

@@ -87,16 +87,16 @@ class TestAddGatewayNetwork(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "netty getty"
         parsed = self.given_args(network.AddGatewayNetwork, given)
-        self.assertEqual('netty', parsed.network_id)
-        self.assertEqual('getty', parsed.net_gateway_id)
+        self.assertEqual('netty', parsed.network)
+        self.assertEqual('getty', parsed.gateway)
         self.assertEqual(None, parsed.segmentation_type)
         self.assertEqual(None, parsed.segmentation_id)
 
     def test_get_parser_all(self):
         given = "netty getty --segmentation-type 1 --segmentation-id 2"
         parsed = self.given_args(network.AddGatewayNetwork, given)
-        self.assertEqual('netty', parsed.network_id)
-        self.assertEqual('getty', parsed.net_gateway_id)
+        self.assertEqual('netty', parsed.network)
+        self.assertEqual('getty', parsed.gateway)
         self.assertEqual('1', parsed.segmentation_type)
         self.assertEqual('2', parsed.segmentation_id)
 
@@ -105,15 +105,15 @@ class TestRemoveGatewayNetwork(common.TestNetworkBase):
     def test_get_parser_nothing(self):
         given = "netty getty"
         parsed = self.given_args(network.RemoveGatewayNetwork, given)
-        self.assertEqual('netty', parsed.network_id)
-        self.assertEqual('getty', parsed.net_gateway_id)
+        self.assertEqual('netty', parsed.network)
+        self.assertEqual('getty', parsed.gateway)
         self.assertEqual(None, parsed.segmentation_type)
         self.assertEqual(None, parsed.segmentation_id)
 
     def test_get_parser_all(self):
         given = "netty getty --segmentation-type 1 --segmentation-id 2"
         parsed = self.given_args(network.RemoveGatewayNetwork, given)
-        self.assertEqual('netty', parsed.network_id)
-        self.assertEqual('getty', parsed.net_gateway_id)
+        self.assertEqual('netty', parsed.network)
+        self.assertEqual('getty', parsed.gateway)
         self.assertEqual('1', parsed.segmentation_type)
         self.assertEqual('2', parsed.segmentation_id)
