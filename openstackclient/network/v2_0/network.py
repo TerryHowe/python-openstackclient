@@ -19,9 +19,6 @@ import logging
 
 from cliff import command
 
-from neutronclient.neutron.v2_0 import agentscheduler as agent
-from neutronclient.neutron.v2_0 import network as neu2
-from neutronclient.neutron.v2_0 import nvpnetworkgateway
 from openstackclient.network import common
 
 
@@ -46,10 +43,10 @@ class CreateNetwork(common.CreateCommand):
         return parser
 
     def get_body(self, parsed_args):
-        return { self.resource: {
-                 'name': str(parsed_args.name),
-                 'admin_state_up': str(parsed_args.admin_state),
-                 'shared': str(parsed_args.shared) } }
+        return {self.resource: {
+                'name': str(parsed_args.name),
+                'admin_state_up': str(parsed_args.admin_state),
+                'shared': str(parsed_args.shared) } }
 
 
 class DeleteNetwork(common.DeleteCommand):
@@ -81,7 +78,7 @@ class ListNetwork(common.ListCommand):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         if parsed_args.external:
-            self.report_filter={'router:external': True}
+            self.report_filter = {'router:external': True}
         elif parsed_args.dhcp_agent:
             self.func = 'networks_on_dhcp_agent'
             self.resources = 'networks_on_dhcp_agent'
@@ -132,16 +129,15 @@ class AddGatewayNetwork(command.Command, common.BaseCommand):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        _client = self.app.client_manager.network
-        _network_id = self.find_resource(parsed_args.network)
-        _gateway_id = self.find('network_gateway', 'network_gateways',
-                                parsed_args.gateway)
-        _client.connect_network_gateway(_gateway_id,
-                         {'network_id': _network_id,
-                          'segmentation_type': parsed_args.segmentation_type,
-                          'segmentation_id': parsed_args.segmentation_id})
-        print >>self.app.stdout, ('Connected network to gateway %s' %
-                                  _gateway_id)
+        client = self.app.client_manager.network
+        network_id = self.find_resource(parsed_args.network)
+        gateway_id = self.find('network_gateway', 'network_gateways',
+                               parsed_args.gateway)
+        body = {'network_id': network_id,
+                'segmentation_type': parsed_args.segmentation_type,
+                'segmentation_id': parsed_args.segmentation_id}
+        client.connect_network_gateway(gateway_id, body)
+        print ('Connected network to gateway %s' % gateway_id)
 
 
 class RemoveGatewayNetwork(command.Command, common.BaseCommand):
@@ -175,13 +171,12 @@ class RemoveGatewayNetwork(command.Command, common.BaseCommand):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        _client = self.app.client_manager.network
-        _network_id = self.find_resource(parsed_args.network)
-        _gateway_id = self.find('network_gateway', 'network_gateways',
-                                parsed_args.gateway)
-        _client.disconnect_network_gateway(_gateway_id,
-                         {'network_id': _network_id,
-                          'segmentation_type': parsed_args.segmentation_type,
-                          'segmentation_id': parsed_args.segmentation_id})
-        print >> self.app.stdout, ('Disconnected network from gateway %s' %
-                                  _gateway_id)
+        client = self.app.client_manager.network
+        network_id = self.find_resource(parsed_args.network)
+        gateway_id = self.find('network_gateway', 'network_gateways',
+                               parsed_args.gateway)
+        body = {'network_id': network_id,
+                'segmentation_type': parsed_args.segmentation_type,
+                'segmentation_id': parsed_args.segmentation_id}
+        client.disconnect_network_gateway(gateway_id, body)
+        print ('Disconnected network from gateway %s' % gateway_id)

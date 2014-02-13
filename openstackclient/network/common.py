@@ -13,6 +13,7 @@
 #   under the License.
 #
 
+import datetime
 import json
 import logging
 import six
@@ -22,6 +23,27 @@ from cliff import lister
 from cliff import show
 
 from openstackclient.common import exceptions
+
+
+def to_primitive(value):
+    if isinstance(value, list) or isinstance(value, tuple):
+        o = []
+        for v in value:
+            o.append(to_primitive(v))
+        return o
+    elif isinstance(value, dict):
+        o = {}
+        for k, v in value.iteritems():
+            o[k] = to_primitive(v)
+        return o
+    elif isinstance(value, datetime.datetime):
+        return str(value)
+    elif hasattr(value, 'iteritems'):
+        return to_primitive(dict(value.iteritems()))
+    elif hasattr(value, '__iter__'):
+        return to_primitive(list(value))
+    else:
+        return value
 
 
 class BaseCommand(object):
@@ -77,8 +99,7 @@ class BaseCommand(object):
 
     def find(self, resource, resources, name):
         client = self.app.client_manager.network
-        list_method = getattr(self.app.client_manager.network,
-                       "list_%s" % resources)
+        list_method = getattr(client, "list_%s" % resources)
         data = list_method(name=name, fields='id')
         info = data[resources]
         if len(info) == 1:
@@ -119,7 +140,7 @@ class CreateCommand(show.ShowOne, BaseCommand):
         create_method = getattr(_client, "create_%s" % self.func)
         data = self.format_show(create_method(body)[self.func])
         if data:
-            print >>self.app.stdout, 'Created a new %s:' % self.resource
+            print('Created a new %s:' % self.resource)
         else:
             data = {'': ''}
         return zip(*sorted(six.iteritems(data)))
@@ -134,10 +155,10 @@ class DeleteCommand(command.Command, BaseCommand):
         super(DeleteCommand, self).__init__(app, app_args)
         self.resources = getattr(self, 'resources', (self.resource + "s"))
         self.metavar = "<" + self.resource + ">"
-        self.help_text = getattr(self, 'help_text', "Name or identifier " + \
-                         "of " + self.resource.replace('_', ' ') + " to delete")
+        self.help_text = getattr(self, 'help_text', "Name or identifier of " +
+                                 self.resource.replace('_', ' ') +
+                                 " to delete")
         self.func = getattr(self, 'func', self.resource)
-
 
     def get_parser(self, prog_name):
         parser = super(DeleteCommand, self).get_parser(prog_name)
@@ -155,10 +176,10 @@ class DeleteCommand(command.Command, BaseCommand):
         else:
             _id = parsed_args.identifier
         delete_method = getattr(self.app.client_manager.network, "delete_" +
-                         self.func)
+                                self.func)
         delete_method(_id)
-        print >>self.app.stdout, ('Deleted %(resource)s: %(id)s'
-            % {'id': parsed_args.identifier, 'resource': self.resource})
+        print ('Deleted %(resource)s: %(id)s' % {'id': parsed_args.identifier,
+               'resource': self.resource})
         return
 
 
@@ -185,8 +206,8 @@ class ListCommand(lister.Lister, BaseCommand):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
-        list_method = getattr(self.app.client_manager.network,
-                       "list_%s" % self.resources)
+        client = self.app.client_manager.network
+        list_method = getattr(client, "list_%s" % self.resources)
         data = list_method(**self.report_filter)[self.resources]
         _columns = len(data) > 0 and sorted(data[0].keys()) or []
         if not _columns:
@@ -207,8 +228,8 @@ class SetCommand(command.Command, BaseCommand):
         super(SetCommand, self).__init__(app, app_args)
         self.resources = getattr(self, 'resources', (self.resource + "s"))
         self.metavar = "<" + self.resource + ">"
-        self.help_text = getattr(self, 'help_text', "Name or identifier " + \
-                         "of " + self.resource.replace('_', ' ') + " to set")
+        self.help_text = getattr(self, 'help_text', "Name or identifier of " +
+                                 self.resource.replace('_', ' ') + " to set")
         self.func = getattr(self, 'func', self.resource)
         self.body = {}
 
@@ -234,10 +255,9 @@ class SetCommand(command.Command, BaseCommand):
             _id = parsed_args.identifier
         update_method = getattr(_client, "update_" + self.func)
         update_method(str(_id), self.body)
-        print >>self.app.stdout, ('Updated %(resource)s: %(id)s' %
-            {'id': parsed_args.identifier, 'resource': self.resource})
+        print ('Updated %(resource)s: %(id)s' % {'id': parsed_args.identifier,
+               'resource': self.resource})
         return
-
 
 
 class ShowCommand(show.ShowOne, BaseCommand):
@@ -249,8 +269,8 @@ class ShowCommand(show.ShowOne, BaseCommand):
         super(ShowCommand, self).__init__(app, app_args)
         self.resources = getattr(self, 'resources', (self.resource + "s"))
         self.metavar = "<" + self.resource + ">"
-        self.help_text = getattr(self, 'help_text', "Name or identifier " + \
-                         "of " + self.resource.replace('_', ' ') + " to show")
+        self.help_text = getattr(self, 'help_text', "Name or identifier of " +
+                                 self.resource.replace('_', ' ') + " to show")
         self.func = getattr(self, 'func', self.resource)
 
     def get_parser(self, prog_name):
