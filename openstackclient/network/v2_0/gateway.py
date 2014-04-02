@@ -40,7 +40,7 @@ class CreateGateway(common.CreateCommand):
         return parser
 
     def get_body(self, parsed_args):
-        return { self.func: { } }
+        return {self.func: {}}
 
 
 class DeleteGateway(common.DeleteCommand):

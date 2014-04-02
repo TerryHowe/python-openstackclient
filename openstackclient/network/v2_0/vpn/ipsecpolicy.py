@@ -16,7 +16,6 @@
 """IPSec Policy action implementations"""
 
 from neutronclient.common import utils
-from neutronclient.neutron.v2_0.vpn import ipsecpolicy as neu2
 from neutronclient.neutron.v2_0.vpn import utils as vpn_utils
 from openstackclient.network import common
 
@@ -65,7 +64,7 @@ class CreateIpsecpolicy(common.CreateCommand):
         return parser
 
     def get_body(self, parsed_args):
-        return { self.resource: { } }
+        return {self.resource: {}}
 
 
 class DeleteIpsecpolicy(common.DeleteCommand):

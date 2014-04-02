@@ -15,7 +15,6 @@
 
 """Load Balancer VIP action implementations"""
 
-from neutronclient.neutron.v2_0.lb import vip as neu2
 from openstackclient.network import common
 
 
@@ -62,7 +61,7 @@ class CreateVip(common.CreateCommand):
         return parser
 
     def get_body(self, parsed_args):
-        return { self.resource: { } }
+        return {self.resource: {}}
 
 
 class DeleteVip(common.DeleteCommand):

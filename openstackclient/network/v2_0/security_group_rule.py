@@ -17,7 +17,6 @@
 
 import argparse
 
-from neutronclient.neutron.v2_0 import securitygroup as neu2
 from openstackclient.network import common
 
 
@@ -57,7 +56,7 @@ class CreateSecurityGroupRule(common.CreateCommand):
         return parser
 
     def get_body(self, parsed_args):
-        return { self.resource: { } }
+        return {self.resource: {}}
 
 
 class DeleteSecurityGroupRule(common.DeleteCommand):
@@ -72,7 +71,7 @@ class ListSecurityGroupRule(common.ListCommand):
 
     resource = 'security_group_rule'
     list_columns = ['id', 'security_group_id', 'direction', 'protocol',
-                    'remote_ip_prefix','remote_group_id']
+                    'remote_ip_prefix', 'remote_group_id']
 
     def get_parser(self, prog_name):
         parser = super(ListSecurityGroupRule, self).get_parser(prog_name)

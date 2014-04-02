@@ -15,7 +15,6 @@
 
 """Firewall action implementations"""
 
-from neutronclient.neutron.v2_0.fw import firewall as neu2
 from openstackclient.network import common
 
 
@@ -62,7 +61,7 @@ class CreateFirewall(common.CreateCommand):
         return parser
 
     def get_body(self, parsed_args):
-        return { self.resource: { } }
+        return {self.resource: {}}
 
 
 class DeleteFirewall(common.DeleteCommand):

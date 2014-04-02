@@ -15,7 +15,6 @@
 
 """Security Group action implementations"""
 
-from neutronclient.neutron.v2_0 import securitygroup as neu2
 from openstackclient.network import common
 
 
@@ -35,7 +34,7 @@ class CreateSecurityGroup(common.CreateCommand):
         return parser
 
     def get_body(self, parsed_args):
-        return { self.resource: { } }
+        return {self.resource: {}}
 
 
 class DeleteSecurityGroup(common.DeleteCommand):
